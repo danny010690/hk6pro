@@ -2680,6 +2680,7 @@ document.getElementById('exportImageBtn').addEventListener('click', function(){
   ctx.moveTo(padding, headerHeight - 5);
   ctx.lineTo(width - padding, headerHeight - 5);
   ctx.stroke();
+  
   TICKETS.forEach(function(t, i){
     var y = headerHeight + i * ticketHeight;
     ctx.fillStyle = '#8b98a9';
@@ -2713,6 +2714,7 @@ document.getElementById('exportImageBtn').addEventListener('click', function(){
       ctx.fillText(pad(n), cx, cy);
     });
   });
+  
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'center';
 
@@ -2735,15 +2737,27 @@ document.getElementById('exportImageBtn').addEventListener('click', function(){
     ctx.font = '11px sans-serif';
     ctx.fillText('For entertainment only', width/2, height - 15);
   }
-  canvas.toBlob(function(blob){
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'MarkSix_' + Date.now() + '.png';
-    a.click();
-    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-    showToast(isVip ? '✓ Exported' : '✓ Exported (with watermark)');
-  });
+
+  // 將 Canvas 轉為圖片並顯示在彈窗中
+  var dataUrl = canvas.toDataURL('image/png');
+  var imgHtml = '<div style="text-align:center;">';
+  imgHtml += '< img src="' + dataUrl + '" style="width:100%; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.5); margin-bottom:12px;" />';
+  imgHtml += '<div style="font-size:13px; color:var(--muted); margin-bottom:16px;">請長按上方圖片保存到手機</div>';
+  imgHtml += '<button type="button" onclick="this.closest(\'.export-modal\').remove()" style="width:100%; padding:12px; border-radius:10px; border:none; background:linear-gradient(180deg,#ffd76a,#f0b429); color:#241a00; font-weight:bold; font-size:15px; cursor:pointer;">完成</button>';
+  imgHtml += '</div>';
+
+  var modal = document.createElement('div');
+  modal.className = 'export-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(11,15,22,0.95);backdrop-filter:blur(8px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--panel); width:100%; max-width:400px; padding:20px; border-radius:16px; border:1px solid rgba(240,180,41,.3); max-height: 90vh; overflow-y:auto;';
+  box.innerHTML = imgHtml;
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+  
+  showToast('✓ 圖片已生成');
 });
 
 /* ============ 单号详细档案 ============ */
