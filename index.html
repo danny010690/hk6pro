@@ -2674,9 +2674,14 @@ document.getElementById('exportImageBtn').addEventListener('click', function(){
   ctx.fillText(currentLang === 'en' ? 'Mark Six · Tickets' : '六合彩 · 注单', width/2, 40);
   ctx.fillStyle = '#8b98a9';
   ctx.font = '13px sans-serif';
-  ctx.fillText('Time: ' + nowString(), width/2, 70);
-  ctx.fillText('Issue: ' + nextIssue() + ' | Count: ' + TICKETS.length + ' | ' + ballsPerTicket + '/' + ballsPerTicket, width/2, 92);
-  ctx.fillText('Mode: ' + genMode + ' | Lucky: ' + pad(lucky), width/2, 114);
+  var t1 = currentLang === 'en' ? 'Time: ' : '時間：';
+  var t2 = currentLang === 'en' ? 'Issue: ' : '期號：';
+  var t3 = currentLang === 'en' ? ' | Count: ' : ' | 注數：';
+  var t4 = currentLang === 'en' ? ' | Mode: ' : ' | 模式：';
+  var t5 = currentLang === 'en' ? ' | Lucky: ' : ' | 幸運號：';
+  ctx.fillText(t1 + nowString(), width/2, 70);
+  ctx.fillText(t2 + nextIssue() + t3 + TICKETS.length + ' | ' + ballsPerTicket + '/' + ballsPerTicket, width/2, 92);
+  ctx.fillText(t4 + genMode + t5 + pad(lucky), width/2, 114);
   ctx.strokeStyle = 'rgba(255,255,255,.1)';
   ctx.beginPath();
   ctx.moveTo(padding, headerHeight - 5);
@@ -2688,8 +2693,7 @@ document.getElementById('exportImageBtn').addEventListener('click', function(){
     ctx.fillStyle = '#8b98a9';
     ctx.font = '12px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText((currentLang === 'en' ? 'Ticket ' : '第 ') + (i+1), padding, y + 20);
-
+   ctx.fillText((currentLang === 'en' ? 'Ticket ' : '第 ') + (i+1) + (currentLang === 'en' ? '' : ' 注'), padding, y + 20);
     var ballStartX = padding + 80;
     var ballRadius = 18;
     var ballSpacing = 42;
@@ -2881,8 +2885,9 @@ document.getElementById('copyTickets').addEventListener('click', function(e){
     '───────────────────────────────'
   ];
   TICKETS.forEach(function(t,i){
-    lines.push('Ticket ' + String(i+1).padStart(2,'0') + ': ' + t.map(pad).join('  '));
-  });
+    lines.push((currentLang === 'en' ? 'Ticket ' : '第 ') + String(i+1).padStart(2,'0') + (currentLang === 'en' ? ': ' : ' 注：') + t.map(pad).join('  '));
+  // ...
+});
   lines.push('═══════════════════════════════');
   copyText(lines.join('\n'), '✓ Copied', e.target);
 });
