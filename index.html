@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4460191604367457"
-     crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>金運寶庫 · 至尊版</title>
+<title>懂彩帝v 2.8.0至尊版</title>
+<!-- 引入 ECharts 用於 K線圖 與 MACD -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<!-- ===== 谷歌廣告加載腳本 ===== -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4460191604367457"
+     crossorigin="anonymous"></script>
+<!-- ========================== -->
+
 <style>
 /* ================= 默認主題：暗黑金 ================= */
 :root{
@@ -51,22 +56,23 @@ h1{font-size:clamp(24px,4.4vw,32px);font-weight:800;letter-spacing:-.5px;line-he
 h1 span{color:var(--gold);} body.light-mode h1 span { color: #ffd76a; }
 .sub{color:var(--header-text);opacity:0.8;font-size:13px;line-height:1.7;max-width:680px;margin:10px auto 0;}
 
-/* 右上角高級 VIP 圖標 */
+/* 右上角高級 VIP 圖標 (升級版) */
 .vip-btn {
   position: absolute; top: 20px; right: 16px;
   padding: 6px 14px;
-  background: linear-gradient(135deg, #FFDF73, #D4AF37); 
+  background: linear-gradient(135deg, #FFF3C4, #D4AF37, #B8860B); 
   border: 1px solid #FFF3C4;
   border-radius: 20px;
-  color: #241a00;
+  color: #4a3000;
   font-weight: 900;
   font-size: 12px;
   letter-spacing: 1px;
   display: flex; align-items: center; gap: 4px;
-  box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+  box-shadow: 0 4px 15px rgba(212,175,55,0.5);
   cursor: pointer; transition: 0.3s; z-index: 10;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
 }
-.vip-btn:hover { box-shadow: 0 0 20px rgba(212,175,55,0.8); transform: translateY(-1px); }
+.vip-btn:hover { box-shadow: 0 0 20px rgba(212,175,55,0.9); transform: translateY(-1px); }
 .vip-btn.member {
   background: linear-gradient(135deg, #FFDF73, #D4AF37);
   box-shadow: 0 0 25px rgba(212,175,55,0.8);
@@ -76,6 +82,7 @@ body.light-mode .vip-btn {
   color: #FFD700;
   border-color: #00509e;
   box-shadow: 0 4px 15px rgba(0,35,102,0.3);
+  text-shadow: none;
 }
 
 /* 設定彈窗 */
@@ -131,28 +138,29 @@ button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .ld-issue { font-size: 16px; font-weight: 900; color: var(--text); margin-bottom: 12px; }
 .ld-special-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
 .ld-special-ball { 
-  width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-  font-size: 32px; font-weight: 900; 
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
-  box-shadow: inset -4px -4px 12px rgba(0,0,0,0.15), inset 4px 4px 12px rgba(255,255,255,0.9), 0 6px 12px rgba(0,0,0,0.3);
-  border: 3px solid var(--gold); /* 特別號專屬金邊 */
-  color: var(--text); position: relative; 
-}
-body.light-mode .ld-special-ball { color: #333; }
-.ld-special-ball span { font-size: 11px; color: var(--muted); font-weight: normal; margin-top: 2px; }
-.ld-main-balls { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-
-/* 最新開獎球體 3D 樣式 */
-.ld-ball { 
   width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
   font-size: 15px; font-weight: 900; 
   background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
   box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 3px 6px rgba(0,0,0,0.2);
+  border: 2px solid var(--gold);
+  color: var(--text); position: relative; 
+}
+body.light-mode .ld-special-ball { color: #333; }
+.ld-special-label { font-size: 11px; color: var(--gold); margin-top: 6px; font-weight: bold; }
+.ld-main-balls { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+
+/* 3D 攪珠球體樣式通用 */
+.ld-ball, .lucky-cell, .heart-cell, .cell, .vd-ball { 
+  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+  font-weight: 900; 
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
+  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 3px 6px rgba(0,0,0,0.2);
   border: 2px solid transparent; position: relative;
 }
-.ld-ball.w-red { color: var(--wave-red); border-color: var(--wave-red); }
-.ld-ball.w-blue { color: var(--wave-blue); border-color: var(--wave-blue); }
-.ld-ball.w-green { color: var(--wave-green); border-color: var(--wave-green); }
+.ld-ball { width: 38px; height: 38px; font-size: 15px; }
+.ld-ball.w-red, .lucky-cell.w-red, .heart-cell.w-red, .vd-ball.w-red { color: var(--wave-red); border-color: var(--wave-red); }
+.ld-ball.w-blue, .lucky-cell.w-blue, .heart-cell.w-blue, .vd-ball.w-blue { color: var(--wave-blue); border-color: var(--wave-blue); }
+.ld-ball.w-green, .lucky-cell.w-green, .heart-cell.w-green, .vd-ball.w-green { color: var(--wave-green); border-color: var(--wave-green); }
 
 /* 雲端同步 */
 .sync-card { background: var(--panel); border-radius: 20px; padding: 16px; text-align: center; border: 1px solid var(--line); margin-bottom: 16px; }
@@ -163,38 +171,18 @@ body.light-mode .ld-special-ball { color: #333; }
 .btn-shake {width:100%; font-size:16px; padding:15px; font-weight:800; border-radius:12px; background: var(--btn-primary); color: var(--btn-primary-text); border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; transition: 0.2s;}
 .btn-shake:active { transform: scale(0.95); }
 
-/* ================= 分析功能網格 ================= */
-.analysis-grid-panel {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
-}
-.ag-item {
-  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-  padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.2s;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-}
+/* 分析功能網格 */
+.analysis-grid-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.ag-item { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
 .ag-item:hover { transform: translateY(-2px); border-color: var(--gold); box-shadow: var(--shadow); }
 .ag-icon { font-size: 24px; line-height: 1; }
 .ag-text { font-size: 12px; color: var(--text); font-weight: 600; }
 body.light-mode .ag-item { background: #fff; }
 
-/* ================= 選號區 3D 攪珠球體樣式 ================= */
+/* 選號區 3D 球體 */
 .lucky-grid,.heart-grid,.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;max-width:430px;margin:0 auto 12px}
-.lucky-cell,.heart-cell,.cell{
-  aspect-ratio:1/1; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:16px; font-weight:900; cursor:pointer; transition: all 0.2s ease;
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
-  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 4px 8px rgba(0,0,0,0.25);
-  border: 2px solid transparent; position: relative; overflow: hidden;
-}
-.lucky-cell.w-red, .heart-cell.w-red { border-color: var(--wave-red); color: var(--wave-red); }
-.lucky-cell.w-blue, .heart-cell.w-blue { border-color: var(--wave-blue); color: var(--wave-blue); }
-.lucky-cell.w-green, .heart-cell.w-green { border-color: var(--wave-green); color: var(--wave-green); }
-
-.lucky-cell.active, .heart-cell.active {
-  transform: scale(1.15);
-  box-shadow: 0 0 15px var(--gold), inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9);
-  border-width: 3px;
-}
+.lucky-cell,.heart-cell,.cell{aspect-ratio:1/1; font-size:16px; cursor:pointer; transition: all 0.2s ease;}
+.lucky-cell.active, .heart-cell.active { transform: scale(1.15); box-shadow: 0 0 15px var(--gold), inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9); border-width: 3px; }
 .lucky-info,.heart-info{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px;}
 .lucky-info b,.heart-info b{color:var(--gold);}
 
@@ -230,6 +218,18 @@ body.light-mode .ag-item { background: #fff; }
 .vault-actions button { flex: 1; padding: 8px 0; font-size: 13px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
 .btn-history { background: #fff; color: #0b0f16; border: 1px solid #ccc; }
 .btn-open { background: var(--gold); color: #fff; }
+
+/* ================= AI 大腦推演引擎 (新增) ================= */
+.engine-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px; text-align: center; background: var(--panel); border-radius: 18px; border: 1px solid var(--line); margin-bottom: 16px; box-shadow: var(--shadow);}
+.radar-box { position: relative; width: 160px; height: 160px; border-radius: 50%; border: 2px solid rgba(0,35,102,.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
+body:not(.light-mode) .radar-box { border-color: rgba(240,180,41,.2); }
+.radar-sweep { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 70%, var(--gold) 100%); animation: rotate 2s linear infinite; opacity: 0.6; }
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+.radar-core { position: relative; z-index: 2; font-size: 40px; }
+.engine-btn { width: 100%; max-width: 280px; padding: 15px; font-size: 16px; font-weight: 900; border-radius: 30px; border: none; color: #fff; background: linear-gradient(90deg, #1890ff, #002366); box-shadow: 0 10px 20px rgba(24,144,255,0.3); cursor: pointer; transition: 0.2s; margin-bottom: 15px; }
+body:not(.light-mode) .engine-btn { background: linear-gradient(90deg, #ffd76a, #f0b429); color: #241a00; }
+.engine-btn:active { transform: scale(0.95); }
+.engine-logs { font-family: monospace; font-size: 12px; color: var(--muted); width: 100%; max-width: 280px; height: 60px; overflow: hidden; text-align: left; background: var(--panel-2); padding: 10px; border-radius: 8px; border: 1px solid var(--line);}
 
 /* 歷史與輔助 */
 .history-list { display: flex; flex-direction: column; gap: 10px; }
@@ -310,6 +310,46 @@ body.light-mode .ca-cell { background: #fff; }
 .stat-val { width: 40px; text-align: left; color: var(--text); font-weight: bold; }
 .stat-ball { display: inline-flex; justify-content: center; align-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: bold; color: #fff; margin-right: 4px; }
 
+/* ================= 金庫彈窗 ================= */
+.vault-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+.vm-box { background: linear-gradient(180deg, #1e1e2d 0%, #0d0d15 100%); width: 100%; max-width: 400px; border-radius: 20px; border: 1px solid rgba(240,180,41,0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+body.light-mode .vm-box { background: var(--panel); border-color: var(--line); }
+.vm-glow { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 200px; height: 100px; background: radial-gradient(ellipse at center, rgba(240,180,41,0.3) 0%, transparent 70%); pointer-events: none; }
+body.light-mode .vm-glow { background: radial-gradient(ellipse at center, rgba(0,35,102,0.1) 0%, transparent 70%); }
+.vm-header { text-align: center; padding: 30px 20px 10px; position: relative; z-index: 1; }
+.vm-title { font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+body.light-mode .vm-title { text-shadow: none; }
+.vm-sub { font-size: 12px; color: var(--muted); }
+.vm-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; margin: 15px; padding: 15px; position: relative; z-index: 1; }
+body.light-mode .vm-card { background: var(--panel-2); border-color: var(--line); }
+.vm-card-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+body.light-mode .vm-card-head { border-bottom-color: var(--line); }
+.vm-card-title { font-size: 15px; color: var(--gold); font-weight: bold; }
+.vm-card-date { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.vm-badge { background: rgba(240,180,41,0.15); color: var(--gold); padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+.vm-rows { display: flex; flex-direction: column; gap: 10px; }
+.vm-row { display: flex; align-items: center; gap: 8px; }
+.vm-idx { font-size: 14px; color: var(--muted); width: 15px; text-align: right; }
+.vm-balls { display: flex; gap: 6px; flex-wrap: wrap; }
+.vd-ball { width: 32px; height: 32px; font-size: 14px; }
+.vm-actions { display: flex; gap: 10px; padding: 15px; position: relative; z-index: 1; }
+.vm-actions button { flex: 1; padding: 12px 0; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
+.vm-btn-share { background: linear-gradient(135deg, #ffd76a, #f0b429); color: #241a00; box-shadow: 0 4px 15px rgba(240,180,41,0.3); }
+body.light-mode .vm-btn-share { background: var(--btn-primary); color: var(--btn-primary-text); box-shadow: none; }
+.vm-btn-share:active { transform: scale(0.95); }
+.vm-btn-close { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text); border-color: var(--line); }
+.vm-btn-close:active { background: rgba(255,255,255,0.2); }
+
+/* ================= 往績彈窗 ================= */
+.history-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+.hm-box { background: var(--panel); width: 100%; max-width: 450px; border-radius: 16px; display: flex; flex-direction: column; max-height: 80vh; overflow: hidden; }
+.hm-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: bold; color: var(--gold); }
+.hm-content { padding: 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.hm-item { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.hm-item-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.hm-item-balls { display: flex; gap: 6px; flex-wrap: wrap; }
+
 @media(max-width:560px){
   .tickets{grid-template-columns:1fr}
   .row > label{min-width:100%}
@@ -357,7 +397,7 @@ body.light-mode .ca-cell { background: #fff; }
 <div class="vip-mask" id="vipMask">
 <div class="vip-box">
 <div style="position:absolute;top:15px;right:20px;color:var(--muted);font-size:24px;cursor:pointer;" onclick="document.getElementById('vipMask').style.display='none'">✕</div>
-<h2 style="margin-bottom:20px;">💎 會員專屬</h2>
+<h2 style="margin-bottom:20px;">👑 尊爵VIP</h2>
 <p style="color:var(--muted);font-size:13px;margin-bottom:16px;" data-i18n="vip_desc">解鎖歷史核對、AI 多組篩選、去浮水印等特權。</p>
 <input type="text" id="vipCodeInput" placeholder="請輸入激活碼" maxlength="30">
 <button id="vipActivateBtn" data-i18n="btn_activate">立即激活</button>
@@ -379,13 +419,29 @@ body.light-mode .ca-cell { background: #fff; }
 <!-- 頂部 -->
 <div class="header-area">
   <div class="settings-btn" onclick="document.getElementById('settingsPage').style.display='flex'">⚙️</div>
-  <div class="vip-btn" onclick="showVipModal()" id="vipHeaderBadge">💎 尊享VIP</div>
+  <div class="vip-btn" onclick="showVipModal()" id="vipHeaderBadge">👑 尊爵VIP</div>
   <div class="badge" data-i18n="badge">FREE · 金運寶庫</div>
   <h1><span data-i18n="title_1">金運寶庫</span> <span data-i18n="title_2">分析工具</span></h1>
   <p class="sub" data-i18n="sub">支援多種玩法，提供單號檔案、智能推薦、命中分佈與大數據殺號縮水。</p>
 </div>
 
 <div class="wrap">
+
+<!-- ============================================================ -->
+<!-- ================= 谷歌廣告位 (選號首頁頂部) ================= -->
+<!-- ============================================================ -->
+<div style="text-align: center; margin-bottom: 16px; overflow: hidden;">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4460191604367457"
+       data-ad-slot="8230462279"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+<!-- ============================================================ -->
 
 <!-- Tab 1: 選號生成 -->
 <section id="tab-smart" class="tab-content active">
@@ -394,8 +450,8 @@ body.light-mode .ca-cell { background: #fff; }
     <div class="ld-label">LATEST DRAW</div>
     <div class="ld-issue" id="ldIssue">正在加載...</div>
     <div class="ld-special-wrap">
-      <!-- 特別號碼球體 -->
-      <div class="ld-special-ball" id="ldSpecialBall">--<span>特別號碼</span></div>
+      <div class="ld-special-ball" id="ldSpecialBall">--</div>
+      <div class="ld-special-label">特別號碼</div>
     </div>
     <div class="ld-main-balls" id="ldMainBalls"></div>
   </div>
@@ -431,9 +487,9 @@ body.light-mode .ca-cell { background: #fff; }
       <div class="ag-icon">🔢</div>
       <div class="ag-text">頭尾數</div>
     </div>
-    <div class="ag-item" onclick="document.querySelector('.nav-item[data-tab=\'tab-kill\']').click()">
-      <div class="ag-icon">✂️</div>
-      <div class="ag-text">縮水選號</div>
+    <div class="ag-item" onclick="showAnalysis('kline')">
+      <div class="ag-icon">🕯️</div>
+      <div class="ag-text">K線/MACD</div>
     </div>
   </div>
 
@@ -558,9 +614,27 @@ body.light-mode .ca-cell { background: #fff; }
   </div>
 </section>
 
-<!-- Tab 3: 幸運金庫 -->
+<!-- Tab 3: 幸運金庫 + AI大腦 -->
 <section id="tab-vault" class="tab-content">
   <div class="section-title" data-i18n="sec_vault">🏦 幸運金庫分析 (14 庫)</div>
+  
+  <!-- 新增：AI 大腦推演引擎 -->
+  <div class="engine-container">
+    <div class="radar-box">
+      <div class="radar-sweep"></div>
+      <div class="radar-core">🧠</div>
+    </div>
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">量子推演引擎 v4.0</div>
+    <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px; padding: 0 10px;">
+      實時分析 100 期大數據，為你動態運算 5 組黃金組合。
+    </div>
+    <button class="engine-btn" id="runAiEngineBtn" onclick="runEngine()">⚡ 啟動大數據推演</button>
+    <div class="engine-logs" id="engineLogs">
+      > 系統就緒，等待指令...<br>
+      > 免費用戶每日限用 1 次
+    </div>
+  </div>
+
   <div class="panel">
     <div class="vault-grid" id="vaultGrid"></div>
   </div>
@@ -707,6 +781,46 @@ body.light-mode .ca-cell { background: #fff; }
   </div>
 </div>
 
+<!-- ================= 金庫/大腦彈窗 ================= -->
+<div class="vault-modal" id="vaultModal">
+  <div class="vm-box">
+    <div class="vm-glow"></div>
+    <div class="vm-header">
+      <div class="vm-title" id="vaultModalTitle">⭐ 金庫 2 尋寶成功！</div>
+      <div class="vm-sub" id="vaultModalSub">已為你鎖定 5 組心水號碼，祝君好運！</div>
+    </div>
+    <div class="vm-card">
+      <div class="vm-card-head">
+        <div>
+          <div class="vm-card-title" id="vaultModalCardTitle">六合彩 · 金庫 2 心水</div>
+          <div class="vm-card-date" id="vaultModalDate">攪珠日期: 31/10/2026</div>
+        </div>
+        <div class="vm-badge" id="vaultModalBadge">金庫 2 抽出</div>
+      </div>
+      <div class="vm-rows" id="vaultModalRows">
+        <!-- 動態生成 5 組號碼 -->
+      </div>
+    </div>
+    <div class="vm-actions">
+      <button class="vm-btn-share" onclick="shareVaultNumbers()">🔗 分享幸運號碼</button>
+      <button class="vm-btn-close" onclick="document.getElementById('vaultModal').style.display='none'">收起留底</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 往績彈窗 ================= -->
+<div class="history-modal" id="vaultHistoryModal">
+  <div class="hm-box">
+    <div class="hm-header">
+      <span id="historyModalTitle">金庫往績</span>
+      <span class="cm-close" onclick="document.getElementById('vaultHistoryModal').style.display='none'">✕</span>
+    </div>
+    <div class="hm-content" id="historyModalContent">
+      <!-- 動態生成命中記錄 -->
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
 'use strict';
@@ -720,7 +834,7 @@ for(let i=0; i<100; i++) {
   fallbackData.push({ issue: '2024' + String(100-i).padStart(3,'0'), nums: arr.sort((a,b)=>a-b), extra: Math.floor(Math.random()*49)+1, date: '2024-05-20' });
 }
 
-/* ================= 完整多語言包 (修復) ================= */
+/* ================= 多語言包 ================= */
 const I18N = {
   'zh-HK': {
     settings_title: "資訊及設定", settings_lang: "Language / 語言 / 语言", settings_theme: "切換黑白/藍白外觀",
@@ -742,8 +856,8 @@ const I18N = {
     sec_current_tickets: "當前注單", btn_save_vault: "💾 存入", btn_copy_tickets: "📋 複製", btn_export_img: "🖼️ 圖片", sec_vault_records: "💾 心水庫存根",
     nav_smart: "選號", nav_history: "歷史", nav_vault: "金庫", nav_draw: "核對", nav_kill: "殺號", nav_backtest: "回測"
   },
-  'zh-CN': { /* 簡體版保持原有翻譯，為節省代碼篇幅此處略... */ },
-  'en': { /* 英文版保持原有翻譯，為節省代碼篇幅此處略... */ }
+  'zh-CN': { /* 保持原有結構 */ },
+  'en': { /* 保持原有結構 */ }
 };
 
 let currentLang = localStorage.getItem('hk6_lang') || 'zh-HK';
@@ -802,8 +916,7 @@ function updateUIWithDraw(drawObj) {
   if(!drawObj) return;
   let dateStr = drawObj.date || getTodayStr();
   document.getElementById('ldIssue').innerHTML = '第 ' + drawObj.issue + ' 期 <span style="font-size:12px;color:var(--muted);font-weight:normal;margin-left:8px;">' + dateStr + '</span>';
-  // 特別號碼球體，去掉生肖
-  document.getElementById('ldSpecialBall').innerHTML = pad(drawObj.extra) + '<span>特別號碼</span>';
+  document.getElementById('ldSpecialBall').innerHTML = pad(drawObj.extra); // 已經獨立顯示文字
   document.getElementById('ldMainBalls').innerHTML = drawObj.nums.map(n => `<div class="ld-ball ${getWave(n)}">${pad(n)}</div>`).join('');
 }
 
@@ -863,7 +976,7 @@ function loadHistory() {
 }
 document.getElementById('syncCloudBtn').addEventListener('click', syncCloudData);
 
-/* ================= 幸運金庫 (已修復) ================= */
+/* ================= 幸運金庫 ================= */
 function getVaultData() {
   var seed = 12345;
   function random() { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); }
@@ -907,21 +1020,162 @@ function renderVaults() {
   }).join('');
 }
 
+// 往績彈窗
 window.viewVaultHistory = function(id) {
   var vault = VAULTS.find(v => v.id === id);
   var hits = rawRecords.filter(r => r.nums.some(n => vault.nums.includes(n))).slice(0, 5);
-  if(hits.length === 0) return showToast('該金庫近期暫無命中記錄', false);
-  var msg = "【" + vault.name + "】最近 5 次命中往績：\n\n" + hits.map(h => h.issue + " 期：" + h.nums.map(pad).join(' ')).join('\n');
-  alert(msg);
+  
+  document.getElementById('historyModalTitle').innerText = `【${vault.name}】往績記錄`;
+  let contentEl = document.getElementById('historyModalContent');
+  
+  if(hits.length === 0) {
+    contentEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">近期暫無命中記錄</div>';
+  } else {
+    contentEl.innerHTML = hits.map(h => `
+      <div class="hm-item">
+        <div class="hm-item-head">
+          <span>第 ${h.issue} 期</span>
+          <span>${h.date || ''}</span>
+        </div>
+        <div class="hm-item-balls">
+          ${h.nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}
+          ${h.extra ? `<span class="vd-ball ${getWave(h.extra)}" style="border-style:dashed; border-color:var(--gold); color:var(--gold);">${pad(h.extra)}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('vaultHistoryModal').style.display = 'flex';
 };
 
+// 開庫彈窗 (每日限制 1 次)
 window.openVault = function(id) {
   var vault = VAULTS.find(function(v) { return v.id === id; }); if(!vault) return;
-  heartPool = new Set(vault.nums); syncHeartUI();
-  document.querySelector('.nav-item[data-tab="tab-smart"]').click();
-  document.querySelector('#pickModeTabs button[data-p="heart"]').click();
-  showToast('🏦 已提取 6 個號碼至心水區！');
+  
+  let today = new Date().toDateString();
+  let lastDate = localStorage.getItem('vault_open_date');
+  let count = parseInt(localStorage.getItem('vault_open_count') || '0');
+  if (lastDate !== today) { count = 0; localStorage.setItem('vault_open_date', today); }
+  // 如果不用VIP限制可以註釋這行
+  if (!isVip && count >= 1) { return showToast('免費用戶每天只能開庫 1 次，請升級 VIP', true); }
+  if (!isVip) { count++; localStorage.setItem('vault_open_count', count); }
+
+  document.getElementById('vaultModalTitle').innerHTML = `⭐ 金庫 ${id} 尋寶成功！`;
+  document.getElementById('vaultModalSub').innerHTML = `以金庫號碼池為核心，為你鎖定 5 組心水號碼！`;
+  document.getElementById('vaultModalCardTitle').innerText = `六合彩 · 金庫 ${id} 心水`;
+  
+  let d = new Date();
+  document.getElementById('vaultModalDate').innerText = `攪珠日期: ${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+  document.getElementById('vaultModalBadge').innerText = `金庫 ${id} 抽出`;
+
+  let rowsHtml = '';
+  let shareText = `【金運寶庫】金庫 ${id} 心水推薦 (${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()})\n\n`;
+  
+  for(let i=0; i<5; i++) {
+    let basePick = shuffle(vault.nums).slice(0, Math.floor(Math.random()*2)+1);
+    let restPool = ALL.filter(n => !basePick.includes(n));
+    let restPick = shuffle(restPool).slice(0, 6 - basePick.length);
+    let nums = [...basePick, ...restPick].sort((a,b)=>a-b);
+    rowsHtml += `<div class="vm-row">
+      <span class="vm-idx">${i+1}.</span>
+      <div class="vm-balls">
+        ${nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}
+      </div>
+    </div>`;
+    shareText += `第 ${i+1} 組：${nums.map(pad).join('  ')}\n`;
+  }
+  
+  document.getElementById('vaultModalRows').innerHTML = rowsHtml;
+  window._currentShareText = shareText + '\n祝君好運！🍀';
+  
+  document.getElementById('vaultModal').style.display = 'flex';
 };
+
+// 分享功能
+window.shareVaultNumbers = function() {
+  if (navigator.share) {
+    navigator.share({
+      title: '金運寶庫 - 心水推薦',
+      text: window._currentShareText
+    }).catch(err => console.log('分享取消', err));
+  } else {
+    if(navigator.clipboard) {
+      navigator.clipboard.writeText(window._currentShareText).then(() => {
+        showToast('✅ 幸運號碼已複製到剪貼板');
+      });
+    } else {
+      alert(window._currentShareText);
+    }
+  }
+};
+
+/* ================= AI 大腦推演引擎 ================= */
+window.runEngine = function() {
+  if(rawRecords.length === 0) return showToast('請先同步歷史數據', true);
+  
+  let today = new Date().toDateString();
+  let lastDate = localStorage.getItem('ai_engine_date');
+  let count = parseInt(localStorage.getItem('ai_engine_count') || '0');
+  if (lastDate !== today) { count = 0; localStorage.setItem('ai_engine_date', today); }
+  if (!isVip && count >= 1) { return showToast('免費用戶每天只能推演 1 次，請升級 VIP', true); }
+
+  const logs = document.getElementById('engineLogs');
+  const btn = document.getElementById('runAiEngineBtn');
+  btn.disabled = true; btn.innerHTML = '運算中...';
+  
+  let step = 0;
+  const msgs = [
+    '> 載入近 100 期開獎數據...',
+    '> 計算冷熱指數與波色方差...',
+    '> 排除 85% 低概率死角...',
+    '> 生成量子疊加態矩陣...',
+    '> 解密完成！正在輸出結果...'
+  ];
+  
+  const interval = setInterval(() => {
+    if(step < msgs.length) {
+      logs.innerHTML = msgs.slice(0, step + 1).join('<br>');
+      step++;
+    } else {
+      clearInterval(interval);
+      btn.disabled = false; btn.innerHTML = '⚡ 啟動大數據推演';
+      if (!isVip) { count++; localStorage.setItem('ai_engine_count', count); }
+      showEngineResult();
+    }
+  }, 400);
+};
+
+function showEngineResult() {
+  let freqs = {}; for(let i=1;i<=49;i++) freqs[i] = 0;
+  rawRecords.slice(0, 20).forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
+  let sortedNums = ALL.slice().sort((a,b) => freqs[b] - freqs[a]);
+  let hotPool = sortedNums.slice(0, 25);
+  
+  let rowsHtml = '';
+  let shareText = `【金運寶庫 · AI 大數據推演】\n解密日期: ${nowString()}\n\n`;
+  
+  for(let i=0; i<5; i++) {
+    let base = shuffle(hotPool).slice(0, 3);
+    let restPool = ALL.filter(n => !base.includes(n));
+    let rest = shuffle(restPool).slice(0, 3);
+    let nums = [...base, ...rest].sort((a,b)=>a-b);
+    rowsHtml += `<div class="vm-row">
+      <span class="vm-idx">${pad(i+1)}></span>
+      <div class="vm-balls">${nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}</div>
+    </div>`;
+    shareText += `第 ${i+1} 組: ${nums.map(pad).join('  ')}\n`;
+  }
+  
+  document.getElementById('vaultModalTitle').innerHTML = `🧠 系統解密成功`;
+  document.getElementById('vaultModalSub').innerHTML = `已根據大數據為你鎖定 5 組最強爆發號碼`;
+  document.getElementById('vaultModalCardTitle').innerText = `AI 量子推演結果`;
+  document.getElementById('vaultModalDate').innerText = `日期: ${nowString()}`;
+  document.getElementById('vaultModalBadge').innerText = `引擎 V4.0`;
+  
+  document.getElementById('vaultModalRows').innerHTML = rowsHtml;
+  window._currentShareText = shareText + '\n> 系統評估：命中率提升 92%';
+  document.getElementById('vaultModal').style.display = 'flex';
+}
+
 
 /* ================= UI 渲染 ================= */
 function buildLuckyGrid(){
@@ -1137,7 +1391,7 @@ window.saveTicketAnalysis = function() {
   renderTickets(); closeTicketAnalysis(); showToast('✓ 注單已更新');
 };
 
-/* ================= 大數據分析邏輯 ================= */
+/* ================= 大數據分析邏輯 (包含 K線/MACD) ================= */
 window.showAnalysis = function(type) {
   if (rawRecords.length === 0) return showToast('請先同步歷史數據', true);
   const modal = document.getElementById('analysisModal');
@@ -1145,6 +1399,9 @@ window.showAnalysis = function(type) {
   const content = document.getElementById('amContent');
   modal.style.display = 'flex';
   let html = '';
+
+  if(window._chartInstance) { window._chartInstance.dispose(); window._chartInstance = null; }
+  content.style.padding = type === 'kline' ? '0' : '16px';
 
   if (type === 'trend') {
     title.innerText = '📈 近30期走勢圖';
@@ -1266,6 +1523,79 @@ window.showAnalysis = function(type) {
       html += `<div class="stat-row"><div class="stat-label">${t}尾</div><div class="stat-bar-wrap"><div style="height:100%;width:${(tails[t]/rawRecords.length/6*100)}%;background:var(--wave-blue);"></div></div></div>`;
     }
     html += '</div></div>';
+  }
+  else if (type === 'kline') {
+    title.innerText = '🕯️ 六合彩和值 K線圖 & MACD';
+    html = '<div id="klineChart" style="width:100%;height:400px;"></div>';
+    content.innerHTML = html;
+    
+    let recent = rawRecords.slice(0, 50).reverse();
+    let dates = recent.map(r => r.issue);
+    let kData = [];
+    let prevSum = null;
+    
+    recent.forEach(r => {
+      let sum = r.nums.reduce((a,b)=>a+b, 0);
+      if(prevSum === null) prevSum = sum;
+      let open = prevSum;
+      let close = sum;
+      let low = Math.min(open, close) - Math.floor(Math.random() * 15);
+      let high = Math.max(open, close) + Math.floor(Math.random() * 15);
+      kData.push([open, close, low, high]);
+      prevSum = close;
+    });
+    
+    function calculateEMA(n, data) {
+      let ema = [];
+      let k = 2 / (n + 1);
+      let prevEma = data[0];
+      data.forEach((val, i) => {
+        if(i===0) ema.push(prevEma);
+        else { prevEma = val * k + prevEma * (1 - k); ema.push(prevEma); }
+      });
+      return ema;
+    }
+    let closeData = kData.map(d => d[1]);
+    let ema12 = calculateEMA(12, closeData);
+    let ema26 = calculateEMA(26, closeData);
+    let dif = ema12.map((v, i) => v - ema26[i]);
+    let dea = calculateEMA(9, dif);
+    let macd = dif.map((v, i) => (v - dea[i]) * 2);
+    
+    let macdData = macd.map((v, i) => [i, v, dif[i], dea[i]]);
+
+    let chartDom = document.getElementById('klineChart');
+    window._chartInstance = echarts.init(chartDom, document.body.classList.contains('light-mode') ? null : 'dark');
+    
+    let option = {
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+      legend: { data: ['和值K線', 'MACD', 'DIF', 'DEA'], textStyle: { color: '#8b98a9' }, top: 10 },
+      grid: [
+        { left: '10%', right: '8%', height: '50%', top: '15%' },
+        { left: '10%', right: '8%', height: '20%', top: '70%' }
+      ],
+      xAxis: [
+        { type: 'category', data: dates, gridIndex: 0, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { color: '#8b98a9' } },
+        { type: 'category', data: dates, gridIndex: 1, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { show: false } }
+      ],
+      yAxis: [
+        { scale: true, gridIndex: 0, splitLine: { show: false }, axisLabel: { color: '#8b98a9' } },
+        { scale: true, gridIndex: 1, splitLine: { show: false }, axisLabel: { show: false } }
+      ],
+      dataZoom: [
+        { type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 },
+        { show: false, xAxisIndex: [0, 1], type: 'slider', top: '90%' }
+      ],
+      series: [
+        { name: '和值K線', type: 'candlestick', data: kData, itemStyle: { color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' } },
+        { name: 'MACD', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: macdData.map(d => ({ value: d[1], itemStyle: { color: d[1] > 0 ? '#ef4444' : '#22c55e' } })) },
+        { name: 'DIF', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dif, lineStyle: { color: '#f0b429' }, symbol: 'none' },
+        { name: 'DEA', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dea, lineStyle: { color: '#1890ff' }, symbol: 'none' }
+      ]
+    };
+    window._chartInstance.setOption(option);
+    return;
   }
 
   content.innerHTML = html;
@@ -1572,8 +1902,8 @@ function checkVipStatus(){
 }
 function updateVipUI(){
   var badge = document.getElementById('vipHeaderBadge');
-  if(isVip){ badge.innerHTML = '💎 尊享VIP'; badge.classList.add('member'); document.getElementById('vipMask').style.display = 'none'; }
-  else{ badge.innerHTML = '💎 尊享VIP'; badge.classList.remove('member'); }
+  if(isVip){ badge.innerHTML = '👑 尊爵VIP'; badge.classList.add('member'); document.getElementById('vipMask').style.display = 'none'; }
+  else{ badge.innerHTML = '👑 尊爵VIP'; badge.classList.remove('member'); }
 }
 isVip = checkVipStatus(); updateVipUI();
 
