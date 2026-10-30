@@ -337,7 +337,33 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
     <button class="btn-sync" id="syncCloudBtn" data-i18n="btn_sync">手動同步最新數據</button>
     <div id="syncStatus" style="font-size:11px;color:var(--muted);margin-top:8px;"></div>
   </div>
-
+<div class="section-title" style="margin-top:20px;">🛠️ 實用工具</div>
+  
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+    <!-- 1. 缩水选号 -->
+    <div class="ag-item" onclick="toggleSmartTools()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🎯</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">縮水選號</div>
+    </div>
+    
+    <!-- 2. AI 智能选号 -->
+    <div class="ag-item" onclick="runAiSmartPick()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🤖</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">AI 智能選號</div>
+    </div>
+    
+    <!-- 3. 注数计算器 (待开发，先占位) -->
+    <div class="ag-item" onclick="showToast('注數計算器開發中...')" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🧮</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">注數計算</div>
+    </div>
+    
+    <!-- 4. 号码体检 (待开发，先占位) -->
+    <div class="ag-item" onclick="showToast('號碼體檢開發中...')" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🩺</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">號碼體檢</div>
+    </div>
+  </div>
   <div class="section-title" data-i18n="sec_num_pick">① 號碼選擇</div>
   <div class="panel shake-panel">
     <button class="btn-shake" id="shakeBtn" data-i18n="btn_shake">📳 搖一搖物理攪珠 (抽出 6+1)</button>
