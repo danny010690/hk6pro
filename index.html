@@ -69,7 +69,39 @@ button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .btn-copy{color:var(--gold);background:rgba(0,163,224,.1);border:1px solid var(--gold)}
 .btn-green{color:#fff;background:var(--green);border:none}
 .btn-purple{color:#fff;background:#7e22ce;border:none}
-.latest-draw-card{background:var(--panel);border-radius:20px;padding:20px 16px;text-align:center;border:1px solid var(--line);margin-bottom:16px;box-shadow:var(--shadow)}
+.latest-draw-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,244,248,0.8) 100%);
+  border-radius: 24px;
+  padding: 24px 16px;
+  text-align: center;
+  border: 1px solid rgba(0, 35, 102, 0.08);
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 35, 102, 0.06), inset 0 2px 0 rgba(255,255,255,0.8);
+  overflow: hidden;
+}
+/* 增加一道斜向高光扫过效果 */
+.latest-draw-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  transform: rotate(30deg);
+  animation: shine 6s infinite;
+}
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  20%, 100% { transform: translateX(100%) rotate(30deg); }
+}
+/* 特别号呼吸灯 */
+.ld-special-ball {
+  animation: pulse-glow 2s infinite;
+}
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(240,180,41,0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(240,180,41,0); }
+  100% { box-shadow: 0 0 0 0 rgba(240,180,41,0); }
+}
 .ld-label{font-size:12px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;font-weight:800}
 .ld-issue{font-size:16px;font-weight:900;color:var(--text);margin-bottom:12px}
 .ld-special-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
