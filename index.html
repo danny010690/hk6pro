@@ -372,6 +372,28 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
     <div class="ld-main-balls" id="ldMainBalls"></div>
   </div>
 
+  <!-- 新增：港风快捷核对卡片 -->
+  <div style="background: linear-gradient(145deg, #131a24, #1a2330); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255, 42, 133, 0.2); position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(255, 42, 133, 0.1);">
+    
+    <!-- 背景装饰光晕 -->
+    <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: rgba(255, 42, 133, 0.15); filter: blur(30px); border-radius: 50%; pointer-events: none;"></div>
+
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+      <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 42, 133, 0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ff2a85; border: 1px solid rgba(255, 42, 133, 0.3);">
+        💌
+      </div>
+      <div>
+        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">想知道中唔中？</div>
+        <div style="font-size: 12px; color: #8b98a9;">输入你嘅号码，即刻核对本期结果。</div>
+      </div>
+    </div>
+    
+    <!-- 立即对飞按钮 -->
+    <button onclick="document.querySelector('.nav-item[data-tab=\'tab-draw\']').click();" style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(90deg, #ff2a85, #ff5e9c); color: #fff; font-size: 16px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 42, 133, 0.4); transition: transform 0.2s, box-shadow 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
+      立即對飛 <span style="margin-left: 5px;">➔</span>
+    </button>
+  </div>
+
   <div class="section-title" style="margin-top:20px;">📊 六合彩大數據分析</div>
   <div class="analysis-grid-panel">
     <div class="ag-item" onclick="showAnalysis('trend')"><div class="ag-icon">📈</div><div class="ag-text">走勢圖</div></div>
