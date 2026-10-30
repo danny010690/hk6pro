@@ -94,14 +94,31 @@ button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .btn-purple{color:#fff;background:#7e22ce;border:none}
 .latest-draw-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,244,248,0.8) 100%);
+  /* 默认使用暗黑主题的卡片背景，浅色主题会在下面覆盖 */
+  background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%);
   border-radius: 24px;
   padding: 24px 16px;
   text-align: center;
-  border: 1px solid rgba(0, 35, 102, 0.08);
+  border: 1px solid var(--line);
   margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0, 35, 102, 0.06), inset 0 2px 0 rgba(255,255,255,0.8);
+  box-shadow: var(--shadow);
   overflow: hidden;
+}
+
+/* 如果切换到了浅色主题，则使用之前的白底微渐变 */
+body.light-mode .latest-draw-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+  border: 1px solid rgba(0, 35, 102, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 35, 102, 0.06), inset 0 2px 0 rgba(255,255,255,0.8);
+}
+
+/* 确保期号和日期颜色跟着主题走 */
+.ld-issue {
+  color: var(--text) !important;
+}
+.ld-issue span {
+  color: var(--muted) !important;
+}
 }
 /* 增加一道斜向高光扫过效果 */
 .latest-draw-card::before {
