@@ -340,6 +340,7 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
 <div class="section-title" style="margin-top:20px;">🛠️ 實用工具</div>
   
   <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+    
     <!-- 1. 缩水选号 -->
     <div class="ag-item" onclick="toggleSmartTools()" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">🎯</div>
@@ -352,19 +353,40 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">AI 智能選號</div>
     </div>
     
-    <!-- 3. 注数计算器 (待开发，先占位) -->
+    <!-- 3. 生肖波色 -->
+    <div class="ag-item" onclick="showZodiacWave()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🔮</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">生肖波色</div>
+    </div>
+    
+    <!-- 4. 号码体检 -->
+    <div class="ag-item" onclick="showToast('號碼體檢開發中...')" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🩺</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">號碼體檢</div>
+    </div>
+    
+    <!-- 5. 注数计算（你已经加上了） -->
     <div class="ag-item" onclick="showToast('注數計算器開發中...')" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">🧮</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">注數計算</div>
     </div>
     
-    <!-- 4. 号码体检 (待开发，先占位) -->
-    <div class="ag-item" onclick="showToast('號碼體檢開發中...')" style="padding: 15px 0;">
-      <div class="ag-icon" style="font-size: 24px;">🩺</div>
-      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">號碼體檢</div>
+    <!-- 6. 回测排行（新增第6个，跳转到回测页） -->
+    <div class="ag-item" onclick="document.querySelector('.nav-item[data-tab=\'tab-backtest\']').click()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">📊</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">回測排行</div>
+    </div>
+<!-- 6. 玄学选号 -->
+    <div class="ag-item" onclick="showMysticPick()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🪙</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">玄學選號</div>
+    </div>
+     <!-- 5. 注数计算（你已经加上了） -->
+    <div class="ag-item" onclick="showToast('注數計算器開發中...')" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🧮</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">注數計算</div>
     </div>
   </div>
-
   <div class="panel">
     <div class="row" style="margin-bottom:12px">
       <label data-i18n="label_pick_mode">選號方式</label>
@@ -1160,6 +1182,71 @@ function doGenerate(){
   document.querySelector('.nav-item[data-tab="tab-backtest"]').click();
   showToast('✓ 已生成 ' + TICKETS.length + ' 注，可點擊「分析」查看');
 }
+window.showZodiacWave = function() {
+  var modal = document.getElementById('zodiacWaveModal');
+  if(!modal) {
+    var html = '<div class="custom-modal" id="zodiacWaveModal">'
+      + '<div class="cm-box" style="max-width: 400px;">'
+      + '<div class="cm-header"><span>🔮 生肖波色查询表</span><span class="cm-close" onclick="document.getElementById(\'zodiacWaveModal\').style.display=\'none\'">✕</span></div>'
+      + '<div class="cm-grid" id="zodiacWaveContent" style="display:block; padding: 16px; overflow-y: auto; max-height: 75vh; background:var(--panel); border-radius: 0 0 20px 20px;"></div>'
+      + '</div></div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+    modal = document.getElementById('zodiacWaveModal');
+  }
+  
+  modal.style.display = 'flex';
+  var currentYear = new Date().getFullYear();
+  var baseIdx = currentYear % 12; 
+  var animals = ['猴', '鸡', '狗', '猪', '鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊'];
+  var currentAnimal = animals[baseIdx];
+  
+  var zodiacMap = {};
+  for(var i=1; i<=49; i++) {
+    var zIdx = (baseIdx - (i % 12) + 12) % 12;
+    var animal = animals[zIdx];
+    if(!zodiacMap[animal]) zodiacMap[animal] = [];
+    zodiacMap[animal].push(i);
+  }
+  
+  var content = '<div style="font-size:13px; margin-bottom:12px; color:var(--gold); text-align:center;">今年是 <b>' + currentYear + ' 年 (' + currentAnimal + '年)</b></div>';
+  var order = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+  
+  content += '<div style="display:grid; grid-template-columns: repeat(2,1fr); gap:8px; margin-bottom:20px;">';
+  order.forEach(function(a) {
+     var nums = zodiacMap[a] || [];
+     var isCurrent = (a === currentAnimal) ? 'border-color:var(--gold);' : '';
+     var nameColor = (a === currentAnimal) ? 'color:var(--red);' : 'color:var(--text);';
+     content += '<div style="background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:8px; ' + isCurrent + '">'
+           + '<div style="font-weight:bold; margin-bottom:4px; font-size:14px; ' + nameColor + '">' + a + ' <span style="font-size:10px; font-weight:normal; color:var(--muted);">(' + nums.length + '码)</span></div>'
+           + '<div style="font-size:12px; color:var(--text); line-height:1.4;">' + nums.map(function(n){ return pad(n); }).join(' ') + '</div>'
+           + '</div>';
+  });
+  content += '</div>';
+  
+  content += '<div style="font-size:14px; font-weight:bold; margin-bottom:10px; color:var(--gold); border-top:1px dashed var(--line); padding-top:12px;">🎨 波色分类</div>';
+  
+  var red = [], blue = [], green = [];
+  for(var i=1; i<=49; i++) {
+     if(WAVE_RED.has(i)) red.push(i);
+     else if(WAVE_BLUE.has(i)) blue.push(i);
+     else green.push(i);
+  }
+  
+  content += '<div style="margin-bottom:10px; font-size:13px; display:flex; align-items:flex-start; line-height:1.6;">'
+        + '<span style="color:var(--wave-red); font-weight:bold; width:50px; flex-shrink:0;">红波</span>'
+        + '<span style="color:var(--text);">' + red.map(function(n){ return pad(n); }).join(', ') + '</span></div>';
+        
+  content += '<div style="margin-bottom:10px; font-size:13px; display:flex; align-items:flex-start; line-height:1.6;">'
+        + '<span style="color:var(--wave-blue); font-weight:bold; width:50px; flex-shrink:0;">蓝波</span>'
+        + '<span style="color:var(--text);">' + blue.map(function(n){ return pad(n); }).join(', ') + '</span></div>';
+        
+  content += '<div style="font-size:13px; display:flex; align-items:flex-start; line-height:1.6;">'
+        + '<span style="color:var(--wave-green); font-weight:bold; width:50px; flex-shrink:0;">绿波</span>'
+        + '<span style="color:var(--text);">' + green.map(function(n){ return pad(n); }).join(', ') + '</span></div>';
+        
+  document.getElementById('zodiacWaveContent').innerHTML = content;
+};
+
 document.getElementById('genBtn').addEventListener('click', doGenerate);
 
 function renderTickets(){
