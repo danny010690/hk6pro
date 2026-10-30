@@ -1371,9 +1371,53 @@ window.showAnalysis = function(type){
     var macdData = macd.map(function(v, i){ return [i, v, dif[i], dea[i]]; });
     var chartDom = document.getElementById('klineChart');
     window._chartInstance = echarts.init(chartDom, document.body.classList.contains('light-mode') ? null : 'dark');
+    
     window._chartInstance.setOption({
       backgroundColor: 'transparent',
-      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'cross' },
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        borderColor: 'var(--gold)',
+        borderWidth: 1,
+        padding: 12,
+        textStyle: { color: '#e6edf3', fontSize: 12 },
+        formatter: function (params) {
+          var p = params[0];
+          if (!p) return '';
+          var idx = p.dataIndex;
+          var rec = recent[idx];
+          if (!rec) return '';
+          
+          var mainBalls = rec.nums.map(function(n){ return pad(n); }).join('  ');
+          var extraBall = rec.extra ? pad(rec.extra) : '--';
+          var sum = rec.nums.reduce(function(a,b){ return a+b; }, 0);
+          var kd = kData[idx];
+          
+          var html = '<div style="min-width:160px;">';
+          html += '<div style="color:var(--gold); font-weight:bold; font-size:13px; margin-bottom:6px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">第 ' + rec.issue + ' 期</div>';
+          html += '<div style="color:var(--muted); margin-bottom:4px;">日期：' + (rec.date || '--') + '</div>';
+          html += '<div style="margin-bottom:4px;">开奖号：<br><span style="color:#ef4444; font-weight:bold;">' + mainBalls + '</span> <span style="color:#1890ff; font-weight:bold;">+ ' + extraBall + '</span></div>';
+          if (kd) {
+            html += '<div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.2);">';
+            html += '<div>和值：<b>' + sum + '</b></div>';
+            html += '<div>K线：开 ' + kd[0] + ' | 收 ' + kd[1] + '</div>';
+            html += '<div>K线：低 ' + kd[2] + ' | 高 ' + kd[3] + '</div>';
+            html += '</div>';
+          }
+          
+          // 如果有 MACD 等指标，也可以在这里提取显示
+          if (params.length > 1) {
+            var macdVal = params.find(function(item){ return item.seriesName === 'MACD'; });
+            if (macdVal && macdVal.value) {
+              html += '<div style="margin-top:4px;">MACD：' + macdVal.value + '</div>';
+            }
+          }
+          
+          html += '</div>';
+          return html;
+        }
+      },
       legend: { data: ['和值K線', 'MACD', 'DIF', 'DEA'], textStyle: { color: '#8b98a9' }, top: 10 },
       grid: [{ left: '10%', right: '8%', height: '50%', top: '15%' }, { left: '10%', right: '8%', height: '20%', top: '70%' }],
       xAxis: [
