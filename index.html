@@ -522,11 +522,12 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
     <div class="row">
       <label>回測期數</label>
       <div class="tabs" id="btPeriodTabs">
-        <button data-p="20">20 期</button>
-        <button data-p="50" class="active">50 期</button>
-        <button data-p="100">100 期</button>
-        <button data-p="200">200 期</button>
-        <button data-p="custom">自訂</button>
+        <button data-p="10" class="active">10 期 (免費)</button>
+        <button data-p="20">20 期 🔒</button>
+        <button data-p="50">50 期 🔒</button>
+        <button data-p="100">100 期 🔒</button>
+        <button data-p="200">200 期 🔒</button>
+        <button data-p="custom">自訂 🔒</button>
       </div>
       <input type="number" class="num-inp" id="customBtPeriod" min="5" max="500" value="100" style="display:none;">
     </div>
@@ -677,7 +678,7 @@ var history = []; var rawRecords = [];
 var missingGroups = new Set(), headGroups = new Set(), tailGroups = new Set(), waveGroups = new Set();
 var LS_VAULT_KEY = 'hk6_vault_records_v1';
 var LS_HISTORY_KEY = 'hk6_real_history_v1';
-var backtestPeriods = 50;
+var backtestPeriods = 10;
 
 if(localStorage.getItem('hk6_theme') === 'light'){
   document.body.classList.add('light-mode');
@@ -2071,8 +2072,17 @@ window.applyStrategy = function(strategyId){
   if(ticketsEl) ticketsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };document.getElementById('btPeriodTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
+  var p = btn.dataset.p;
+
+  // 拦截：非 10 期的选项，免费用户不能用
+  if(p !== '10' && !isVip){
+    showToast('免費用戶最高只能回測 10 期，請升級 VIP', true);
+    if(window.showVipModal) window.showVipModal();
+    return;
+  }
+
   var customInput = document.getElementById('customBtPeriod');
-  if(btn.dataset.p === 'custom'){
+  if(p === 'custom'){
     customInput.style.display = '';
     var v = parseInt(customInput.value, 10) || 100;
     v = Math.max(5, Math.min(v, 500));
@@ -2080,7 +2090,7 @@ window.applyStrategy = function(strategyId){
     backtestPeriods = v;
   } else {
     customInput.style.display = 'none';
-    backtestPeriods = parseInt(btn.dataset.p, 10) || 50;
+    backtestPeriods = parseInt(p, 10) || 10;
   }
   this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
 });
@@ -2101,6 +2111,13 @@ document.getElementById('customBtPeriod').addEventListener('change', function(){
 
 document.getElementById('runBacktestBtn').addEventListener('click', function(){
   if(rawRecords.length < 10) return showToast('歷史數據不足，請先同步', true);
+  
+  // 二次拦截：防止通过修改 DOM 或手动输入绕过
+  if(backtestPeriods > 10 && !isVip){
+    showToast('免費用戶最高只能回測 10 期，請升級 VIP', true);
+    if(window.showVipModal) window.showVipModal();
+    return;
+  }
   var k = parseInt(document.getElementById('btTicketCount').value, 10) || 10;
   var n = parseInt(document.getElementById('btBalls').value, 10) || 6;
   k = Math.max(1, Math.min(k, 50));
