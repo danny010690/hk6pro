@@ -632,7 +632,7 @@ function showToast(msg, isError){
   clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2800);
 }
 
-var fallbackData = (function(){
+var fallbackData = (function(){ return []; /* 演示數據已停用 */
   var arr = []; var seed = 20251030;
   function rnd(){ seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
   var base = new Date(2025, 9, 30);
@@ -682,7 +682,13 @@ window.changeLang = function(lang, btn){
 };
 
 function updateUIWithDraw(drawObj){
-  if(!drawObj) return;
+  if(!drawObj){
+    document.getElementById('ldIssue').textContent = '暫無數據';
+    document.getElementById('ldSpecialBall').textContent = '--';
+    document.getElementById('ldMainBalls').innerHTML = '';
+    return;
+  }
+
   var dateStr = drawObj.date || getTodayStr();
   document.getElementById('ldIssue').innerHTML = '第 ' + drawObj.issue + ' 期 <span style="font-size:12px;color:var(--muted);font-weight:normal;margin-left:8px;">' + dateStr + '</span>';
   document.getElementById('ldSpecialBall').innerHTML = pad(drawObj.extra);
@@ -692,6 +698,10 @@ function updateUIWithDraw(drawObj){
 function renderHistoryList(){
   var listEl = document.getElementById('historyList');
   if(!listEl) return;
+  if(rawRecords.length === 0){
+    listEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:30px 10px;font-size:13px;">暫無歷史數據<br><span style="font-size:12px;">請點擊上方「手動同步最新數據」</span></div>';
+    return;
+  }
   listEl.innerHTML = rawRecords.map(function(r){
     return '<div class="history-item">'
       + '<div class="history-issue">' + r.issue + (r.date ? '<br><span style="font-size:11px;color:var(--muted);font-weight:normal;">' + r.date + '</span>' : '') + '</div>'
@@ -759,8 +769,8 @@ async function syncCloudData(){
       applyRecords(cached, 'cache');
       showToast('⚠️ 雲端不可用，已用本地緩存（' + cached.length + ' 期）', true);
     } else {
-      applyRecords(fallbackData, 'demo');
-      showToast('⚠️ 雲端不可用，已用演示數據', true);
+      applyRecords([], 'none');
+      showToast('❌ 同步失敗，暫無數據，請檢查網絡後重試', true);
     }
   }
   btn.textContent = oldText; btn.disabled = false;
@@ -2143,7 +2153,7 @@ window.submitCustomPrompt = function(){
   if(cached && Array.isArray(cached) && cached.length > 0){
     applyRecords(cached, 'cache');
   } else {
-    applyRecords(fallbackData, 'demo');
+    applyRecords([], 'none');
   }
   buildLuckyGrid();
   buildHeartGrid();
