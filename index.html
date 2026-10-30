@@ -364,10 +364,10 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">生肖波色查詢</div>
     </div>
     
-    <!-- 5. 号码体检 -->
-    <div class="ag-item" onclick="showToast('號碼體檢開發中...')" style="padding: 15px 0;">
-      <div class="ag-icon" style="font-size: 24px;">🩺</div>
-      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">號碼體檢</div>
+    <!-- 5. 生肖星座 -->
+    <div class="ag-item" onclick="showZodiacConstellation()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">♈️</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">生肖星座選號</div>
     </div>
     
     <!-- 6. 注数计算（你已经加上了） -->
@@ -378,7 +378,7 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
 
     <!-- 7. 拖膽计算 -->
     <div class="ag-item" onclick="showToast('拖膽計算器開發中...')" style="padding: 15px 0;">
-      <div class="ag-icon" style="font-size: 24px;">🧮</div>
+      <div class="ag-icon" style="font-size: 24px;">💻</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">拖膽計算</div>
     </div>
     
@@ -1346,6 +1346,133 @@ window.startMysticPick = function() {
       showToast('✅ 卦象已生，注單已更新');
     }
   }, 100);
+};
+
+// ===== 生肖星座选号 =====
+// ===== 生肖星座选号（传统对应数字版） =====
+window.showZodiacConstellation = function() {
+  var modal = document.getElementById('zodiacConstellationModal');
+  if(!modal) {
+    var zodiacs = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+    var constellations = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座'];
+    
+    var zOpts = zodiacs.map(function(z, i){ return '<option value="' + i + '">' + z + '</option>'; }).join('');
+    var cOpts = constellations.map(function(c, i){ return '<option value="' + i + '">' + c + '</option>'; }).join('');
+
+    var html = '<div class="custom-modal" id="zodiacConstellationModal">'
+      + '<div class="cm-box" style="max-width: 380px; text-align: center;">'
+      + '<div class="cm-header"><span>✨ 專屬生肖星座選號</span><span class="cm-close" onclick="document.getElementById(\'zodiacConstellationModal\').style.display=\'none\'">✕</span></div>'
+      + '<div style="padding: 20px; background: var(--panel); border-radius: 0 0 20px 20px;">'
+      + '<div style="font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5;">本工具根據中國傳統十二生肖與西洋十二星座的幸運數字對應關係生成組合。不同生肖和星座在民間傳說中各有其幸運數字。</div>'
+      
+      + '<div style="display: flex; gap: 10px; margin-bottom: 20px;">'
+      + '<select id="zcZodiac" style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--text); outline: none; font-size: 14px;">' + zOpts + '</select>'
+      + '<select id="zcConstellation" style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--text); outline: none; font-size: 14px;">' + cOpts + '</select>'
+      + '</div>'
+      
+      + '<button class="act btn-main" onclick="generateZodiacConstellation()" style="width: 100%; margin-bottom: 16px;">🌟 解碼專屬幸運號</button>'
+      
+      + '<div id="zcResult" style="display: none; margin-bottom: 16px;">'
+      + '<div id="zcText" style="font-size: 13px; color: var(--gold); margin-bottom: 12px; font-weight: bold;"></div>'
+      + '<div id="zcBalls" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>'
+      + '</div>'
+      
+      // 底部固定说明区
+      + '<div style="font-size: 11.5px; color: var(--muted); line-height: 1.6; text-align: left; padding: 12px; background: var(--panel-2); border-radius: 8px; border: 1px dashed var(--line);">'
+      + '💡 <b>說明：</b>幸運號碼生成器根據中國傳統十二生肖或西洋十二星座的對應數字，生成六合彩號碼組合。不同生肖和星座在民間傳說中各有其幸運數字，本工具將這些傳統對應關係數位化。此功能純粹娛樂參考。'
+      + '</div>'
+      + '</div></div></div>';
+      + '</div></div></div>';
+      
+    document.body.insertAdjacentHTML('beforeend', html);
+    modal = document.getElementById('zodiacConstellationModal');
+  }
+  
+  document.getElementById('zcResult').style.display = 'none';
+  modal.style.display = 'flex';
+};
+
+window.generateZodiacConstellation = function() {
+  var zIdx = parseInt(document.getElementById('zcZodiac').value, 10);
+  var cIdx = parseInt(document.getElementById('zcConstellation').value, 10);
+  var zName = document.getElementById('zcZodiac').options[zIdx].text;
+  var cName = document.getElementById('zcConstellation').options[cIdx].text;
+  
+  var currentYear = new Date().getFullYear();
+  var baseIdx = currentYear % 12; 
+  var animals = ['猴', '鸡', '狗', '猪', '鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊'];
+  
+  // 将选中的生肖映射到对应数字（六合彩当年生肖盘）
+  var selectedZodiacIndex = animals.indexOf(zName); 
+  var zodiacNums = [];
+  for(var i = 1; i <= 49; i++) {
+    var zIdxMap = (baseIdx - (i % 12) + 12) % 12;
+    if(zIdxMap === selectedZodiacIndex) {
+      zodiacNums.push(i);
+    }
+  }
+  
+  // 星座幸运数字池 (按间隔 12 的固定映射)
+  var constellationNums = [];
+  for(var i = 1; i <= 49; i++) {
+    if((i % 12) === cIdx % 12) {
+      constellationNums.push(i);
+    }
+  }
+  
+  // 算法固定：用生肖索引和星座索引做种子，保证同配置出同号
+  var seed = (zIdx + 1) * 100 + (cIdx + 1);
+  function zcRandom() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  }
+  
+  // 从生肖池抽 3 个，星座池抽 3 个
+  var finalNums = [];
+  
+  var zPool = zodiacNums.slice();
+  for (var i = zPool.length - 1; i > 0; i--) {
+    var j = Math.floor(zcRandom() * (i + 1));
+    var t = zPool[i]; zPool[i] = zPool[j]; zPool[j] = t;
+  }
+  finalNums = finalNums.concat(zPool.slice(0, 3));
+  
+  var cPool = constellationNums.slice();
+  for (var i = cPool.length - 1; i > 0; i--) {
+    var j = Math.floor(zcRandom() * (i + 1));
+    var t = cPool[i]; cPool[i] = cPool[j]; cPool[j] = t;
+  }
+  
+  // 避开重复号码，补齐 6 个
+  for (var i = 0; i < cPool.length && finalNums.length < 6; i++) {
+    if(finalNums.indexOf(cPool[i]) === -1) {
+      finalNums.push(cPool[i]);
+    }
+  }
+  
+  if (finalNums.length < 6) {
+    var allRest = [];
+    for(var i=1; i<=49; i++) { if(finalNums.indexOf(i) === -1) allRest.push(i); }
+    for (var i = allRest.length - 1; i > 0; i--) {
+      var j = Math.floor(zcRandom() * (i + 1));
+      var t = allRest[i]; allRest[i] = allRest[j]; allRest[j] = t;
+    }
+    finalNums = finalNums.concat(allRest.slice(0, 6 - finalNums.length));
+  }
+  
+  finalNums.sort(function(a,b){ return a - b; });
+  
+  document.getElementById('zcText').innerHTML = '【' + zName + '】 与 【' + cName + '】 专属幸运号：';
+  document.getElementById('zcBalls').innerHTML = finalNums.map(function(n) {
+    return '<span class="ball ' + getWave(n) + '" style="width: 38px; height: 38px; font-size: 16px; box-shadow: 0 0 10px rgba(240,180,41,0.3);">' + pad(n) + '</span>';
+  }).join('');
+  
+  document.getElementById('zcResult').style.display = 'block';
+  
+  TICKETS = [finalNums];
+  ballsPerTicket = 6;
+  renderTickets();
+  showToast('✅ 專屬幸運號已生成');
 };
 
 document.getElementById('genBtn').addEventListener('click', doGenerate);
