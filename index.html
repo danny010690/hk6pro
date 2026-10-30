@@ -352,39 +352,40 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
       <div class="ag-icon" style="font-size: 24px;">🤖</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">AI 智能選號</div>
     </div>
-    
-    <!-- 3. 生肖波色 -->
+    <!-- 3. 玄学选号 -->
+    <div class="ag-item" onclick="showMysticPick()" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">☯️</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">玄學選號</div>
+    </div>
+
+    <!-- 4. 生肖波色 -->
     <div class="ag-item" onclick="showZodiacWave()" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">🔮</div>
-      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">生肖波色</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">生肖波色查詢</div>
     </div>
     
-    <!-- 4. 号码体检 -->
+    <!-- 5. 号码体检 -->
     <div class="ag-item" onclick="showToast('號碼體檢開發中...')" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">🩺</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">號碼體檢</div>
     </div>
     
-    <!-- 5. 注数计算（你已经加上了） -->
+    <!-- 6. 注数计算（你已经加上了） -->
     <div class="ag-item" onclick="showToast('注數計算器開發中...')" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">🧮</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">注數計算</div>
     </div>
+
+    <!-- 7. 拖膽计算 -->
+    <div class="ag-item" onclick="showToast('拖膽計算器開發中...')" style="padding: 15px 0;">
+      <div class="ag-icon" style="font-size: 24px;">🧮</div>
+      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">拖膽計算</div>
+    </div>
     
-    <!-- 6. 回测排行（新增第6个，跳转到回测页） -->
+    <!-- 8. 回测排行（新增第6个，跳转到回测页） -->
     <div class="ag-item" onclick="document.querySelector('.nav-item[data-tab=\'tab-backtest\']').click()" style="padding: 15px 0;">
       <div class="ag-icon" style="font-size: 24px;">📊</div>
       <div class="ag-text" style="margin-top: 8px; font-weight: 600;">回測排行</div>
-    </div>
-<!-- 6. 玄学选号 -->
-    <div class="ag-item" onclick="showMysticPick()" style="padding: 15px 0;">
-      <div class="ag-icon" style="font-size: 24px;">🪙</div>
-      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">玄學選號</div>
-    </div>
-     <!-- 5. 注数计算（你已经加上了） -->
-    <div class="ag-item" onclick="showToast('注數計算器開發中...')" style="padding: 15px 0;">
-      <div class="ag-icon" style="font-size: 24px;">🧮</div>
-      <div class="ag-text" style="margin-top: 8px; font-weight: 600;">注數計算</div>
     </div>
   </div>
   <div class="panel">
@@ -1245,6 +1246,106 @@ window.showZodiacWave = function() {
         + '<span style="color:var(--text);">' + green.map(function(n){ return pad(n); }).join(', ') + '</span></div>';
         
   document.getElementById('zodiacWaveContent').innerHTML = content;
+};
+
+// ===== 玄学选号（易经摇卦） =====
+window.showMysticPick = function() {
+  var modal = document.getElementById('mysticPickModal');
+  if(!modal) {
+    var html = '<div class="custom-modal" id="mysticPickModal">'
+      + '<div class="cm-box" style="max-width: 360px; text-align: center;">'
+      + '<div class="cm-header"><span>🪙 易經銅錢搖卦</span><span class="cm-close" onclick="document.getElementById(\'mysticPickModal\').style.display=\'none\'">✕</span></div>'
+      + '<div style="padding: 24px 20px; background: var(--panel); border-radius: 0 0 20px 20px;">'
+      + '<div id="mysticIcon" style="font-size: 50px; margin-bottom: 12px; transition: transform 0.1s;">🪙</div>'
+      + '<div id="mysticText" style="font-size: 14px; color: var(--text); margin-bottom: 20px; min-height: 40px; font-weight: bold; line-height: 1.5;">點擊下方按鈕，感應天地靈氣...</div>'
+      + '<button class="act btn-main" id="mysticBtn" onclick="startMysticPick()" style="width: 100%; margin-bottom: 12px;">🙏 搖卦起局</button>'
+      + '<div id="mysticResult" style="display: none; margin-top: 16px;">'
+      + '<div style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">卦象已現，為你求得以下心水號碼：</div>'
+      + '<div id="mysticBalls" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>'
+      + '</div>'
+      + '</div></div></div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+    modal = document.getElementById('mysticPickModal');
+  }
+  
+  // 重置状态
+  document.getElementById('mysticIcon').innerText = '🪙';
+  document.getElementById('mysticIcon').style.transform = 'none';
+  document.getElementById('mysticText').innerHTML = '點擊下方按鈕，感應天地靈氣...';
+  document.getElementById('mysticBtn').disabled = false;
+  document.getElementById('mysticBtn').innerText = '🙏 搖卦起局';
+  document.getElementById('mysticResult').style.display = 'none';
+  
+  modal.style.display = 'flex';
+};
+
+window.startMysticPick = function() {
+  var btn = document.getElementById('mysticBtn');
+  var icon = document.getElementById('mysticIcon');
+  var text = document.getElementById('mysticText');
+  var result = document.getElementById('mysticResult');
+  var ballsContainer = document.getElementById('mysticBalls');
+  
+  btn.disabled = true;
+  btn.innerText = '☯️ 正在感應天地五行...';
+  text.innerHTML = '口中默念所求之事...<br>專注於螢幕上的銅錢...';
+  
+  var count = 0;
+  var interval = setInterval(function(){
+    count++;
+    // 摇卦动画
+    icon.style.transform = 'rotate(' + (count % 2 === 0 ? 30 : -30) + 'deg) translateY(-5px)';
+    icon.innerText = count % 2 === 0 ? '☯️' : '🪙';
+    
+    if(count > 12) { // 晃动 1.2 秒左右
+      clearInterval(interval);
+      icon.style.transform = 'none';
+      icon.innerText = '🎴';
+      
+      // 易经六十四卦（随机抽一个）
+      var guas = [
+        {name: '乾为天', desc: '大吉大利，飛龍在天'},
+        {name: '坤为地', desc: '厚德載物，穩中求勝'},
+        {name: '水雷屯', desc: '萬物始生，需待時機'},
+        {name: '山水蒙', desc: '啟蒙開智，順其自然'},
+        {name: '水天需', desc: '守正待時，耐心等候'},
+        {name: '天水讼', desc: '和為貴，退一步海闊天空'},
+        {name: '地水师', desc: '統領全局，謀定而後動'},
+        {name: '水地比', desc: '相輔相成，吉星高照'},
+        {name: '风天小畜', desc: '積少成多，蓄勢待發'},
+        {name: '火天大有', desc: '如日中天，鴻運當頭'},
+        {name: '地山谦', desc: '謙虛謹慎，吉無不利'}
+      ];
+      var gua = guas[Math.floor(Math.random() * guas.length)];
+      
+      text.innerHTML = '<div style="color: var(--gold); font-size: 18px; margin-bottom: 6px;">【' + gua.name + '】</div><div style="font-size: 13px; color: var(--muted);">' + gua.desc + '</div>';
+      
+      // 玄学号码生成算法（结合时间、卦象索引、随机数）
+      var seed = new Date().getTime() + gua.name.length;
+      function mysticRandom() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      
+      var nums = [];
+      while(nums.length < 6) {
+        var n = Math.floor(mysticRandom() * 49) + 1;
+        if(nums.indexOf(n) === -1) nums.push(n);
+      }
+      nums.sort(function(a,b){ return a-b; });
+      
+      ballsContainer.innerHTML = nums.map(function(n){
+        return '<span class="ball ' + getWave(n) + '" style="width: 38px; height: 38px; font-size: 16px; box-shadow: 0 0 10px rgba(240,180,41,0.3);">' + pad(n) + '</span>';
+      }).join('');
+      
+      result.style.display = 'block';
+      btn.innerText = '🔄 再搖一卦';
+      btn.disabled = false;
+      
+      // 自动把玄学号码放入 TICKETS 方便核对
+      TICKETS = [nums];
+      ballsPerTicket = 6;
+      renderTickets();
+      showToast('✅ 卦象已生，注單已更新');
+    }
+  }, 100);
 };
 
 document.getElementById('genBtn').addEventListener('click', doGenerate);
