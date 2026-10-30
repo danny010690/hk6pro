@@ -742,18 +742,40 @@ async function syncCloudData(){
     if(!resp.ok) throw new Error('HTTP ' + resp.status);
     var data = await resp.json();
     var newRaw = [];
-    if(Array.isArray(data)){
-      data.forEach(function(item){
-        if(item && item.nums && Array.isArray(item.nums) && item.nums.length >= 6){
-          newRaw.push({
-            issue: String(item.issue || item.drawIssue || '未知'),
-            nums: item.nums.slice(0,6).map(Number).sort(function(a,b){ return a-b; }),
-            extra: Number(item.extra) || 0,
-            date: item.date || item.drawDate || item.time || ''
-          });
-        }
+    // 兼容：文件是数组，或 {data:[...]} / {list:[...]} / {history:[...]}
+    var list = Array.isArray(data)
+      ? data
+      : (data && (data.data || data.list || data.history || data.records)) || [];
+
+    list.forEach(function(item){
+      if(!item || !item.nums || !Array.isArray(item.nums)) return;
+
+      // 号码：兼容数字 2 和字符串 "02"
+      var nums = item.nums
+        .map(function(x){ return parseInt(String(x).replace(/\D/g, ''), 10); })
+        .filter(function(n){ return !isNaN(n) && n >= 1 && n <= 49; });
+
+      if(nums.length < 6) return;
+      nums = nums.slice(0, 6);
+      var uniq = Array.from(new Set(nums));
+      if(uniq.length < 6) return; // 去重后不足 6 个视为脏数据
+      nums = uniq.sort(function(a,b){ return a - b; });
+
+      // 特别号：兼容 "22" / 22 / 空
+      var extraNum = parseInt(String(item.extra || '').replace(/\D/g, ''), 10);
+      var extra = (!isNaN(extraNum) && extraNum >= 1 && extraNum <= 49) ? extraNum : 0;
+
+      // 期号：兼容 "第26/115期"、"26/116"、纯数字
+      var issueStr = String(item.issue || item.drawIssue || item.period || '').trim();
+      if(!issueStr) issueStr = '未知';
+
+      newRaw.push({
+        issue: issueStr,
+        nums: nums,
+        extra: extra,
+        date: item.date || item.drawDate || item.time || ''
       });
-    }
+    });
     if(newRaw.length === 0) throw new Error('數據格式不正確');
     localStorage.setItem(LS_HISTORY_KEY, JSON.stringify(newRaw));
     applyRecords(newRaw, 'cloud');
