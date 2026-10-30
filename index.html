@@ -314,7 +314,11 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
 .bt-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold);margin-left:6px;vertical-align:middle}
 .bt-table tr.applied td{background:rgba(63,185,80,.12) !important;box-shadow:inset 0 0 0 1px rgba(63,185,80,.4);}
 @media(max-width:560px){.tickets{grid-template-columns:1fr}.row > label{min-width:100%}.heart-grid,.lucky-grid{gap:5px}.heart-cell,.lucky-cell{font-size:13px}.history-item{flex-direction:column;align-items:flex-start}.analysis-grid-panel{grid-template-columns:repeat(3,1fr)}}
-
+/* 强制修复特别号数字颜色（无论什么主题，数字强制变深色） */
+.ld-special-ball {
+  color: #1a1a1a !important; 
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important;
+}
 </style>
 </head>
 <body>
