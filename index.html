@@ -676,21 +676,28 @@ function _0xdb96(){var _0xba7b73=['8j+NOcbbssdNTPZLKiJLIQdMRiO','mZG3nti3oeXXt1z
 
 <!-- 第二个：精简版的防调试代码 -->
 <script>
-document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+// 1. 禁用右键
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+// 2. 禁用 F12 和快捷键
 document.onkeydown = function(e) {
     if (e.key === 'F12' || e.keyCode === 123) return false;
     if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) return false;
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return false;
 };
+
+// 3. 终极防控制台（无限断点，只要打开 F12 就卡死，不管他是用键盘还是菜单打开的）
 (function() {
-    setInterval(function() {
-        var startTime = performance.now();
+    function blockDevTools() {
+        // 如果控制台被打开，debugger 会生效并暂停页面
         debugger; 
-        var endTime = performance.now();
-        if (endTime - startTime > 100) {
-            document.body.innerHTML = "⚠️ 檢測到非法調試，頁面已鎖定";
-            document.body.style.cssText = "color:#fff; background:#e5484d; padding:50px; text-align:center; font-size:20px; margin-top:20%;";
-        }
-    }, 1000);
+        // 隔 50 毫秒再次触发，形成无限死循环，让他什么代码都看不到
+        setTimeout(blockDevTools, 50);
+    }
+    blockDevTools();
 })();
 </script>
+</body>
+</html>
