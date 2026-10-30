@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>懂彩帝v3.0策略排行榜至尊版</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+/* 强制修复特别号数字颜色（无论什么主题，数字强制变深色） */
+.ld-special-ball {
+  color: #1a1a1a !important; 
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important;
+}
 <style> 
 :root{
   --gold:#f0b429;--gold-2:#ffd76a;--bg:#0b0f16;--panel:#131a24;--panel-2:#1a2330;
@@ -92,16 +97,32 @@ button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .btn-copy{color:var(--gold);background:rgba(0,163,224,.1);border:1px solid var(--gold)}
 .btn-green{color:#fff;background:var(--green);border:none}
 .btn-purple{color:#fff;background:#7e22ce;border:none}
-.ld-special-ball { 
-  width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-  font-size: 15px; font-weight: 900; 
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
-  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 3px 6px rgba(0,0,0,0.2);
-  border: 2px solid var(--gold);
-  /* 强制使用深色数字，无论黑白主题，因为球体背景永远是浅色的 */
-  color: #1a1a1a !important; 
-  position: relative; 
-  text-shadow: 0 1px 2px rgba(255,255,255,0.8); /* 加一点白色投影让数字更立体 */
+.latest-draw-card {
+  position: relative;
+  /* 默认使用暗黑主题的卡片背景，浅色主题会在下面覆盖 */
+  background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%);
+  border-radius: 24px;
+  padding: 24px 16px;
+  text-align: center;
+  border: 1px solid var(--line);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* 如果切换到了浅色主题，则使用之前的白底微渐变 */
+body.light-mode .latest-draw-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+  border: 1px solid rgba(0, 35, 102, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 35, 102, 0.06), inset 0 2px 0 rgba(255,255,255,0.8);
+}
+
+/* 确保期号和日期颜色跟着主题走 */
+.ld-issue {
+  color: var(--text) !important;
+}
+.ld-issue span {
+  color: var(--muted) !important;
 }
 /* 增加一道斜向高光扫过效果 */
 .latest-draw-card::before {
@@ -298,6 +319,7 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
 .bt-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold);margin-left:6px;vertical-align:middle}
 .bt-table tr.applied td{background:rgba(63,185,80,.12) !important;box-shadow:inset 0 0 0 1px rgba(63,185,80,.4);}
 @media(max-width:560px){.tickets{grid-template-columns:1fr}.row > label{min-width:100%}.heart-grid,.lucky-grid{gap:5px}.heart-cell,.lucky-cell{font-size:13px}.history-item{flex-direction:column;align-items:flex-start}.analysis-grid-panel{grid-template-columns:repeat(3,1fr)}}
+
 </style>
 </head>
 <body>
