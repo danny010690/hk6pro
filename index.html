@@ -580,8 +580,22 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
 
 <div class="analysis-modal" id="analysisModal">
   <div class="am-box">
-    <div class="am-header"><span id="amTitle">數據分析</span><span class="cm-close" onclick="document.getElementById('analysisModal').style.display='none'">✕</span></div>
-    <div class="am-content" id="amContent"></div>
+    <div class="am-header">
+      <span id="amTitle">數據分析</span>
+      <span class="cm-close" onclick="document.getElementById('analysisModal').style.display='none'">✕</span>
+    </div>
+    <!-- 新增：分析期數選擇 -->
+    <div style="padding: 10px 16px 0; border-bottom: 1px solid var(--line); padding-bottom: 10px;">
+      <div class="tabs" id="analysisPeriodTabs" style="justify-content: center; gap: 8px;">
+        <button data-p="10">10 期</button>
+        <button data-p="50" class="active">50 期</button>
+        <button data-p="100">100 期 🔒</button>
+        <button data-p="200">200 期 🔒</button>
+      </div>
+    </div>
+    <div class="am-content" id="amContent">
+      <!-- 數據填充區 -->
+    </div>
   </div>
 </div>
 
@@ -1217,162 +1231,222 @@ window.saveTicketAnalysis = function(){
   renderTickets(); closeTicketAnalysis(); showToast('✓ 注單已更新');
 };
 
-window.showAnalysis = function(type){
-  if(rawRecords.length === 0) return showToast('請先同步歷史數據', true);
-  var modal = document.getElementById('analysisModal');
-  var title = document.getElementById('amTitle');
-  var content = document.getElementById('amContent');
-  modal.style.display = 'flex';
-  var html = '';
-  if(window._chartInstance){ window._chartInstance.dispose(); window._chartInstance = null; }
+/* ===== 状态变量 ===== */
+var analysisPeriods = 50;
+var currentAnalysisType = '';
+
+/* ===== 绑定期数选择点击事件与权限拦截 ===== */
+document.getElementById('analysisPeriodTabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('button'); if(!btn) return;
+  var p = parseInt(btn.dataset.p, 10);
+  
+  // 100期以上拦截
+  if(p >= 100 && !isVip) {
+    showToast('100期以上數據僅限 VIP 會員查看', true);
+    if(window.showVipModal) window.showVipModal();
+    return;
+  }
+  
+  analysisPeriods = p;
+  this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+  
+  if (currentAnalysisType) {
+    renderAnalysisContent(currentAnalysisType);
+  }
+});
+
+window.showAnalysis = function(type) {
+  if (rawRecords.length === 0) return showToast('請先同步歷史數據', true);
+  currentAnalysisType = type;
+  document.getElementById('analysisModal').style.display = 'flex';
+  
+  // 更新期数 Tab 的高亮状态
+  var tabs = document.getElementById('analysisPeriodTabs');
+  if (tabs) {
+    tabs.querySelectorAll('button').forEach(function(b){
+      b.classList.toggle('active', parseInt(b.dataset.p, 10) === analysisPeriods);
+    });
+  }
+  renderAnalysisContent(type);
+};
+
+function renderAnalysisContent(type) {
+  const title = document.getElementById('amTitle');
+  const content = document.getElementById('amContent');
+  let html = '';
+  
+  // 动态截取数据：免费版最大50，VIP最大200
+  var currentData = rawRecords.slice(0, Math.min(analysisPeriods, rawRecords.length));
+
+  if(window._chartInstance) { window._chartInstance.dispose(); window._chartInstance = null; }
   content.style.padding = type === 'kline' ? '0' : '16px';
 
-  if(type === 'trend'){
-    title.innerText = '📈 近30期走勢圖';
+  if (type === 'trend') {
+    title.innerText = '📈 走勢圖 (近 ' + currentData.length + ' 期)';
     html = '<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;">';
-    for(var i=1;i<=49;i++){
-      var count = 0;
-      rawRecords.slice(0, 30).forEach(function(r){ if(r.nums.indexOf(i) !== -1 || r.extra === i) count++; });
-      var bg = count >= 4 ? 'var(--red)' : count >= 2 ? 'var(--gold)' : 'var(--panel-2)';
-      var color = count >= 2 ? '#fff' : 'var(--text)';
-      html += '<div style="text-align:center;padding:4px 0;background:' + bg + ';color:' + color + ';border-radius:4px;font-size:12px;">' + i + '<br><span style="font-size:10px;">' + count + '次</span></div>';
+    for(let i=1;i<=49;i++) {
+      let count = 0;
+      currentData.forEach(r => { if(r.nums.includes(i) || r.extra === i) count++; });
+      let bg = count >= 4 ? 'var(--red)' : count >= 2 ? 'var(--gold)' : 'var(--panel-2)';
+      let color = count >= 2 ? '#fff' : 'var(--text)';
+      html += `<div style="text-align:center;padding:4px 0;background:${bg};color:${color};border-radius:4px;font-size:12px;">${i}<br><span style="font-size:10px;">${count}次</span></div>`;
     }
     html += '</div>';
-  }
-  else if(type === 'omission'){
-    title.innerText = '📊 當前遺漏統計';
+  } 
+  else if (type === 'omission') {
+    title.innerText = '📊 當前遺漏統計 (近 ' + currentData.length + ' 期)';
     html = '<div style="display:flex;flex-direction:column;gap:6px;">';
-    for(var i=1;i<=49;i++){
-      var omission = 0;
-      for(var j=0;j<rawRecords.length;j++){
-        if(rawRecords[j].nums.indexOf(i) !== -1 || rawRecords[j].extra === i) break;
+    for(let i=1;i<=49;i++) {
+      let omission = 0;
+      for(let j=0;j<currentData.length;j++) {
+        if(currentData[j].nums.includes(i) || currentData[j].extra === i) break;
         omission++;
       }
-      var wave = getWave(i);
-      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      var barW = Math.min(omission * 5, 100) + '%';
-      html += '<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:' + color + '">' + pad(i) + '</span></div><div class="stat-bar-wrap"><div style="height:100%;width:' + barW + ';background:' + color + ';opacity:0.7;"></div></div><div class="stat-val">' + omission + ' 期</div></div>';
+      let wave = getWave(i);
+      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      let barW = Math.min(omission * (100/currentData.length), 100) + '%';
+      html += `<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:${color}">${pad(i)}</span></div><div class="stat-bar-wrap"><div style="height:100%;width:${barW};background:${color};opacity:0.7;"></div></div><div class="stat-val">${omission} 期</div></div>`;
     }
     html += '</div>';
   }
-  else if(type === 'frequency'){
-    title.innerText = '📉 歷史出次統計';
+  else if (type === 'frequency') {
+    title.innerText = '📉 歷史出次統計 (近 ' + currentData.length + ' 期)';
     html = '<div style="display:flex;flex-direction:column;gap:6px;">';
-    var freqs = {}; for(var i=1;i<=49;i++) freqs[i] = 0;
-    rawRecords.forEach(function(r){ r.nums.forEach(function(n){ freqs[n]++; }); if(r.extra) freqs[r.extra]++; });
-    var sorted = Object.entries(freqs).sort(function(a,b){ return b[1]-a[1]; });
-    sorted.forEach(function(pair){
-      var n = parseInt(pair[0], 10); var count = pair[1]; var wave = getWave(n);
-      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      var barW = Math.min((count / rawRecords.length) * 100, 100) + '%';
-      html += '<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:' + color + '">' + pad(n) + '</span></div><div class="stat-bar-wrap"><div style="height:100%;width:' + barW + ';background:' + color + ';opacity:0.7;"></div></div><div class="stat-val">' + count + ' 次</div></div>';
+    let freqs = {};
+    for(let i=1;i<=49;i++) freqs[i] = 0;
+    currentData.forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
+    let sorted = Object.entries(freqs).sort((a,b)=>b[1]-a[1]);
+    sorted.forEach(([num, count]) => {
+      let n = parseInt(num); let wave = getWave(n);
+      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      let barW = Math.min((count / (currentData.length || 1)) * 100, 100) + '%';
+      html += `<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:${color}">${pad(n)}</span></div><div class="stat-bar-wrap"><div style="height:100%;width:${barW};background:${color};opacity:0.7;"></div></div><div class="stat-val">${count} 次</div></div>`;
     });
     html += '</div>';
   }
-  else if(type === 'hotcold'){
-    title.innerText = '🔥 冷熱碼分析 (近10期)';
-    var freqs = {}; for(var i=1;i<=49;i++) freqs[i] = 0;
-    rawRecords.slice(0, 10).forEach(function(r){ r.nums.forEach(function(n){ freqs[n]++; }); if(r.extra) freqs[r.extra]++; });
-    var sorted = Object.entries(freqs).sort(function(a,b){ return b[1]-a[1]; });
+  else if (type === 'hotcold') {
+    let sliceData = currentData.slice(0, 10);
+    title.innerText = '🔥 冷熱碼分析 (近 ' + sliceData.length + ' 期)';
+    let freqs = {};
+    for(let i=1;i<=49;i++) freqs[i] = 0;
+    sliceData.forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
+    let sorted = Object.entries(freqs).sort((a,b)=>b[1]-a[1]);
     html = '<div style="margin-bottom:10px;font-weight:bold;color:var(--red)">🔥 最熱門 (出現最多)</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px;">';
-    sorted.slice(0, 8).forEach(function(pair){
-      var n = parseInt(pair[0], 10); var wave = getWave(n);
-      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      html += '<span class="stat-ball" style="background:' + color + ';width:30px;height:30px;font-size:14px;">' + n + '</span>';
+    sorted.slice(0, 8).forEach(([num]) => {
+      let n = parseInt(num); let wave = getWave(n);
+      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      html += `<span class="stat-ball" style="background:${color};width:30px;height:30px;font-size:14px;">${n}</span>`;
     });
     html += '</div><div style="margin-bottom:10px;font-weight:bold;color:var(--wave-blue)">❄️ 最冷門 (出現最少)</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
-    sorted.slice(-8).forEach(function(pair){
-      var n = parseInt(pair[0], 10); var wave = getWave(n);
-      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      html += '<span class="stat-ball" style="background:' + color + ';width:30px;height:30px;font-size:14px;">' + n + '</span>';
+    sorted.slice(-8).forEach(([num]) => {
+      let n = parseInt(num); let wave = getWave(n);
+      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      html += `<span class="stat-ball" style="background:${color};width:30px;height:30px;font-size:14px;">${n}</span>`;
     });
     html += '</div>';
   }
-  else if(type === 'wave'){
-    title.innerText = '🔮 波色比例統計';
-    var r=0,b=0,g=0;
-    rawRecords.forEach(function(rec){
-      rec.nums.forEach(function(n){ if(WAVE_RED.has(n)) r++; else if(WAVE_BLUE.has(n)) b++; else g++; });
-      if(rec.extra){ if(WAVE_RED.has(rec.extra)) r++; else if(WAVE_BLUE.has(rec.extra)) b++; else g++; }
+  else if (type === 'wave') {
+    title.innerText = '🔮 波色比例統計 (近 ' + currentData.length + ' 期)';
+    let r=0,b=0,g=0;
+    currentData.forEach(rec => {
+      rec.nums.forEach(n => { if(WAVE_RED.has(n)) r++; else if(WAVE_BLUE.has(n)) b++; else g++; });
+      if(rec.extra) { if(WAVE_RED.has(rec.extra)) r++; else if(WAVE_BLUE.has(rec.extra)) b++; else g++; }
     });
-    var total = r+b+g || 1;
-    html = '<div style="margin-bottom:15px;text-align:center;">總開出號碼數: <b>' + total + '</b></div>'
-      + '<div class="stat-row"><div class="stat-label">紅波</div><div class="stat-bar-wrap"><div class="stat-bar-red" style="width:' + (r/total*100) + '%"></div></div><div class="stat-val">' + (r/total*100).toFixed(1) + '%</div></div>'
-      + '<div class="stat-row"><div class="stat-label">藍波</div><div class="stat-bar-wrap"><div class="stat-bar-blue" style="width:' + (b/total*100) + '%"></div></div><div class="stat-val">' + (b/total*100).toFixed(1) + '%</div></div>'
-      + '<div class="stat-row"><div class="stat-label">綠波</div><div class="stat-bar-wrap"><div class="stat-bar-green" style="width:' + (g/total*100) + '%"></div></div><div class="stat-val">' + (g/total*100).toFixed(1) + '%</div></div>';
+    let total = r+b+g || 1;
+    html = `
+      <div style="margin-bottom:15px;text-align:center;">總開出號碼數: <b>${total}</b></div>
+      <div class="stat-row"><div class="stat-label">紅波</div><div class="stat-bar-wrap"><div class="stat-bar-red" style="width:${(r/total*100)}%"></div></div><div class="stat-val">${(r/total*100).toFixed(1)}%</div></div>
+      <div class="stat-row"><div class="stat-label">藍波</div><div class="stat-bar-wrap"><div class="stat-bar-blue" style="width:${(b/total*100)}%"></div></div><div class="stat-val">${(b/total*100).toFixed(1)}%</div></div>
+      <div class="stat-row"><div class="stat-label">綠波</div><div class="stat-bar-wrap"><div class="stat-bar-green" style="width:${(g/total*100)}%"></div></div><div class="stat-val">${(g/total*100).toFixed(1)}%</div></div>
+    `;
   }
-  else if(type === 'zodiac'){
-    title.innerText = '🐲 生肖統計 (當年)';
-    var currentYear = new Date().getFullYear();
-    var zCount = {};
-    var animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
-    animals.forEach(function(a){ zCount[a] = 0; });
-    var baseIdx = currentYear % 12;
-    rawRecords.forEach(function(r){
-      r.nums.forEach(function(n){
-        var zIdx = (baseIdx - (n % 12) + 12) % 12;
+  else if (type === 'zodiac') {
+    title.innerText = '🐲 生肖統計 (近 ' + currentData.length + ' 期)';
+    let currentYear = new Date().getFullYear();
+    let zCount = {};
+    const animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+    animals.forEach(a => zCount[a] = 0);
+    let baseIdx = currentYear % 12; 
+    currentData.forEach(r => {
+      r.nums.forEach(n => {
+        let zIdx = (baseIdx - (n % 12) + 12) % 12;
         zCount[animals[zIdx]]++;
       });
     });
     html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
-    animals.forEach(function(a){
-      html += '<div style="background:var(--panel-2);padding:10px;border-radius:8px;text-align:center;"><div style="font-size:16px;font-weight:bold;margin-bottom:4px;color:var(--gold)">' + a + '</div><div style="font-size:12px;color:var(--muted)">出現 ' + zCount[a] + ' 次</div></div>';
-    });
+    for(let a of animals) {
+      html += `<div style="background:var(--panel-2);padding:10px;border-radius:8px;text-align:center;">
+        <div style="font-size:16px;font-weight:bold;margin-bottom:4px;color:var(--gold)">${a}</div>
+        <div style="font-size:12px;color:var(--muted)">出現 ${zCount[a]} 次</div>
+      </div>`;
+    }
     html += '</div><div style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center;">* 注：生肖按當年農曆年對應，數據僅供參考</div>';
   }
-  else if(type === 'headtail'){
-    title.innerText = '🔢 頭尾數統計';
-    var heads = {0:0,1:0,2:0,3:0,4:0};
-    var tails = {}; for(var i=0;i<=9;i++) tails[i]=0;
-    rawRecords.forEach(function(r){
-      r.nums.forEach(function(n){
+  else if (type === 'headtail') {
+    title.innerText = '🔢 頭尾數統計 (近 ' + currentData.length + ' 期)';
+    let heads = {0:0,1:0,2:0,3:0,4:0};
+    let tails = {};
+    for(let i=0;i<=9;i++) tails[i]=0;
+    currentData.forEach(r => {
+      r.nums.forEach(n => {
         heads[Math.floor(n/10)] = (heads[Math.floor(n/10)]||0)+1;
         tails[n%10] = (tails[n%10]||0)+1;
       });
     });
     html = '<div style="display:flex;gap:20px;"><div style="flex:1;"><div style="font-weight:bold;margin-bottom:8px;">頭數</div>';
-    for(var h=0; h<=4; h++){
-      html += '<div class="stat-row"><div class="stat-label">' + h + '頭</div><div class="stat-bar-wrap"><div style="height:100%;width:' + (heads[h]/rawRecords.length/6*100) + '%;background:var(--gold);"></div></div></div>';
+    for(let h=0; h<=4; h++) {
+      html += `<div class="stat-row"><div class="stat-label">${h}頭</div><div class="stat-bar-wrap"><div style="height:100%;width:${(heads[h]/(currentData.length||1)/6*100)}%;background:var(--gold);"></div></div></div>`;
     }
     html += '</div><div style="flex:1;"><div style="font-weight:bold;margin-bottom:8px;">尾數</div>';
-    for(var t=0; t<=9; t++){
-      html += '<div class="stat-row"><div class="stat-label">' + t + '尾</div><div class="stat-bar-wrap"><div style="height:100%;width:' + (tails[t]/rawRecords.length/6*100) + '%;background:var(--wave-blue);"></div></div></div>';
+    for(let t=0; t<=9; t++) {
+      html += `<div class="stat-row"><div class="stat-label">${t}尾</div><div class="stat-bar-wrap"><div style="height:100%;width:${(tails[t]/(currentData.length||1)/6*100)}%;background:var(--wave-blue);"></div></div></div>`;
     }
     html += '</div></div>';
   }
-  else if(type === 'kline'){
-    title.innerText = '🕯️ 六合彩和值 K線圖 & MACD';
+  else if (type === 'kline') {
+    title.innerText = '🕯️ 六合彩和值 K線圖 & MACD (近 ' + currentData.length + ' 期)';
     html = '<div id="klineChart" style="width:100%;height:400px;"></div>';
     content.innerHTML = html;
-    var recent = rawRecords.slice(0, 50).reverse();
-    var dates = recent.map(function(r){ return r.issue; });
-    var kData = [];
-    var prevSum = null;
-    recent.forEach(function(r){
-      var sum = r.nums.reduce(function(a,b){ return a+b; }, 0);
+    
+    let recent = currentData.slice().reverse(); // 使用动态截取的数据
+    let dates = recent.map(r => r.issue);
+    let kData = [];
+    let prevSum = null;
+    
+    recent.forEach(r => {
+      let sum = r.nums.reduce((a,b)=>a+b, 0);
       if(prevSum === null) prevSum = sum;
-      var open = prevSum; var close = sum;
-      var low = Math.min(open, close) - Math.floor(Math.random() * 15);
-      var high = Math.max(open, close) + Math.floor(Math.random() * 15);
+      let open = prevSum;
+      let close = sum;
+      let low = Math.min(open, close) - Math.floor(Math.random() * 15);
+      let high = Math.max(open, close) + Math.floor(Math.random() * 15);
       kData.push([open, close, low, high]);
       prevSum = close;
     });
-    function calculateEMA(n, data){
-      var ema = []; var k = 2 / (n + 1); var prevEma = data[0];
-      data.forEach(function(val, i){ if(i===0) ema.push(prevEma); else { prevEma = val * k + prevEma * (1 - k); ema.push(prevEma); } });
+    
+    function calculateEMA(n, data) {
+      let ema = [];
+      let k = 2 / (n + 1);
+      let prevEma = data[0];
+      data.forEach((val, i) => {
+        if(i===0) ema.push(prevEma);
+        else { prevEma = val * k + prevEma * (1 - k); ema.push(prevEma); }
+      });
       return ema;
     }
-    var closeData = kData.map(function(d){ return d[1]; });
-    var ema12 = calculateEMA(12, closeData);
-    var ema26 = calculateEMA(26, closeData);
-    var dif = ema12.map(function(v, i){ return v - ema26[i]; });
-    var dea = calculateEMA(9, dif);
-    var macd = dif.map(function(v, i){ return (v - dea[i]) * 2; });
-    var macdData = macd.map(function(v, i){ return [i, v, dif[i], dea[i]]; });
-    var chartDom = document.getElementById('klineChart');
+    let closeData = kData.map(d => d[1]);
+    let ema12 = calculateEMA(12, closeData);
+    let ema26 = calculateEMA(26, closeData);
+    let dif = ema12.map((v, i) => v - ema26[i]);
+    let dea = calculateEMA(9, dif);
+    let macd = dif.map((v, i) => (v - dea[i]) * 2);
+    
+    let macdData = macd.map((v, i) => [i, v, dif[i], dea[i]]);
+
+    let chartDom = document.getElementById('klineChart');
     window._chartInstance = echarts.init(chartDom, document.body.classList.contains('light-mode') ? null : 'dark');
     
-    window._chartInstance.setOption({
+    let option = {
       backgroundColor: 'transparent',
       tooltip: {
         trigger: 'axis',
@@ -1381,7 +1455,7 @@ window.showAnalysis = function(type){
         borderColor: 'var(--gold)',
         borderWidth: 1,
         padding: 12,
-        textStyle: { color: '#ffffff', fontSize: 12 },
+        textStyle: { color: '#e6edf3', fontSize: 12 },
         formatter: function (params) {
           var p = params[0];
           if (!p) return '';
@@ -1395,7 +1469,7 @@ window.showAnalysis = function(type){
           var kd = kData[idx];
           
           var html = '<div style="min-width:160px;">';
-          html += '<div style="color:var(--gold); font-weight:bold; font-size:13px; margin-bottom:6px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">第 ' + rec.issue + ' 期</div>';
+          html += '<div style="color:#ffffff; font-weight:bold; font-size:14px; margin-bottom:6px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">第 ' + rec.issue + ' 期</div>';
           html += '<div style="color:var(--muted); margin-bottom:4px;">日期：' + (rec.date || '--') + '</div>';
           html += '<div style="margin-bottom:4px;">开奖号：<br><span style="color:#ef4444; font-weight:bold;">' + mainBalls + '</span> <span style="color:#1890ff; font-weight:bold;">+ ' + extraBall + '</span></div>';
           if (kd) {
@@ -1406,7 +1480,6 @@ window.showAnalysis = function(type){
             html += '</div>';
           }
           
-          // 如果有 MACD 等指标，也可以在这里提取显示
           if (params.length > 1) {
             var macdVal = params.find(function(item){ return item.seriesName === 'MACD'; });
             if (macdVal && macdVal.value) {
@@ -1419,7 +1492,10 @@ window.showAnalysis = function(type){
         }
       },
       legend: { data: ['和值K線', 'MACD', 'DIF', 'DEA'], textStyle: { color: '#8b98a9' }, top: 10 },
-      grid: [{ left: '10%', right: '8%', height: '50%', top: '15%' }, { left: '10%', right: '8%', height: '20%', top: '70%' }],
+      grid: [
+        { left: '10%', right: '8%', height: '50%', top: '15%' },
+        { left: '10%', right: '8%', height: '20%', top: '70%' }
+      ],
       xAxis: [
         { type: 'category', data: dates, gridIndex: 0, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { color: '#8b98a9' } },
         { type: 'category', data: dates, gridIndex: 1, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { show: false } }
@@ -1428,18 +1504,23 @@ window.showAnalysis = function(type){
         { scale: true, gridIndex: 0, splitLine: { show: false }, axisLabel: { color: '#8b98a9' } },
         { scale: true, gridIndex: 1, splitLine: { show: false }, axisLabel: { show: false } }
       ],
-      dataZoom: [{ type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 }, { show: false, xAxisIndex: [0, 1], type: 'slider', top: '90%' }],
+      dataZoom: [
+        { type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 },
+        { show: false, xAxisIndex: [0, 1], type: 'slider', top: '90%' }
+      ],
       series: [
         { name: '和值K線', type: 'candlestick', data: kData, itemStyle: { color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' } },
-        { name: 'MACD', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: macdData.map(function(d){ return { value: d[1], itemStyle: { color: d[1] > 0 ? '#ef4444' : '#22c55e' } }; }) },
+        { name: 'MACD', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: macdData.map(d => ({ value: d[1], itemStyle: { color: d[1] > 0 ? '#ef4444' : '#22c55e' } })) },
         { name: 'DIF', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dif, lineStyle: { color: '#f0b429' }, symbol: 'none' },
         { name: 'DEA', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dea, lineStyle: { color: '#1890ff' }, symbol: 'none' }
       ]
-    });
+    };
+    window._chartInstance.setOption(option);
     return;
   }
+
   content.innerHTML = html;
-};
+}
 
 document.getElementById('strategyTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
