@@ -3,119 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>懂彩帝v 2.8.0至尊版</title>
-     
+<title>懂彩帝v3.0策略排行榜至尊版</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
-/* ================= 默認主題：暗黑金 ================= */
 :root{
-  --gold:#f0b429; --gold-2:#ffd76a; --bg:#0b0f16; 
-  --panel:#131a24; --panel-2:#1a2330; --line:rgba(255,255,255,.08);
-  --text:#e6edf3; --muted:#8b98a9; --red:#e5484d; --green:#3fb950;
-  --nav-h:60px; --wave-red:#ff4d4f; --wave-blue:#1890ff; --wave-green:#52c41a;
-  --shadow:0 4px 15px rgba(0,0,0,0.3); --card-bg:var(--panel-2);
+  --gold:#f0b429;--gold-2:#ffd76a;--bg:#0b0f16;--panel:#131a24;--panel-2:#1a2330;
+  --line:rgba(255,255,255,.08);--text:#e6edf3;--muted:#8b98a9;--red:#e5484d;--green:#3fb950;
+  --nav-h:60px;--wave-red:#ff4d4f;--wave-blue:#1890ff;--wave-green:#52c41a;
+  --shadow:0 4px 15px rgba(0,0,0,0.3);--card-bg:var(--panel-2);
   --header-bg:radial-gradient(900px 400px at 50% -50%, rgba(240,180,41,.15), transparent 70%);
-  --header-text:#fff; --btn-primary:linear-gradient(180deg,#ffd76a,#f0b429);
-  --btn-primary-text:#241a00; --btn-danger:linear-gradient(180deg,#ff7875,#e5484d);
-  --input-bg:#0b0f16;
+  --header-text:#fff;--btn-primary:linear-gradient(180deg,#ffd76a,#f0b429);
+  --btn-primary-text:#241a00;--btn-danger:linear-gradient(180deg,#ff7875,#e5484d);--input-bg:#0b0f16;
 }
-/* ================= 淺色主題：賽馬會藍 ================= */
-body.light-mode {
-  --gold:#002366; --gold-2:#00529b; --bg:#F0F4F8; --panel:#FFFFFF; 
-  --panel-2:#F8FAFC; --line:rgba(0,35,102,.1); --text:#333333; --muted:#666666;
-  --shadow:0 4px 12px rgba(0,0,0,0.06); --card-bg:#FFFFFF;
-  --header-bg:#002366; --header-text:#FFFFFF;
-  --btn-primary:#002366; --btn-primary-text:#FFFFFF; --btn-danger:#E53935; --input-bg:#F0F4F8;
-}
+body.light-mode{--gold:#002366;--gold-2:#00529b;--bg:#F0F4F8;--panel:#FFFFFF;--panel-2:#F8FAFC;--line:rgba(0,35,102,.1);--text:#333;--muted:#666;--shadow:0 4px 12px rgba(0,0,0,0.06);--card-bg:#FFFFFF;--header-bg:#002366;--header-text:#FFFFFF;--btn-primary:#002366;--btn-primary-text:#FFFFFF;--btn-danger:#E53935;--input-bg:#F0F4F8;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;
-  background: var(--bg); color:var(--text); min-height:100vh;
-  padding:0 0 calc(var(--nav-h) + 30px) 0; -webkit-font-smoothing:antialiased; transition: 0.3s;
-}
-.wrap{max-width:1100px;margin:0 auto;padding:20px 16px;position:relative;}
-
-/* 頂部 Header */
-.header-area {
-  background: var(--header-bg); color: var(--header-text); padding: 30px 16px 20px;
-  text-align: center; position: relative; border-bottom: 1px solid var(--line); transition: 0.3s;
-}
-body.light-mode .header-area { box-shadow: 0 4px 15px rgba(0,35,102,.15); }
-.settings-btn {
-  position:absolute; top:20px; left:16px; width:38px; height:38px; border-radius:50%;
-  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
-  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; color:var(--header-text); z-index:10; transition: 0.3s;
-}
-.badge{display:inline-block;font-size:11px;letter-spacing:.22em;color:var(--header-text);border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);padding:6px 14px;border-radius:999px;margin-bottom:12px;}
-h1{font-size:clamp(24px,4.4vw,32px);font-weight:800;letter-spacing:-.5px;line-height:1.25;color:var(--header-text);}
-h1 span{color:var(--gold);} body.light-mode h1 span { color: #ffd76a; }
-.sub{color:var(--header-text);opacity:0.8;font-size:13px;line-height:1.7;max-width:680px;margin:10px auto 0;}
-
-/* 右上角高級 VIP 圖標 (升級版) */
-.vip-btn {
-  position: absolute; top: 20px; right: 16px;
-  padding: 6px 14px;
-  background: linear-gradient(135deg, #FFF3C4, #D4AF37, #B8860B); 
-  border: 1px solid #FFF3C4;
-  border-radius: 20px;
-  color: #4a3000;
-  font-weight: 900;
-  font-size: 12px;
-  letter-spacing: 1px;
-  display: flex; align-items: center; gap: 4px;
-  box-shadow: 0 4px 15px rgba(212,175,55,0.5);
-  cursor: pointer; transition: 0.3s; z-index: 10;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
-}
-.vip-btn:hover { box-shadow: 0 0 20px rgba(212,175,55,0.9); transform: translateY(-1px); }
-.vip-btn.member {
-  background: linear-gradient(135deg, #FFDF73, #D4AF37);
-  box-shadow: 0 0 25px rgba(212,175,55,0.8);
-}
-body.light-mode .vip-btn {
-  background: linear-gradient(135deg, #002366, #00509e);
-  color: #FFD700;
-  border-color: #00509e;
-  box-shadow: 0 4px 15px rgba(0,35,102,0.3);
-  text-shadow: none;
-}
-
-/* 設定彈窗 */
-.settings-page {
-  position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:100000;
-  display:none; flex-direction:column; color:var(--text); overflow-y:auto;
-}
-.sp-header{background:var(--panel); border-bottom:1px solid var(--line); padding:16px; display:flex; align-items:center; justify-content:center; position:relative;}
-.sp-back{position:absolute; left:16px; top:50%; transform:translateY(-50%); width:36px; height:36px; background:var(--panel-2); border:1px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--gold);}
-.sp-content{padding:20px; display:flex; flex-direction:column; gap:16px; max-width:600px; margin:0 auto; width:100%;}
-.sp-section-title{font-size:14px; font-weight:600; color:var(--muted); margin-bottom:10px;}
-.sp-lang-tabs{display:flex; background:var(--panel-2); border-radius:20px; padding:4px; border:1px solid var(--line);}
-.sp-lang-tabs button{flex:1; border:none; background:transparent; padding:8px 0; font-size:13px; color:var(--muted); border-radius:16px; cursor:pointer; font-weight:600; transition:.2s;}
-.sp-lang-tabs button.active{background:var(--gold); color:#fff;}
-.sp-row{display:flex; justify-content:space-between; align-items:center; background:var(--panel); padding:14px 16px; border-radius:12px; border:1px solid var(--line); font-size:14px; cursor:pointer;}
-.sp-toggle{width:44px; height:24px; background:var(--input-bg); border:1px solid var(--line); border-radius:12px; position:relative; transition:.3s;}
-.sp-toggle::after{content:""; position:absolute; top:2px; left:2px; width:18px; height:18px; background:var(--muted); border-radius:50%; transition:.3s;}
-.sp-toggle.on{background:var(--gold); border-color:var(--gold);}
-.sp-toggle.on::after{left:22px; background:#fff;}
-.sp-card{background:var(--panel); padding:16px; border-radius:12px; border:1px solid var(--line); font-size:13.5px; line-height:1.8; color:var(--muted);}
-.sp-card h3{font-size:16px; font-weight:800; color:var(--gold); margin-bottom:10px;}
-
-/* 面板與按鈕 */
-.tab-content{display:none;animation:fadeIn .3s ease}
-.tab-content.active{display:block}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 calc(var(--nav-h) + 30px) 0;-webkit-font-smoothing:antialiased;transition:.3s}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px;position:relative}
+.header-area{background:var(--header-bg);color:var(--header-text);padding:30px 16px 20px;text-align:center;position:relative;border-bottom:1px solid var(--line);transition:.3s}
+body.light-mode .header-area{box-shadow:0 4px 15px rgba(0,35,102,.15)}
+.settings-btn{position:absolute;top:20px;left:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--header-text);z-index:10;transition:.3s}
+.badge{display:inline-block;font-size:11px;letter-spacing:.22em;color:var(--header-text);border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);padding:6px 14px;border-radius:999px;margin-bottom:12px}
+h1{font-size:clamp(24px,4.4vw,32px);font-weight:800;letter-spacing:-.5px;line-height:1.25;color:var(--header-text)}
+h1 span{color:var(--gold)}body.light-mode h1 span{color:#ffd76a}
+.sub{color:var(--header-text);opacity:.8;font-size:13px;line-height:1.7;max-width:680px;margin:10px auto 0}
+.vip-btn{position:absolute;top:20px;right:16px;padding:6px 14px;background:linear-gradient(135deg,#FFF3C4,#D4AF37,#B8860B);border:1px solid #FFF3C4;border-radius:20px;color:#4a3000;font-weight:900;font-size:12px;letter-spacing:1px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 15px rgba(212,175,55,.5);cursor:pointer;transition:.3s;z-index:10;text-shadow:0 1px 1px rgba(255,255,255,.5)}
+.vip-btn:hover{box-shadow:0 0 20px rgba(212,175,55,.9);transform:translateY(-1px)}
+.vip-btn.member{background:linear-gradient(135deg,#FFDF73,#D4AF37);box-shadow:0 0 25px rgba(212,175,55,.8)}
+body.light-mode .vip-btn{background:linear-gradient(135deg,#002366,#00509e);color:#FFD700;border-color:#00509e;box-shadow:0 4px 15px rgba(0,35,102,.3);text-shadow:none}
+.settings-page{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:100000;display:none;flex-direction:column;color:var(--text);overflow-y:auto}
+.sp-header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px;display:flex;align-items:center;justify-content:center;position:relative}
+.sp-back{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--panel-2);border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gold)}
+.sp-content{padding:20px;display:flex;flex-direction:column;gap:16px;max-width:600px;margin:0 auto;width:100%}
+.sp-section-title{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:10px}
+.sp-lang-tabs{display:flex;background:var(--panel-2);border-radius:20px;padding:4px;border:1px solid var(--line)}
+.sp-lang-tabs button{flex:1;border:none;background:transparent;padding:8px 0;font-size:13px;color:var(--muted);border-radius:16px;cursor:pointer;font-weight:600;transition:.2s}
+.sp-lang-tabs button.active{background:var(--gold);color:#fff}
+.sp-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel);padding:14px 16px;border-radius:12px;border:1px solid var(--line);font-size:14px;cursor:pointer}
+.sp-toggle{width:44px;height:24px;background:var(--input-bg);border:1px solid var(--line);border-radius:12px;position:relative;transition:.3s}
+.sp-toggle::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;background:var(--muted);border-radius:50%;transition:.3s}
+.sp-toggle.on{background:var(--gold);border-color:var(--gold)}
+.sp-toggle.on::after{left:22px;background:#fff}
+.sp-card{background:var(--panel);padding:16px;border-radius:12px;border:1px solid var(--line);font-size:13.5px;line-height:1.8;color:var(--muted)}
+.sp-card h3{font-size:16px;font-weight:800;color:var(--gold);margin-bottom:10px}
+.tab-content{display:none;animation:fadeIn .3s ease}.tab-content.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.section-title{display:flex;align-items:center;gap:12px;font-size:14px;letter-spacing:.12em;color:var(--muted);margin:20px 0 14px;}
+.section-title{display:flex;align-items:center;gap:12px;font-size:14px;letter-spacing:.12em;color:var(--muted);margin:20px 0 14px}
 .section-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow); transition: 0.3s;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow);transition:.3s}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 .row > label{font-size:12px;color:var(--muted);min-width:70px;font-weight:600}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}
-.tabs button{font-family:inherit;padding:8px 14px;font-size:13px;font-weight:600;border-radius:10px;background:var(--input-bg);color:var(--muted);border:1px solid var(--line);cursor:pointer;transition:.18s;}
-.tabs button.active{background:var(--gold);color:#fff;border-color:var(--gold);}
-.num-inp{width:86px;padding:9px 12px;border-radius:10px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);font-size:14px;font-family:inherit;text-align:center;}
+.tabs button{font-family:inherit;padding:8px 14px;font-size:13px;font-weight:600;border-radius:10px;background:var(--input-bg);color:var(--muted);border:1px solid var(--line);cursor:pointer;transition:.18s}
+.tabs button.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+.num-inp{width:86px;padding:9px 12px;border-radius:10px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);font-size:14px;font-family:inherit;text-align:center}
 .num-inp:focus{outline:none;border-color:var(--gold)}
 .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:4px 0 16px}
 .bar.left{justify-content:flex-start;margin:14px 0 0}
-button.act{font-family:inherit;font-size:14.5px;font-weight:700;border:none;border-radius:12px;padding:12px 22px;cursor:pointer;transition:transform .12s ease, box-shadow .18s ease;display:flex;align-items:center;justify-content:center;gap:6px;}
+button.act{font-family:inherit;font-size:14.5px;font-weight:700;border:none;border-radius:12px;padding:12px 22px;cursor:pointer;transition:transform .12s ease,box-shadow .18s ease;display:flex;align-items:center;justify-content:center;gap:6px}
 button.act:active{transform:scale(.97)}
 button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .btn-main{color:var(--btn-primary-text);background:var(--btn-primary);box-shadow:0 4px 15px rgba(0,0,0,.2)}
@@ -123,246 +67,194 @@ button.act.sm{padding:9px 15px;font-size:13px;border-radius:10px}
 .btn-ghost{color:var(--muted);background:var(--panel-2);border:1px solid var(--line)}
 .btn-ghost:hover{color:var(--gold);border-color:var(--gold)}
 .btn-copy{color:var(--gold);background:rgba(0,163,224,.1);border:1px solid var(--gold)}
-.btn-green{color:#fff;background:var(--green);border:none;}
-.btn-purple{color:#fff;background:#7e22ce;border:none;}
-
-/* 最新開獎展示 */
-.latest-draw-card { background: var(--panel); border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid var(--line); margin-bottom: 16px; box-shadow: var(--shadow); }
-.ld-label { font-size: 12px; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px; font-weight: 800; }
-.ld-issue { font-size: 16px; font-weight: 900; color: var(--text); margin-bottom: 12px; }
-.ld-special-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
-.ld-special-ball { 
-  width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-  font-size: 15px; font-weight: 900; 
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
-  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 3px 6px rgba(0,0,0,0.2);
-  border: 2px solid var(--gold);
-  color: var(--text); position: relative; 
-}
-body.light-mode .ld-special-ball { color: #333; }
-.ld-special-label { font-size: 11px; color: var(--gold); margin-top: 6px; font-weight: bold; }
-.ld-main-balls { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-
-/* 3D 攪珠球體樣式通用 */
-.ld-ball, .lucky-cell, .heart-cell, .cell, .vd-ball { 
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-  font-weight: 900; 
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 80%, #d0d0d0 100%);
-  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9), 0 3px 6px rgba(0,0,0,0.2);
-  border: 2px solid transparent; position: relative;
-}
-.ld-ball { width: 38px; height: 38px; font-size: 15px; }
-.ld-ball.w-red, .lucky-cell.w-red, .heart-cell.w-red, .vd-ball.w-red { color: var(--wave-red); border-color: var(--wave-red); }
-.ld-ball.w-blue, .lucky-cell.w-blue, .heart-cell.w-blue, .vd-ball.w-blue { color: var(--wave-blue); border-color: var(--wave-blue); }
-.ld-ball.w-green, .lucky-cell.w-green, .heart-cell.w-green, .vd-ball.w-green { color: var(--wave-green); border-color: var(--wave-green); }
-
-/* 雲端同步 */
-.sync-card { background: var(--panel); border-radius: 20px; padding: 16px; text-align: center; border: 1px solid var(--line); margin-bottom: 16px; }
-.btn-sync { background: var(--btn-primary); color: var(--btn-primary-text); font-size: 14px; font-weight: bold; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; width: 100%; }
-
-/* 搖一搖 */
-.shake-panel{text-align:center; padding:15px;}
-.btn-shake {width:100%; font-size:16px; padding:15px; font-weight:800; border-radius:12px; background: var(--btn-primary); color: var(--btn-primary-text); border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; transition: 0.2s;}
-.btn-shake:active { transform: scale(0.95); }
-
-/* 分析功能網格 */
-.analysis-grid-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-.ag-item { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
-.ag-item:hover { transform: translateY(-2px); border-color: var(--gold); box-shadow: var(--shadow); }
-.ag-icon { font-size: 24px; line-height: 1; }
-.ag-text { font-size: 12px; color: var(--text); font-weight: 600; }
-body.light-mode .ag-item { background: #fff; }
-
-/* 選號區 3D 球體 */
+.btn-green{color:#fff;background:var(--green);border:none}
+.btn-purple{color:#fff;background:#7e22ce;border:none}
+.latest-draw-card{background:var(--panel);border-radius:20px;padding:20px 16px;text-align:center;border:1px solid var(--line);margin-bottom:16px;box-shadow:var(--shadow)}
+.ld-label{font-size:12px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;font-weight:800}
+.ld-issue{font-size:16px;font-weight:900;color:var(--text);margin-bottom:12px}
+.ld-special-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
+.ld-special-ball{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;background:radial-gradient(circle at 30% 30%,#fff 0%,#f0f0f0 80%,#d0d0d0 100%);box-shadow:inset -2px -2px 6px rgba(0,0,0,.15),inset 2px 2px 6px rgba(255,255,255,.9),0 3px 6px rgba(0,0,0,.2);border:2px solid var(--gold);color:var(--text);position:relative}
+body.light-mode .ld-special-ball{color:#333}
+.ld-special-label{font-size:11px;color:var(--gold);margin-top:6px;font-weight:bold}
+.ld-main-balls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.ld-ball,.lucky-cell,.heart-cell,.cell,.vd-ball{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;background:radial-gradient(circle at 30% 30%,#fff 0%,#f0f0f0 80%,#d0d0d0 100%);box-shadow:inset -2px -2px 6px rgba(0,0,0,.15),inset 2px 2px 6px rgba(255,255,255,.9),0 3px 6px rgba(0,0,0,.2);border:2px solid transparent;position:relative}
+.ld-ball{width:38px;height:38px;font-size:15px}
+.ld-ball.w-red,.lucky-cell.w-red,.heart-cell.w-red,.vd-ball.w-red{color:var(--wave-red);border-color:var(--wave-red)}
+.ld-ball.w-blue,.lucky-cell.w-blue,.heart-cell.w-blue,.vd-ball.w-blue{color:var(--wave-blue);border-color:var(--wave-blue)}
+.ld-ball.w-green,.lucky-cell.w-green,.heart-cell.w-green,.vd-ball.w-green{color:var(--wave-green);border-color:var(--wave-green)}
+.sync-card{background:var(--panel);border-radius:20px;padding:16px;text-align:center;border:1px solid var(--line);margin-bottom:16px}
+.btn-sync{background:var(--btn-primary);color:var(--btn-primary-text);font-size:14px;font-weight:bold;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;width:100%}
+.shake-panel{text-align:center;padding:15px}
+.btn-shake{width:100%;font-size:16px;padding:15px;font-weight:800;border-radius:12px;background:var(--btn-primary);color:var(--btn-primary-text);border:none;box-shadow:0 4px 15px rgba(0,0,0,.2);cursor:pointer;transition:.2s}
+.btn-shake:active{transform:scale(.95)}
+.analysis-grid-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.ag-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 5px;text-align:center;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.ag-item:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:var(--shadow)}
+.ag-icon{font-size:24px;line-height:1}
+.ag-text{font-size:12px;color:var(--text);font-weight:600}
+body.light-mode .ag-item{background:#fff}
 .lucky-grid,.heart-grid,.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;max-width:430px;margin:0 auto 12px}
-.lucky-cell,.heart-cell,.cell{aspect-ratio:1/1; font-size:16px; cursor:pointer; transition: all 0.2s ease;}
-.lucky-cell.active, .heart-cell.active { transform: scale(1.15); box-shadow: 0 0 15px var(--gold), inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.9); border-width: 3px; }
-.lucky-info,.heart-info{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px;}
-.lucky-info b,.heart-info b{color:var(--gold);}
-
-/* 殺號結果 */
+.lucky-cell,.heart-cell,.cell{aspect-ratio:1/1;font-size:16px;cursor:pointer;transition:all .2s ease}
+.lucky-cell.active,.heart-cell.active{transform:scale(1.15);box-shadow:0 0 15px var(--gold),inset -2px -2px 6px rgba(0,0,0,.15),inset 2px 2px 6px rgba(255,255,255,.9);border-width:3px}
+.lucky-info,.heart-info{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px}
+.lucky-info b,.heart-info b{color:var(--gold)}
 .kill-result{margin-top:6px;font-size:13px;line-height:1.9;color:var(--muted);text-align:center}
 .kill-nums{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:430px;margin:12px auto 0}
-.kn{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:9px;font-size:13px;font-weight:700;border:1px solid var(--line);}
-.kn.keep{background:var(--panel-2);color:var(--text);}
-.kn.kill{background:rgba(229,72,77,.1);color:#6d4548;text-decoration:line-through;}
-
-/* 注單卡片 */
+.kn{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:9px;font-size:13px;font-weight:700;border:1px solid var(--line)}
+.kn.keep{background:var(--panel-2);color:var(--text)}
+.kn.kill{background:rgba(229,72,77,.1);color:#6d4548;text-decoration:line-through}
 .tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.ticket{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:12px; box-shadow: var(--shadow); transition: 0.2s;}
-.ticket:hover { border-color: var(--gold); }
+.ticket{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:var(--shadow);transition:.2s}
+.ticket:hover{border-color:var(--gold)}
 .ticket-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .ticket-no{font-size:11.5px;color:var(--muted);font-weight:600}
 .balls{display:flex;gap:6px;flex-wrap:wrap}
-.ball{position:relative;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:700;border:1px solid var(--line);background:var(--input-bg);}
-.ball.w-red{color:var(--wave-red); border-color: rgba(239,68,68,.3);}
-.ball.w-blue{color:var(--wave-blue); border-color: rgba(59,130,246,.3);}
-.ball.w-green{color:var(--wave-green); border-color: rgba(34,197,94,.3);}
-.ball.win{border-color:var(--gold);box-shadow:0 0 10px var(--gold); transform:scale(1.1); color:var(--gold) !important;}
-
-/* 金庫卡片 */
-.vault-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.vault-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; box-shadow: var(--shadow); }
-.vault-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--line); padding-bottom: 10px; margin-bottom: 10px; }
-.vault-title { font-size: 16px; font-weight: 900; color: var(--gold); letter-spacing: 1px; }
-.vault-badge { font-size: 11px; padding: 2px 6px; border-radius: 4px; background: rgba(240,180,41,0.1); color: var(--gold); }
-.vault-info { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
-.vault-info b { font-size: 18px; color: var(--text); }
-.vault-actions { display: flex; gap: 8px; margin-top: auto; }
-.vault-actions button { flex: 1; padding: 8px 0; font-size: 13px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
-.btn-history { background: #fff; color: #0b0f16; border: 1px solid #ccc; }
-.btn-open { background: var(--gold); color: #fff; }
-
-/* ================= AI 大腦推演引擎 (新增) ================= */
-.engine-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px; text-align: center; background: var(--panel); border-radius: 18px; border: 1px solid var(--line); margin-bottom: 16px; box-shadow: var(--shadow);}
-.radar-box { position: relative; width: 160px; height: 160px; border-radius: 50%; border: 2px solid rgba(0,35,102,.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
-body:not(.light-mode) .radar-box { border-color: rgba(240,180,41,.2); }
-.radar-sweep { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 70%, var(--gold) 100%); animation: rotate 2s linear infinite; opacity: 0.6; }
-@keyframes rotate { 100% { transform: rotate(360deg); } }
-.radar-core { position: relative; z-index: 2; font-size: 40px; }
-.engine-btn { width: 100%; max-width: 280px; padding: 15px; font-size: 16px; font-weight: 900; border-radius: 30px; border: none; color: #fff; background: linear-gradient(90deg, #1890ff, #002366); box-shadow: 0 10px 20px rgba(24,144,255,0.3); cursor: pointer; transition: 0.2s; margin-bottom: 15px; }
-body:not(.light-mode) .engine-btn { background: linear-gradient(90deg, #ffd76a, #f0b429); color: #241a00; }
-.engine-btn:active { transform: scale(0.95); }
-.engine-logs { font-family: monospace; font-size: 12px; color: var(--muted); width: 100%; max-width: 280px; height: 60px; overflow: hidden; text-align: left; background: var(--panel-2); padding: 10px; border-radius: 8px; border: 1px solid var(--line);}
-
-/* 歷史與輔助 */
-.history-list { display: flex; flex-direction: column; gap: 10px; }
-.history-item { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;}
-.history-issue { font-size: 14px; font-weight: bold; color: var(--gold); min-width: 70px; }
-.vault-item { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-
-/* AI 面板 */
-.ai-panel { background: rgba(240,180,41,.05); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 14px; display: none; }
-.ai-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.ai-input-row label { font-size: 12px; color: var(--muted); margin-bottom: 4px; display: block; }
-.ai-input-row input, .ai-input-row select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--text); }
-
-/* 核對界面 */
+.ball{position:relative;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:700;border:1px solid var(--line);background:var(--input-bg)}
+.ball.w-red{color:var(--wave-red);border-color:rgba(239,68,68,.3)}
+.ball.w-blue{color:var(--wave-blue);border-color:rgba(59,130,246,.3)}
+.ball.w-green{color:var(--wave-green);border-color:rgba(34,197,94,.3)}
+.ball.win{border-color:var(--gold);box-shadow:0 0 10px var(--gold);transform:scale(1.1);color:var(--gold) !important}
+.vault-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.vault-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.vault-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:10px}
+.vault-title{font-size:16px;font-weight:900;color:var(--gold);letter-spacing:1px}
+.vault-badge{font-size:11px;padding:2px 6px;border-radius:4px;background:rgba(240,180,41,.1);color:var(--gold)}
+.vault-info{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.vault-info b{font-size:18px;color:var(--text)}
+.vault-actions{display:flex;gap:8px;margin-top:auto}
+.vault-actions button{flex:1;padding:8px 0;font-size:13px;border-radius:6px;font-weight:bold;cursor:pointer;border:none}
+.btn-history{background:#fff;color:#0b0f16;border:1px solid #ccc}
+.btn-open{background:var(--gold);color:#fff}
+.engine-container{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 10px;text-align:center;background:var(--panel);border-radius:18px;border:1px solid var(--line);margin-bottom:16px;box-shadow:var(--shadow)}
+.radar-box{position:relative;width:160px;height:160px;border-radius:50%;border:2px solid rgba(0,35,102,.1);display:flex;align-items:center;justify-content:center;margin-bottom:20px;overflow:hidden}
+body:not(.light-mode) .radar-box{border-color:rgba(240,180,41,.2)}
+.radar-sweep{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:conic-gradient(from 0deg,transparent 70%,var(--gold) 100%);animation:rotate 2s linear infinite;opacity:.6}
+@keyframes rotate{100%{transform:rotate(360deg)}}
+.radar-core{position:relative;z-index:2;font-size:40px}
+.engine-btn{width:100%;max-width:280px;padding:15px;font-size:16px;font-weight:900;border-radius:30px;border:none;color:#fff;background:linear-gradient(90deg,#1890ff,#002366);box-shadow:0 10px 20px rgba(24,144,255,.3);cursor:pointer;transition:.2s;margin-bottom:15px}
+body:not(.light-mode) .engine-btn{background:linear-gradient(90deg,#ffd76a,#f0b429);color:#241a00}
+.engine-btn:active{transform:scale(.95)}
+.engine-logs{font-family:monospace;font-size:12px;color:var(--muted);width:100%;max-width:280px;height:60px;overflow:hidden;text-align:left;background:var(--panel-2);padding:10px;border-radius:8px;border:1px solid var(--line)}
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.history-issue{font-size:14px;font-weight:bold;color:var(--gold);min-width:70px}
+.vault-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.ai-panel{background:rgba(240,180,41,.05);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;display:none}
+.ai-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ai-input-row label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
+.ai-input-row input,.ai-input-row select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--input-bg);color:var(--text)}
 .draw-inputs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
 .di-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.di{width:42px;height:42px;border-radius:50%;text-align:center;font-size:16px;font-weight:800;background:var(--input-bg);border:1px solid var(--line);color:var(--gold);outline:none;transition:border-color .18s;}
+.di{width:42px;height:42px;border-radius:50%;text-align:center;font-size:16px;font-weight:800;background:var(--input-bg);border:1px solid var(--line);color:var(--gold);outline:none;transition:border-color .18s}
 .di:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.2)}
-.di.di-special{border:2px solid var(--gold);background:var(--panel-2);}
+.di.di-special{border:2px solid var(--gold);background:var(--panel-2)}
 .di-label{font-size:10.5px;color:var(--muted);white-space:nowrap}
 .di-label.sp{color:var(--gold);font-weight:700}
-
-/* Toast & Nav */
-.toast{position:fixed;bottom:calc(var(--nav-h) + 20px);left:50%;transform:translateX(-50%) translateY(10px);padding:12px 22px;border-radius:10px;background:var(--panel);color:var(--gold);font-size:13.5px;font-weight:600;border:1px solid var(--gold);box-shadow:0 6px 24px rgba(0,0,0,.2);z-index:9999;opacity:0;pointer-events:none;transition:.3s;}
+.toast{position:fixed;bottom:calc(var(--nav-h) + 20px);left:50%;transform:translateX(-50%) translateY(10px);padding:12px 22px;border-radius:10px;background:var(--panel);color:var(--gold);font-size:13.5px;font-weight:600;border:1px solid var(--gold);box-shadow:0 6px 24px rgba(0,0,0,.2);z-index:9999;opacity:0;pointer-events:none;transition:.3s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.err{color:var(--red);border-color:var(--red);}
-
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:100;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;flex:1;}
+.toast.err{color:var(--red);border-color:var(--red)}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;flex:1}
 .nav-item .icon{font-size:18px;filter:grayscale(1);opacity:.7;transition:.2s}
 .nav-item.active{color:var(--gold)}
 .nav-item.active .icon{filter:none;opacity:1;transform:translateY(-2px)}
-
-/* 彈窗 */
-.custom-prompt { position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999999;display:none;align-items:center;justify-content:center; }
-.custom-prompt-box { background:var(--panel); width:90%; max-width:400px; border-radius:16px; padding:20px; border:1px solid var(--line); }
-.custom-prompt textarea { width:100%; height:120px; background:var(--input-bg); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px; margin-bottom:16px; font-size:13.5px; }
-.vip-mask { position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:100000;display:none;flex-direction:column;align-items:center;justify-content:center; }
-.vip-box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px 30px;width:90%;max-width:400px;text-align:center;}
-.vip-box input{width:100%;padding:14px;border-radius:10px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);font-size:16px;text-align:center;margin-bottom:16px;}
-.vip-box button{width:100%;padding:14px;border-radius:10px;border:none;background:var(--btn-primary);color:var(--btn-primary-text);font-size:16px;font-weight:bold;}
-
-/* ================= 注單分析彈窗 ================= */
-.custom-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px);}
-.cm-box { background: var(--panel); width: 100%; max-width: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 90vh; }
-.cm-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: bold; color: var(--text); }
-.cm-close { cursor: pointer; font-size: 20px; color: var(--muted); }
-.cm-slots { display: flex; justify-content: center; gap: 10px; padding: 20px 10px; flex-wrap: wrap; }
-.slot-ball { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; background: #fff; color: #000; border: 1px solid var(--line); }
-body.light-mode .slot-ball { background: #fff; color: #333; }
-.slot-ball.empty { background: var(--bg); border-style: dashed; color: var(--muted); }
-.cm-analysis { text-align: center; font-size: 13px; color: var(--muted); padding: 0 16px 16px; line-height: 1.8; }
-.cm-actions { display: flex; gap: 10px; padding: 0 16px 16px; }
-.cm-actions button { flex: 1; }
-.cm-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 16px; background: var(--panel-2); overflow-y: auto; border-radius: 0 0 20px 20px; }
-.ca-cell { aspect-ratio: 1/1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; border: 2px solid var(--line); background: var(--bg); cursor: pointer; transition: all 0.2s; }
-body.light-mode .ca-cell { background: #fff; }
-.ca-cell.w-red { border-color: var(--wave-red); color: var(--wave-red); }
-.ca-cell.w-blue { border-color: var(--wave-blue); color: var(--wave-blue); }
-.ca-cell.w-green { border-color: var(--wave-green); color: var(--wave-green); }
-.ca-cell.active { background: var(--gold); color: #fff !important; border-color: var(--gold); transform: scale(1.05); }
-.ca-cell.active.w-red { background: var(--wave-red); color: #fff; border-color: var(--wave-red); }
-.ca-cell.active.w-blue { background: var(--wave-blue); color: #fff; border-color: var(--wave-blue); }
-.ca-cell.active.w-green { background: var(--wave-green); color: #fff; border-color: var(--wave-green); }
-
-/* ================= 大數據分析彈窗 ================= */
-.analysis-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); }
-.am-box { background: var(--panel); width: 100%; max-width: 500px; border-radius: 16px; display: flex; flex-direction: column; max-height: 85vh; overflow: hidden; }
-.am-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: bold; color: var(--gold); }
-.am-content { padding: 16px; overflow-y: auto; flex: 1; font-size: 13px; }
-/* 走勢圖與統計表 */
-.stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.stat-label { width: 40px; font-weight: bold; text-align: right; color: var(--muted); }
-.stat-bar-wrap { flex: 1; background: var(--input-bg); height: 16px; border-radius: 8px; overflow: hidden; display: flex; }
-.stat-bar-red { background: var(--wave-red); height: 100%; }
-.stat-bar-blue { background: var(--wave-blue); height: 100%; }
-.stat-bar-green { background: var(--wave-green); height: 100%; }
-.stat-val { width: 40px; text-align: left; color: var(--text); font-weight: bold; }
-.stat-ball { display: inline-flex; justify-content: center; align-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: bold; color: #fff; margin-right: 4px; }
-
-/* ================= 金庫彈窗 ================= */
-.vault-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-.vm-box { background: linear-gradient(180deg, #1e1e2d 0%, #0d0d15 100%); width: 100%; max-width: 400px; border-radius: 20px; border: 1px solid rgba(240,180,41,0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; position: relative; overflow: hidden; }
-body.light-mode .vm-box { background: var(--panel); border-color: var(--line); }
-.vm-glow { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 200px; height: 100px; background: radial-gradient(ellipse at center, rgba(240,180,41,0.3) 0%, transparent 70%); pointer-events: none; }
-body.light-mode .vm-glow { background: radial-gradient(ellipse at center, rgba(0,35,102,0.1) 0%, transparent 70%); }
-.vm-header { text-align: center; padding: 30px 20px 10px; position: relative; z-index: 1; }
-.vm-title { font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-body.light-mode .vm-title { text-shadow: none; }
-.vm-sub { font-size: 12px; color: var(--muted); }
-.vm-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; margin: 15px; padding: 15px; position: relative; z-index: 1; }
-body.light-mode .vm-card { background: var(--panel-2); border-color: var(--line); }
-.vm-card-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-body.light-mode .vm-card-head { border-bottom-color: var(--line); }
-.vm-card-title { font-size: 15px; color: var(--gold); font-weight: bold; }
-.vm-card-date { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.vm-badge { background: rgba(240,180,41,0.15); color: var(--gold); padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-.vm-rows { display: flex; flex-direction: column; gap: 10px; }
-.vm-row { display: flex; align-items: center; gap: 8px; }
-.vm-idx { font-size: 14px; color: var(--muted); width: 15px; text-align: right; }
-.vm-balls { display: flex; gap: 6px; flex-wrap: wrap; }
-.vd-ball { width: 32px; height: 32px; font-size: 14px; }
-.vm-actions { display: flex; gap: 10px; padding: 15px; position: relative; z-index: 1; }
-.vm-actions button { flex: 1; padding: 12px 0; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
-.vm-btn-share { background: linear-gradient(135deg, #ffd76a, #f0b429); color: #241a00; box-shadow: 0 4px 15px rgba(240,180,41,0.3); }
-body.light-mode .vm-btn-share { background: var(--btn-primary); color: var(--btn-primary-text); box-shadow: none; }
-.vm-btn-share:active { transform: scale(0.95); }
-.vm-btn-close { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text); border-color: var(--line); }
-.vm-btn-close:active { background: rgba(255,255,255,0.2); }
-
-/* ================= 往績彈窗 ================= */
-.history-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-.hm-box { background: var(--panel); width: 100%; max-width: 450px; border-radius: 16px; display: flex; flex-direction: column; max-height: 80vh; overflow: hidden; }
-.hm-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: bold; color: var(--gold); }
-.hm-content { padding: 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; }
-.hm-item { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.hm-item-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
-.hm-item-balls { display: flex; gap: 6px; flex-wrap: wrap; }
-
-@media(max-width:560px){
-  .tickets{grid-template-columns:1fr}
-  .row > label{min-width:100%}
-  .heart-grid,.lucky-grid{gap:5px}
-  .heart-cell,.lucky-cell{font-size:13px;}
-  .history-item { flex-direction: column; align-items: flex-start;}
-  .analysis-grid-panel { grid-template-columns: repeat(3, 1fr); }
-}
+.custom-prompt{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:999999;display:none;align-items:center;justify-content:center}
+.custom-prompt-box{background:var(--panel);width:90%;max-width:400px;border-radius:16px;padding:20px;border:1px solid var(--line)}
+.custom-prompt textarea{width:100%;height:120px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13.5px}
+.vip-mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:100000;display:none;flex-direction:column;align-items:center;justify-content:center}
+.vip-box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px 30px;width:90%;max-width:400px;text-align:center;position:relative}
+.vip-box input{width:100%;padding:14px;border-radius:10px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);font-size:16px;text-align:center;margin-bottom:16px}
+.vip-box button{width:100%;padding:14px;border-radius:10px;border:none;background:var(--btn-primary);color:var(--btn-primary-text);font-size:16px;font-weight:bold}
+.custom-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.cm-box{background:var(--panel);width:100%;max-width:450px;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;max-height:90vh}
+.cm-header{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);font-size:16px;font-weight:bold;color:var(--text)}
+.cm-close{cursor:pointer;font-size:20px;color:var(--muted)}
+.cm-slots{display:flex;justify-content:center;gap:10px;padding:20px 10px;flex-wrap:wrap}
+.slot-ball{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;background:#fff;color:#000;border:1px solid var(--line)}
+body.light-mode .slot-ball{background:#fff;color:#333}
+.slot-ball.empty{background:var(--bg);border-style:dashed;color:var(--muted)}
+.cm-analysis{text-align:center;font-size:13px;color:var(--muted);padding:0 16px 16px;line-height:1.8}
+.cm-actions{display:flex;gap:10px;padding:0 16px 16px}
+.cm-actions button{flex:1}
+.cm-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:16px;background:var(--panel-2);overflow-y:auto;border-radius:0 0 20px 20px}
+.ca-cell{aspect-ratio:1/1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;border:2px solid var(--line);background:var(--bg);cursor:pointer;transition:all .2s}
+body.light-mode .ca-cell{background:#fff}
+.ca-cell.w-red{border-color:var(--wave-red);color:var(--wave-red)}
+.ca-cell.w-blue{border-color:var(--wave-blue);color:var(--wave-blue)}
+.ca-cell.w-green{border-color:var(--wave-green);color:var(--wave-green)}
+.ca-cell.active{background:var(--gold);color:#fff !important;border-color:var(--gold);transform:scale(1.05)}
+.ca-cell.active.w-red{background:var(--wave-red);color:#fff;border-color:var(--wave-red)}
+.ca-cell.active.w-blue{background:var(--wave-blue);color:#fff;border-color:var(--wave-blue)}
+.ca-cell.active.w-green{background:var(--wave-green);color:#fff;border-color:var(--wave-green)}
+.analysis-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:999999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.am-box{background:var(--panel);width:100%;max-width:500px;border-radius:16px;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
+.am-header{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);font-size:16px;font-weight:bold;color:var(--gold)}
+.am-content{padding:16px;overflow-y:auto;flex:1;font-size:13px}
+.stat-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.stat-label{width:40px;font-weight:bold;text-align:right;color:var(--muted)}
+.stat-bar-wrap{flex:1;background:var(--input-bg);height:16px;border-radius:8px;overflow:hidden;display:flex}
+.stat-bar-red{background:var(--wave-red);height:100%}
+.stat-bar-blue{background:var(--wave-blue);height:100%}
+.stat-bar-green{background:var(--wave-green);height:100%}
+.stat-val{width:40px;text-align:left;color:var(--text);font-weight:bold}
+.stat-ball{display:inline-flex;justify-content:center;align-items:center;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:bold;color:#fff;margin-right:4px}
+.vault-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:999999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+.vm-box{background:linear-gradient(180deg,#1e1e2d 0%,#0d0d15 100%);width:100%;max-width:400px;border-radius:20px;border:1px solid rgba(240,180,41,.4);box-shadow:0 10px 40px rgba(0,0,0,.8);display:flex;flex-direction:column;position:relative;overflow:hidden}
+body.light-mode .vm-box{background:var(--panel);border-color:var(--line)}
+.vm-glow{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:200px;height:100px;background:radial-gradient(ellipse at center,rgba(240,180,41,.3) 0%,transparent 70%);pointer-events:none}
+body.light-mode .vm-glow{background:radial-gradient(ellipse at center,rgba(0,35,102,.1) 0%,transparent 70%)}
+.vm-header{text-align:center;padding:30px 20px 10px;position:relative;z-index:1}
+.vm-title{font-size:20px;font-weight:900;color:var(--gold);margin-bottom:8px;text-shadow:0 2px 4px rgba(0,0,0,.5)}
+body.light-mode .vm-title{text-shadow:none}
+.vm-sub{font-size:12px;color:var(--muted)}
+.vm-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:12px;margin:15px;padding:15px;position:relative;z-index:1}
+body.light-mode .vm-card{background:var(--panel-2);border-color:var(--line)}
+.vm-card-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.1)}
+body.light-mode .vm-card-head{border-bottom-color:var(--line)}
+.vm-card-title{font-size:15px;color:var(--gold);font-weight:bold}
+.vm-card-date{font-size:11px;color:var(--muted);margin-top:4px}
+.vm-badge{background:rgba(240,180,41,.15);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px}
+.vm-rows{display:flex;flex-direction:column;gap:10px}
+.vm-row{display:flex;align-items:center;gap:8px}
+.vm-idx{font-size:14px;color:var(--muted);width:15px;text-align:right}
+.vm-balls{display:flex;gap:6px;flex-wrap:wrap}
+.vd-ball{width:32px;height:32px;font-size:14px}
+.vm-actions{display:flex;gap:10px;padding:15px;position:relative;z-index:1}
+.vm-actions button{flex:1;padding:12px 0;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s}
+.vm-btn-share{background:linear-gradient(135deg,#ffd76a,#f0b429);color:#241a00;box-shadow:0 4px 15px rgba(240,180,41,.3)}
+body.light-mode .vm-btn-share{background:var(--btn-primary);color:var(--btn-primary-text);box-shadow:none}
+.vm-btn-share:active{transform:scale(.95)}
+.vm-btn-close{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);border-color:var(--line)}
+.history-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:999999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+.hm-box{background:var(--panel);width:100%;max-width:450px;border-radius:16px;display:flex;flex-direction:column;max-height:80vh;overflow:hidden}
+.hm-header{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);font-size:16px;font-weight:bold;color:var(--gold)}
+.hm-content{padding:16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px}
+.hm-item{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.hm-item-head{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.hm-item-balls{display:flex;gap:6px;flex-wrap:wrap}
+.bt-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+.bt-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px}
+.bt-table th{text-align:left;padding:10px 8px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);background:var(--panel-2);white-space:nowrap}
+.bt-table td{padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.bt-table tbody tr:last-child td{border-bottom:none}
+.bt-table tr.top1 td{color:var(--gold);font-weight:700;background:rgba(240,180,41,.06)}
+.bt-table tr.top2 td{color:#b8c4d0}
+.bt-table tr.top3 td{color:#cd9b6a}
+.bt-note{font-size:11.5px;color:var(--muted);line-height:1.8;margin-top:12px;padding:12px;background:var(--panel-2);border-radius:10px;border:1px solid var(--line)}
+.bt-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold);margin-left:6px;vertical-align:middle}
+.bt-table tr.applied td{background:rgba(63,185,80,.12) !important;box-shadow:inset 0 0 0 1px rgba(63,185,80,.4);}
+@media(max-width:560px){.tickets{grid-template-columns:1fr}.row > label{min-width:100%}.heart-grid,.lucky-grid{gap:5px}.heart-cell,.lucky-cell{font-size:13px}.history-item{flex-direction:column;align-items:flex-start}.analysis-grid-panel{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<!-- 設定頁面 -->
 <div class="settings-page" id="settingsPage">
   <div class="sp-header">
     <div class="sp-back" onclick="document.getElementById('settingsPage').style.display='none'">←</div>
-    <div style="font-size:18px; font-weight:800; color:var(--text);" data-i18n="settings_title">資訊及設定</div>
+    <div style="font-size:18px;font-weight:800;color:var(--text);" data-i18n="settings_title">資訊及設定</div>
   </div>
   <div class="sp-content">
     <div>
@@ -373,44 +265,39 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
         <button data-lang="zh-CN" onclick="changeLang('zh-CN', this)">简体中文</button>
       </div>
     </div>
-    
     <div class="sp-row" onclick="toggleTheme()">
       <span data-i18n="settings_theme">切換黑白/藍白外觀</span>
       <div class="sp-toggle" id="themeToggle"></div>
     </div>
-
     <div class="sp-card">
       <h3 data-i18n="terms_title">📜 使用條款與免責聲明</h3>
       <p data-i18n="terms_p1">1. 本應用程式（金運寶庫）僅供娛樂、數據統計分析與技術交流使用，不涉及任何真實金錢交易或賭博行為。</p>
-      <p data-i18n="terms_p2">2. 所有預測、AI 推薦數據均基於歷史概率模型生成，不代表任何中獎保證。</p>
+      <p data-i18n="terms_p2">2. 所有預測、AI 推薦、策略回測數據均基於歷史概率模型生成，不代表任何中獎保證。</p>
     </div>
   </div>
 </div>
 
-<!-- 會員激活 -->
 <div class="vip-mask" id="vipMask">
-<div class="vip-box">
-<div style="position:absolute;top:15px;right:20px;color:var(--muted);font-size:24px;cursor:pointer;" onclick="document.getElementById('vipMask').style.display='none'">✕</div>
-<h2 style="margin-bottom:20px;">👑 尊爵VIP</h2>
-<p style="color:var(--muted);font-size:13px;margin-bottom:16px;" data-i18n="vip_desc">解鎖歷史核對、AI 多組篩選、去浮水印等特權。</p>
-<input type="text" id="vipCodeInput" placeholder="請輸入激活碼" maxlength="30">
-<button id="vipActivateBtn" data-i18n="btn_activate">立即激活</button>
-</div>
+  <div class="vip-box">
+    <div style="position:absolute;top:15px;right:20px;color:var(--muted);font-size:24px;cursor:pointer;" onclick="document.getElementById('vipMask').style.display='none'">✕</div>
+    <h2 style="margin-bottom:20px;">👑 尊爵VIP</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px;" data-i18n="vip_desc">解鎖歷史核對、AI 多組篩選、去浮水印等特權。</p>
+    <input type="text" id="vipCodeInput" placeholder="請輸入激活碼" maxlength="30">
+    <button id="vipActivateBtn" data-i18n="btn_activate">立即激活</button>
+  </div>
 </div>
 
-<!-- 自定義輸入 -->
 <div class="custom-prompt" id="customPromptMask">
   <div class="custom-prompt-box">
-    <div id="customPromptMsg" style="color:var(--gold); font-size:15px; margin-bottom:12px; font-weight:600;"></div>
+    <div id="customPromptMsg" style="color:var(--gold);font-size:15px;margin-bottom:12px;font-weight:600;"></div>
     <textarea id="customPromptInput"></textarea>
-    <div style="display:flex; gap:10px; justify-content:flex-end;">
-      <button type="button" onclick="closeCustomPrompt()" style="padding:10px 22px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--muted); font-size:14px;">取消</button>
-      <button type="button" onclick="submitCustomPrompt()" style="padding:10px 22px; border-radius:10px; border:none; background:var(--gold); color:#fff; font-weight:bold; font-size:14px;">確定</button>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button type="button" onclick="closeCustomPrompt()" style="padding:10px 22px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:14px;">取消</button>
+      <button type="button" onclick="submitCustomPrompt()" style="padding:10px 22px;border-radius:10px;border:none;background:var(--gold);color:#fff;font-weight:bold;font-size:14px;">確定</button>
     </div>
   </div>
 </div>
 
-<!-- 頂部 -->
 <div class="header-area">
   <div class="settings-btn" onclick="document.getElementById('settingsPage').style.display='flex'">⚙️</div>
   <div class="vip-btn" onclick="showVipModal()" id="vipHeaderBadge">👑 尊爵VIP</div>
@@ -421,25 +308,7 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
 
 <div class="wrap">
 
-<!-- ============================================================ -->
-<!-- ================= 谷歌廣告位 (選號首頁頂部) ================= -->
-<!-- ============================================================ -->
-<div style="text-align: center; margin-bottom: 16px; overflow: hidden;">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-4460191604367457"
-       data-ad-slot="8230462279"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>
-       (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-<!-- ============================================================ -->
-
-<!-- Tab 1: 選號生成 -->
 <section id="tab-smart" class="tab-content active">
-  
   <div class="latest-draw-card">
     <div class="ld-label">LATEST DRAW</div>
     <div class="ld-issue" id="ldIssue">正在加載...</div>
@@ -450,47 +319,23 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
     <div class="ld-main-balls" id="ldMainBalls"></div>
   </div>
 
-  <!-- 大數據分析網格 -->
   <div class="section-title" style="margin-top:20px;">📊 六合彩大數據分析</div>
   <div class="analysis-grid-panel">
-    <div class="ag-item" onclick="showAnalysis('trend')">
-      <div class="ag-icon">📈</div>
-      <div class="ag-text">走勢圖</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('omission')">
-      <div class="ag-icon">📊</div>
-      <div class="ag-text">遺漏統計</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('frequency')">
-      <div class="ag-icon">📉</div>
-      <div class="ag-text">出次統計</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('hotcold')">
-      <div class="ag-icon">🔥</div>
-      <div class="ag-text">冷熱碼</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('wave')">
-      <div class="ag-icon">🔮</div>
-      <div class="ag-text">波色比例</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('zodiac')">
-      <div class="ag-icon">🐲</div>
-      <div class="ag-text">生肖統計</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('headtail')">
-      <div class="ag-icon">🔢</div>
-      <div class="ag-text">頭尾數</div>
-    </div>
-    <div class="ag-item" onclick="showAnalysis('kline')">
-      <div class="ag-icon">🕯️</div>
-      <div class="ag-text">K線/MACD</div>
-    </div>
+    <div class="ag-item" onclick="showAnalysis('trend')"><div class="ag-icon">📈</div><div class="ag-text">走勢圖</div></div>
+    <div class="ag-item" onclick="showAnalysis('omission')"><div class="ag-icon">📊</div><div class="ag-text">遺漏統計</div></div>
+    <div class="ag-item" onclick="showAnalysis('frequency')"><div class="ag-icon">📉</div><div class="ag-text">出次統計</div></div>
+    <div class="ag-item" onclick="showAnalysis('hotcold')"><div class="ag-icon">🔥</div><div class="ag-text">冷熱碼</div></div>
+    <div class="ag-item" onclick="showAnalysis('wave')"><div class="ag-icon">🔮</div><div class="ag-text">波色比例</div></div>
+    <div class="ag-item" onclick="showAnalysis('zodiac')"><div class="ag-icon">🐲</div><div class="ag-text">生肖統計</div></div>
+    <div class="ag-item" onclick="showAnalysis('headtail')"><div class="ag-icon">🔢</div><div class="ag-text">頭尾數</div></div>
+    <div class="ag-item" onclick="showAnalysis('kline')"><div class="ag-icon">🕯️</div><div class="ag-text">K線/MACD</div></div>
   </div>
 
   <div class="sync-card">
-    <div class="sync-title" style="font-size:14px; font-weight:800; color:var(--gold); margin-bottom:8px;" data-i18n="sync_title">☁️ 雲端自動同步</div>
-    <div class="sync-desc" style="font-size:12px; color:var(--muted); margin-bottom:12px;" data-i18n="sync_desc">獲取最新真實歷史開獎記錄</div>
+    <div style="font-size:14px;font-weight:800;color:var(--gold);margin-bottom:8px;" data-i18n="sync_title">☁️ 雲端自動同步</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;" data-i18n="sync_desc">獲取最新真實歷史開獎記錄</div>
     <button class="btn-sync" id="syncCloudBtn" data-i18n="btn_sync">手動同步最新數據</button>
+    <div id="syncStatus" style="font-size:11px;color:var(--muted);margin-top:8px;"></div>
   </div>
 
   <div class="section-title" data-i18n="sec_num_pick">① 號碼選擇</div>
@@ -522,7 +367,6 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
       </div>
       <div class="bar left" style="margin:0">
         <button class="act btn-ghost sm" id="heartClear" data-i18n="btn_clear">清空</button>
-        <button class="act btn-main sm" id="smartRecommendBtn" style="margin-left:auto" data-i18n="btn_ai">🤖 AI推薦</button>
       </div>
     </div>
   </div>
@@ -543,11 +387,11 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
     <div class="row">
       <label data-i18n="label_balls">每注球數</label>
       <div class="tabs" id="ballCountTabs">
-        <button data-b="2" data-i18n="ball_2">2球 · 二中二</button>
-        <button data-b="3" data-i18n="ball_3">3球 · 三中三</button>
-        <button data-b="4" data-i18n="ball_4">4球 · 四中四</button>
-        <button data-b="5" data-i18n="ball_5">5球 · 五中五</button>
-        <button data-b="6" class="active" data-i18n="ball_6">6球 · 六中六</button>
+        <button data-b="2" data-i18n="ball_2">2球</button>
+        <button data-b="3" data-i18n="ball_3">3球</button>
+        <button data-b="4" data-i18n="ball_4">4球</button>
+        <button data-b="5" data-i18n="ball_5">5球</button>
+        <button data-b="6" class="active" data-i18n="ball_6">6球</button>
         <button data-b="custom" data-i18n="ball_custom">自訂</button>
       </div>
       <input type="number" class="num-inp" id="customBalls" min="2" max="6" value="4">
@@ -556,7 +400,7 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
       <label data-i18n="label_custom_tickets">自訂注數</label>
       <input type="number" class="num-inp" id="customTickets" min="1" max="200" value="10">
     </div>
-    <div class="ticket-info" id="ticketInfo" style="font-size:12.5px;color:var(--muted);line-height:1.8;text-align:center;margin-top:10px"></div>
+    <div id="ticketInfo" style="font-size:12.5px;color:var(--muted);line-height:1.8;text-align:center;margin-top:10px"></div>
     <div class="bar left" style="margin-top:16px;margin-bottom:0">
       <button class="act btn-main" id="genBtn" style="flex:1" data-i18n="btn_gen">✨ 一鍵生成注單</button>
     </div>
@@ -569,72 +413,36 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
     </div>
     <div class="ai-panel" id="aiPanel">
       <div class="ai-input-row">
-        <div>
-          <label data-i18n="ai_groups">生成組數</label>
-          <input type="number" id="aiGroupCount" value="10" min="2" max="100">
-        </div>
-        <div>
-          <label data-i18n="ai_tickets">每組注數</label>
-          <input type="number" id="aiTicketCount" value="17" min="1" max="100">
-        </div>
+        <div><label data-i18n="ai_groups">生成組數</label><input type="number" id="aiGroupCount" value="10" min="2" max="100"></div>
+        <div><label data-i18n="ai_tickets">每組注數</label><input type="number" id="aiTicketCount" value="17" min="1" max="100"></div>
       </div>
       <div class="ai-input-row">
-        <div>
-          <label data-i18n="ai_sims">模擬次數</label>
-          <select id="aiSimCount">
-            <option value="50000">5 萬次</option>
-            <option value="100000" selected>10 萬次</option>
-          </select>
-        </div>
-        <div>
-          <label data-i18n="ai_algo">算法</label>
-          <select id="aiAlgo">
-            <option value="smart" data-i18n="mode_smart">聰明組合</option>
-            <option value="dantuo" data-i18n="mode_dantuo">幸運號膽拖</option>
-          </select>
-        </div>
+        <div><label data-i18n="ai_sims">模擬次數</label><select id="aiSimCount"><option value="50000">5 萬次</option><option value="100000" selected>10 萬次</option></select></div>
+        <div><label data-i18n="ai_algo">算法</label><select id="aiAlgo"><option value="smart" data-i18n="mode_smart">聰明組合</option><option value="dantuo" data-i18n="mode_dantuo">幸運號膽拖</option></select></div>
       </div>
-      <button class="act btn-purple" id="runAiBtn" style="width:100%; margin-top:10px;" data-i18n="btn_run_ai">🚀 啟動 AI 模擬運算</button>
-      <div id="aiResult" style="margin-top:12px; font-size:13px; max-height:200px; overflow-y:auto;"></div>
+      <button class="act btn-purple" id="runAiBtn" style="width:100%;margin-top:10px;" data-i18n="btn_run_ai">🚀 啟動 AI 模擬運算</button>
+      <div id="aiResult" style="margin-top:12px;font-size:13px;max-height:200px;overflow-y:auto;"></div>
     </div>
   </div>
 </section>
 
-<!-- Tab 2: 開獎歷史 -->
 <section id="tab-history" class="tab-content">
   <div class="section-title" data-i18n="sec_history">📅 開獎歷史記錄</div>
-  <div class="panel">
-    <div class="history-list" id="historyList"></div>
-  </div>
+  <div class="panel"><div class="history-list" id="historyList"></div></div>
 </section>
 
-<!-- Tab 3: 幸運金庫 + AI大腦 -->
 <section id="tab-vault" class="tab-content">
   <div class="section-title" data-i18n="sec_vault">🏦 幸運金庫分析 (14 庫)</div>
-  
-  <!-- 新增：AI 大腦推演引擎 -->
   <div class="engine-container">
-    <div class="radar-box">
-      <div class="radar-sweep"></div>
-      <div class="radar-core">🧠</div>
-    </div>
-    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">量子推演引擎 v4.0</div>
-    <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px; padding: 0 10px;">
-      實時分析 100 期大數據，為你動態運算 5 組黃金組合。
-    </div>
+    <div class="radar-box"><div class="radar-sweep"></div><div class="radar-core">🧠</div></div>
+    <div style="font-size:16px;font-weight:bold;margin-bottom:8px;">量子推演引擎 v4.0</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;padding:0 10px;">實時分析 100 期大數據，為你動態運算 5 組黃金組合。</div>
     <button class="engine-btn" id="runAiEngineBtn" onclick="runEngine()">⚡ 啟動大數據推演</button>
-    <div class="engine-logs" id="engineLogs">
-      > 系統就緒，等待指令...<br>
-      > 免費用戶每日限用 1 次
-    </div>
+    <div class="engine-logs" id="engineLogs">&gt; 系統就緒，等待指令...<br>&gt; 免費用戶每日限用 1 次</div>
   </div>
-
-  <div class="panel">
-    <div class="vault-grid" id="vaultGrid"></div>
-  </div>
+  <div class="panel"><div class="vault-grid" id="vaultGrid"></div></div>
 </section>
 
-<!-- Tab 4: 核對開獎 -->
 <section id="tab-draw" class="tab-content">
   <div class="section-title" data-i18n="sec_draw">🎯 核對開獎（會員專享）</div>
   <div class="panel">
@@ -643,12 +451,11 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
       <button class="act btn-main sm" id="randomDraw" data-i18n="btn_random_fill">🎲 隨機填號</button>
       <button class="act btn-main sm" id="confirmDraw" style="background:var(--green);" data-i18n="btn_confirm_draw">✅ 確認核對</button>
     </div>
-    <div id="verdict" style="margin-top:16px; text-align:center; font-size:14px; line-height:1.8; color:var(--muted);" data-i18n="draw_hint">請輸入號碼比對。</div>
-    <div id="hitChart" style="margin-top:16px; display:none;"></div>
+    <div id="verdict" style="margin-top:16px;text-align:center;font-size:14px;line-height:1.8;color:var(--muted);" data-i18n="draw_hint">請輸入號碼比對。</div>
+    <div id="hitChart" style="margin-top:16px;display:none;"></div>
   </div>
 </section>
 
-<!-- Tab 5: 殺號縮水 -->
 <section id="tab-kill" class="tab-content">
   <div class="section-title" data-i18n="sec_kill">✂️ 殺號縮水</div>
   <div class="panel">
@@ -664,32 +471,30 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
         <button data-s="wave" data-i18n="strat_wave">波色</button>
       </div>
     </div>
-    
-    <div id="missingPanel" class="exclude-panel" style="display:none; background:rgba(240,180,41,.05); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;">
-      <div style="font-size:12px; margin-bottom:8px;" data-i18n="exclude_missing_title">請選擇要排除的整組號碼：</div>
+    <div id="missingPanel" class="exclude-panel" style="display:none;background:rgba(240,180,41,.05);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;margin-bottom:8px;" data-i18n="exclude_missing_title">請選擇要排除的整組號碼：</div>
       <div class="tabs" style="gap:4px;">
         <button class="exclude-btn" data-g="0">第一門(01-09)</button><button class="exclude-btn" data-g="1">第二門(10-19)</button><button class="exclude-btn" data-g="2">第三門(20-29)</button><button class="exclude-btn" data-g="3">第四門(30-39)</button><button class="exclude-btn" data-g="4">第五門(40-49)</button>
       </div>
     </div>
-    <div id="headPanel" class="exclude-panel" style="display:none; background:rgba(240,180,41,.05); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;">
-      <div style="font-size:12px; margin-bottom:8px;" data-i18n="exclude_head_title">請選擇要排除的頭數：</div>
+    <div id="headPanel" class="exclude-panel" style="display:none;background:rgba(240,180,41,.05);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;margin-bottom:8px;" data-i18n="exclude_head_title">請選擇要排除的頭數：</div>
       <div class="tabs" style="gap:4px;">
         <button class="exclude-btn" data-g="0">0頭(01-09)</button><button class="exclude-btn" data-g="1">1頭(10-19)</button><button class="exclude-btn" data-g="2">2頭(20-29)</button><button class="exclude-btn" data-g="3">3頭(30-39)</button><button class="exclude-btn" data-g="4">4頭(40-49)</button>
       </div>
     </div>
-    <div id="tailPanel" class="exclude-panel" style="display:none; background:rgba(240,180,41,.05); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;">
-      <div style="font-size:12px; margin-bottom:8px;" data-i18n="exclude_tail_title">請選擇要排除的尾數：</div>
+    <div id="tailPanel" class="exclude-panel" style="display:none;background:rgba(240,180,41,.05);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;margin-bottom:8px;" data-i18n="exclude_tail_title">請選擇要排除的尾數：</div>
       <div class="tabs" style="gap:4px;">
         <button class="exclude-btn" data-g="0">0尾</button><button class="exclude-btn" data-g="1">1尾</button><button class="exclude-btn" data-g="2">2尾</button><button class="exclude-btn" data-g="3">3尾</button><button class="exclude-btn" data-g="4">4尾</button><button class="exclude-btn" data-g="5">5尾</button><button class="exclude-btn" data-g="6">6尾</button><button class="exclude-btn" data-g="7">7尾</button><button class="exclude-btn" data-g="8">8尾</button><button class="exclude-btn" data-g="9">9尾</button>
       </div>
     </div>
-    <div id="wavePanel" class="exclude-panel" style="display:none; background:rgba(240,180,41,.05); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;">
-      <div style="font-size:12px; margin-bottom:8px;" data-i18n="exclude_wave_title">請選擇要排除的波色：</div>
+    <div id="wavePanel" class="exclude-panel" style="display:none;background:rgba(240,180,41,.05);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;margin-bottom:8px;" data-i18n="exclude_wave_title">請選擇要排除的波色：</div>
       <div class="tabs" style="gap:4px;">
         <button class="exclude-btn" data-g="red">紅波</button><button class="exclude-btn" data-g="blue">藍波</button><button class="exclude-btn" data-g="green">綠波</button>
       </div>
     </div>
-
     <div class="row">
       <label data-i18n="label_keep">保留數</label>
       <div class="tabs" id="keepTabs">
@@ -704,32 +509,50 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
   </div>
 </section>
 
-<!-- Tab 6: 回測分析 -->
 <section id="tab-backtest" class="tab-content">
   <div class="section-title" data-i18n="sec_backtest">📈 回測與導入</div>
   <div class="panel">
-    <div class="bar left" style="margin-bottom:10px">
-      <button class="act btn-purple sm" id="importTicketsBtn" style="width:100%;" data-i18n="btn_import">📥 批量導入注單</button>
+    <div class="bar left" style="margin-bottom:10px"><button class="act btn-purple sm" id="importTicketsBtn" style="width:100%;" data-i18n="btn_import">📥 批量導入注單</button></div>
+    <div class="bar left" style="margin-bottom:10px"><button class="act btn-green sm" id="verifyHistoryBtn" style="width:100%;" data-i18n="btn_verify">📈 用歷史記錄核對當前注單</button></div>
+    <div id="verifyResultArea" style="display:none;margin-top:12px;font-size:13px;line-height:1.6;background:var(--panel-2);padding:12px;border-radius:8px;"><div id="verifySummary"></div></div>
+  </div>
+
+  <div class="section-title">🧪 策略回測實驗室</div>
+  <div class="panel">
+    <div class="row">
+      <label>回測期數</label>
+      <div class="tabs" id="btPeriodTabs">
+        <button data-p="20">20 期</button>
+        <button data-p="50" class="active">50 期</button>
+        <button data-p="100">100 期</button>
+        <button data-p="200">200 期</button>
+        <button data-p="custom">自訂</button>
+      </div>
+      <input type="number" class="num-inp" id="customBtPeriod" min="5" max="500" value="100" style="display:none;">
+    </div>
+    <div class="row">
+      <label>每策略注數</label>
+      <input type="number" class="num-inp" id="btTicketCount" value="10" min="1" max="50">
+      <label style="min-width:auto;margin-left:8px;">每注球數</label>
+      <input type="number" class="num-inp" id="btBalls" value="6" min="2" max="6">
     </div>
     <div class="bar left" style="margin-bottom:10px">
-      <button class="act btn-green sm" id="verifyHistoryBtn" style="width:100%;" data-i18n="btn_verify">📈 用歷史記錄核對當前注單</button>
+      <button class="act btn-purple" id="runBacktestBtn" style="width:100%">🧪 開始回測（10 種策略）</button>
     </div>
-    <div id="verifyResultArea" style="display:none; margin-top:12px; font-size:13px; line-height:1.6; background:var(--panel-2); padding:12px; border-radius:8px;">
-      <div id="verifySummary"></div>
-    </div>
+    <div id="btStatus" style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:12px;"></div>
+    <div id="btLeaderboard"></div>
   </div>
 
   <div class="section-title" data-i18n="sec_current_tickets">當前注單</div>
   <div class="bar" style="justify-content:space-between;margin:10px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--line)">
     <div style="font-size:14px;color:var(--muted)" data-i18n="sec_current_tickets">注單列表</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="act btn-main sm" id="saveToVaultBtn" style="background:var(--green); color:#fff;" data-i18n="btn_save_vault">💾 存入</button>
+      <button class="act btn-main sm" id="saveToVaultBtn" style="background:var(--green);color:#fff;" data-i18n="btn_save_vault">💾 存入</button>
       <button class="act btn-copy sm" id="copyTickets" data-i18n="btn_copy_tickets">📋 複製</button>
       <button class="act btn-ghost sm" id="exportImageBtn" data-i18n="btn_export_img">🖼️ 圖片</button>
     </div>
   </div>
   <div class="tickets" id="tickets"></div>
-
   <div class="section-title" style="margin-top:30px" data-i18n="sec_vault_records">💾 心水庫存根</div>
   <div class="panel" id="vaultPanel"></div>
 </section>
@@ -745,55 +568,33 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
   <div class="nav-item" data-tab="tab-backtest"><div class="icon">📈</div><span data-i18n="nav_backtest">回測</span></div>
 </nav>
 
-<!-- ================= 注單分析彈窗 ================= -->
 <div class="custom-modal" id="ticketAnalysisModal">
   <div class="cm-box">
-    <div class="cm-header">
-      <span>請選取號碼 (注單分析)</span>
-      <span class="cm-close" onclick="closeTicketAnalysis()">✕</span>
-    </div>
+    <div class="cm-header"><span>請選取號碼 (注單分析)</span><span class="cm-close" onclick="closeTicketAnalysis()">✕</span></div>
     <div class="cm-slots" id="caSlots"></div>
     <div class="cm-analysis" id="caStats"></div>
-    <div class="cm-actions">
-      <button class="act btn-ghost" onclick="closeTicketAnalysis()">返回</button>
-      <button class="act btn-main" onclick="saveTicketAnalysis()">選取注項</button>
-    </div>
+    <div class="cm-actions"><button class="act btn-ghost" onclick="closeTicketAnalysis()">返回</button><button class="act btn-main" onclick="saveTicketAnalysis()">選取注項</button></div>
     <div class="cm-grid" id="caGrid"></div>
   </div>
 </div>
 
-<!-- ================= 大數據分析彈窗 ================= -->
 <div class="analysis-modal" id="analysisModal">
   <div class="am-box">
-    <div class="am-header">
-      <span id="amTitle">數據分析</span>
-      <span class="cm-close" onclick="document.getElementById('analysisModal').style.display='none'">✕</span>
-    </div>
-    <div class="am-content" id="amContent">
-      <!-- 數據填充區 -->
-    </div>
+    <div class="am-header"><span id="amTitle">數據分析</span><span class="cm-close" onclick="document.getElementById('analysisModal').style.display='none'">✕</span></div>
+    <div class="am-content" id="amContent"></div>
   </div>
 </div>
 
-<!-- ================= 金庫/大腦彈窗 ================= -->
 <div class="vault-modal" id="vaultModal">
   <div class="vm-box">
     <div class="vm-glow"></div>
-    <div class="vm-header">
-      <div class="vm-title" id="vaultModalTitle">⭐ 金庫 2 尋寶成功！</div>
-      <div class="vm-sub" id="vaultModalSub">已為你鎖定 5 組心水號碼，祝君好運！</div>
-    </div>
+    <div class="vm-header"><div class="vm-title" id="vaultModalTitle">⭐ 金庫 2 尋寶成功！</div><div class="vm-sub" id="vaultModalSub">已為你鎖定 5 組心水號碼，祝君好運！</div></div>
     <div class="vm-card">
       <div class="vm-card-head">
-        <div>
-          <div class="vm-card-title" id="vaultModalCardTitle">六合彩 · 金庫 2 心水</div>
-          <div class="vm-card-date" id="vaultModalDate">攪珠日期: 31/10/2026</div>
-        </div>
+        <div><div class="vm-card-title" id="vaultModalCardTitle">六合彩 · 金庫 2 心水</div><div class="vm-card-date" id="vaultModalDate">攪珠日期: 31/10/2026</div></div>
         <div class="vm-badge" id="vaultModalBadge">金庫 2 抽出</div>
       </div>
-      <div class="vm-rows" id="vaultModalRows">
-        <!-- 動態生成 5 組號碼 -->
-      </div>
+      <div class="vm-rows" id="vaultModalRows"></div>
     </div>
     <div class="vm-actions">
       <button class="vm-btn-share" onclick="shareVaultNumbers()">🔗 分享幸運號碼</button>
@@ -802,16 +603,10 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
   </div>
 </div>
 
-<!-- ================= 往績彈窗 ================= -->
 <div class="history-modal" id="vaultHistoryModal">
   <div class="hm-box">
-    <div class="hm-header">
-      <span id="historyModalTitle">金庫往績</span>
-      <span class="cm-close" onclick="document.getElementById('vaultHistoryModal').style.display='none'">✕</span>
-    </div>
-    <div class="hm-content" id="historyModalContent">
-      <!-- 動態生成命中記錄 -->
-    </div>
+    <div class="hm-header"><span id="historyModalTitle">金庫往績</span><span class="cm-close" onclick="document.getElementById('vaultHistoryModal').style.display='none'">✕</span></div>
+    <div class="hm-content" id="historyModalContent"></div>
   </div>
 </div>
 
@@ -819,64 +614,9 @@ body.light-mode .vm-btn-close { background: var(--input-bg); color: var(--text);
 (function(){
 'use strict';
 
-const CLOUD_JSON_URL = 'https://danny010690.github.io/hk6pro/history.json'; 
+var CLOUD_JSON_URL = 'https://danny010690.github.io/hk6pro/history.json';
 
-// 備用模擬數據
-var fallbackData = [];
-for(let i=0; i<100; i++) {
-  let arr = []; while(arr.length < 6) { let n = Math.floor(Math.random()*49)+1; if(!arr.includes(n)) arr.push(n); }
-  fallbackData.push({ issue: '2024' + String(100-i).padStart(3,'0'), nums: arr.sort((a,b)=>a-b), extra: Math.floor(Math.random()*49)+1, date: '2024-05-20' });
-}
-
-/* ================= 多語言包 ================= */
-const I18N = {
-  'zh-HK': {
-    settings_title: "資訊及設定", settings_lang: "Language / 語言 / 语言", settings_theme: "切換黑白/藍白外觀",
-    terms_title: "📜 使用條款與免責聲明", terms_p1: "1. 本應用程式（金運寶庫）僅供娛樂、數據統計分析與技術交流使用，不涉及任何真實金錢交易或賭博行為。", terms_p2: "2. 所有預測、AI 推薦數據均基於歷史概率模型生成，不代表任何中獎保證。",
-    vip_desc: "解鎖歷史核對、AI 多組篩選、去浮水印等特權。", btn_activate: "立即激活",
-    badge: "FREE · 金運寶庫", title_1: "金運寶庫", title_2: "分析工具", sub: "支援多種玩法，提供單號檔案、智能推薦、命中分佈與大數據殺號縮水。",
-    sync_title: "☁️ 雲端自動同步", sync_desc: "獲取最新真實歷史開獎記錄", btn_sync: "手動同步最新數據",
-    sec_num_pick: "① 號碼選擇", btn_shake: "📳 搖一搖物理攪珠 (抽出 6+1)", label_pick_mode: "選號方式",
-    pick_lucky: "🍀 幸運號（1個）", pick_heart: "💙 心水號（多個）", btn_random_lucky: "🎲 隨機抽一個", btn_paste: "📥 導入", btn_clear: "清空", btn_ai: "🤖 AI推薦",
-    sec_gen_mode: "② 生成模式與球數", label_gen_mode: "生成模式", mode_smart8: "聰明 8 注", mode_smart9: "聰明 9 注", mode_smart17: "聰明 17 注", mode_dantuo: "幸運號膽拖", mode_heart: "心水組合", mode_custom: "自定義注數",
-    label_balls: "每注球數", ball_2: "2球 · 二中二", ball_3: "3球 · 三中三", ball_4: "4球 · 四中四", ball_5: "5球 · 五中五", ball_6: "6球 · 六中六", ball_custom: "自訂",
-    label_custom_tickets: "自訂注數", btn_gen: "✨ 一鍵生成注單", label_ai_group: "AI 多組篩選", ai_groups: "生成組數", ai_tickets: "每組注數", ai_sims: "模擬次數", ai_algo: "算法", mode_smart: "聰明組合", btn_run_ai: "🚀 啟動 AI 模擬運算",
-    sec_history: "📅 開獎歷史記錄", sec_vault: "🏦 幸運金庫分析 (14 庫)", sec_draw: "🎯 核對開獎（會員專享）",
-    btn_random_fill: "🎲 隨機填號", btn_confirm_draw: "✅ 確認核對", draw_hint: "請輸入號碼比對。",
-    sec_kill: "✂️ 殺號縮水", label_strategy: "殺號策略", strat_cold: "冷號殺", strat_hot: "熱號殺", strat_ai: "AI 綜合", strat_missing: "缺一門", strat_head: "頭數", strat_tail: "尾數", strat_wave: "波色",
-    exclude_missing_title: "請選擇要排除的整組號碼：", exclude_head_title: "請選擇要排除的頭數：", exclude_tail_title: "請選擇要排除的尾數：", exclude_wave_title: "請選擇要排除的波色：",
-    label_keep: "保留數", btn_apply_kill: "✂️ 執行縮水", btn_copy_kill: "📋 複製結果",
-    sec_backtest: "📈 回測與導入", btn_import: "📥 批量導入注單", btn_verify: "📈 用歷史記錄核對當前注單",
-    sec_current_tickets: "當前注單", btn_save_vault: "💾 存入", btn_copy_tickets: "📋 複製", btn_export_img: "🖼️ 圖片", sec_vault_records: "💾 心水庫存根",
-    nav_smart: "選號", nav_history: "歷史", nav_vault: "金庫", nav_draw: "核對", nav_kill: "殺號", nav_backtest: "回測"
-  },
-  'zh-CN': { /* 保持原有結構 */ },
-  'en': { /* 保持原有結構 */ }
-};
-
-let currentLang = localStorage.getItem('hk6_lang') || 'zh-HK';
-window.changeLang = function(lang, btn){
-  currentLang = lang;
-  localStorage.setItem('hk6_lang', lang);
-  document.querySelectorAll('#langTabs button').forEach(function(b){ b.classList.remove('active'); });
-  if(btn) btn.classList.add('active');
-  showToast('Language switched');
-};
-
-/* ================= 主題 ================= */
-const savedTheme = localStorage.getItem('hk6_theme');
-if(savedTheme === 'light') {
-  document.body.classList.add('light-mode');
-  document.getElementById('themeToggle').classList.add('on');
-}
-window.toggleTheme = function() {
-  const isLight = document.body.classList.toggle('light-mode');
-  document.getElementById('themeToggle').classList.toggle('on', isLight);
-  localStorage.setItem('hk6_theme', isLight ? 'light' : 'dark');
-};
-
-/* ================= 核心工具 ================= */
-var pad = function(n){ return String(n).padStart(2,'0'); };
+function pad(n){ return String(n).padStart(2,'0'); }
 var ALL = []; for(var i=1;i<=49;i++) ALL.push(i);
 var WAVE_RED = new Set([1,2,7,8,12,13,18,19,23,24,29,30,34,35,40,45,46]);
 var WAVE_BLUE = new Set([3,4,9,10,14,15,20,25,26,31,36,37,41,42,47,48]);
@@ -885,293 +625,325 @@ function getWave(n){ if(WAVE_RED.has(n)) return 'w-red'; if(WAVE_BLUE.has(n)) re
 function shuffle(arr){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function nowString(){ var d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes()); }
 function getTodayStr(){ var d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function getZodiac(year) {
-  if (isNaN(year)) year = new Date().getFullYear();
-  const animals = ['猴', '鸡', '狗', '猪', '鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊'];
-  return animals[year % 12];
-}
 
 var toastEl = document.getElementById('toast'); var toastTimer = null;
 function showToast(msg, isError){
   toastEl.textContent = msg; toastEl.classList.toggle('err', !!isError); toastEl.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2500);
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2800);
 }
 
-/* ================= 狀態 ================= */
+var fallbackData = (function(){
+  var arr = []; var seed = 20251030;
+  function rnd(){ seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  var base = new Date(2025, 9, 30);
+  for (var i = 0; i < 300; i++) {
+    var nums = [];
+    while (nums.length < 6) {
+      var n = Math.floor(rnd() * 49) + 1;
+      if (nums.indexOf(n) === -1) nums.push(n);
+    }
+    nums.sort(function(a,b){ return a - b; });
+    var extra = Math.floor(rnd() * 49) + 1;
+    while (nums.indexOf(extra) !== -1) extra = Math.floor(rnd() * 49) + 1;
+    var d = new Date(base.getTime() - i * 3 * 24 * 60 * 60 * 1000);
+    arr.push({
+      issue: String(2025300 - i),
+      nums: nums,
+      extra: extra,
+      date: d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate())
+    });
+  }
+  return arr;
+})();
+
 var lucky = 7, pickMode = 'lucky', genMode = 'smart17', ticketCount = 17, ballsPerTicket = 6;
 var strategy = 'cold', keepCount = 49;
 var killed = new Set(), activePool = ALL.slice(), TICKETS = [], heartPool = new Set();
 var history = []; var rawRecords = [];
 var missingGroups = new Set(), headGroups = new Set(), tailGroups = new Set(), waveGroups = new Set();
 var LS_VAULT_KEY = 'hk6_vault_records_v1';
+var LS_HISTORY_KEY = 'hk6_real_history_v1';
+var backtestPeriods = 50;
 
-/* ================= 雲端與展示 ================= */
-function updateUIWithDraw(drawObj) {
+if(localStorage.getItem('hk6_theme') === 'light'){
+  document.body.classList.add('light-mode');
+  document.getElementById('themeToggle').classList.add('on');
+}
+window.toggleTheme = function(){
+  var isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('themeToggle').classList.toggle('on', isLight);
+  localStorage.setItem('hk6_theme', isLight ? 'light' : 'dark');
+};
+window.changeLang = function(lang, btn){
+  localStorage.setItem('hk6_lang', lang);
+  document.querySelectorAll('#langTabs button').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+  showToast('Language switched');
+};
+
+function updateUIWithDraw(drawObj){
   if(!drawObj) return;
-  let dateStr = drawObj.date || getTodayStr();
+  var dateStr = drawObj.date || getTodayStr();
   document.getElementById('ldIssue').innerHTML = '第 ' + drawObj.issue + ' 期 <span style="font-size:12px;color:var(--muted);font-weight:normal;margin-left:8px;">' + dateStr + '</span>';
-  document.getElementById('ldSpecialBall').innerHTML = pad(drawObj.extra); // 已經獨立顯示文字
-  document.getElementById('ldMainBalls').innerHTML = drawObj.nums.map(n => `<div class="ld-ball ${getWave(n)}">${pad(n)}</div>`).join('');
+  document.getElementById('ldSpecialBall').innerHTML = pad(drawObj.extra);
+  document.getElementById('ldMainBalls').innerHTML = drawObj.nums.map(function(n){ return '<div class="ld-ball ' + getWave(n) + '">' + pad(n) + '</div>'; }).join('');
 }
 
-async function syncCloudData() {
+function renderHistoryList(){
+  var listEl = document.getElementById('historyList');
+  if(!listEl) return;
+  listEl.innerHTML = rawRecords.map(function(r){
+    return '<div class="history-item">'
+      + '<div class="history-issue">' + r.issue + (r.date ? '<br><span style="font-size:11px;color:var(--muted);font-weight:normal;">' + r.date + '</span>' : '') + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">'
+      + r.nums.map(function(n){ return '<span class="ball ' + getWave(n) + '" style="width:26px;height:26px;font-size:11px;margin-right:2px;">' + pad(n) + '</span>'; }).join('')
+      + (r.extra ? '<span style="font-size:10px;color:var(--gold);margin-left:4px;">特別</span><span class="ball ' + getWave(r.extra) + '" style="width:26px;height:26px;font-size:11px;border:2px dashed var(--gold);">' + pad(r.extra) + '</span>' : '')
+      + '</div></div>';
+  }).join('');
+}
+
+function setDataSource(src, count){
+  var el = document.getElementById('syncStatus');
+  if(!el) return;
+  var map = { cloud: '☁️ 雲端數據', cache: '💾 本地緩存', demo: '🧪 演示數據', none: '—' };
+  el.textContent = (map[src] || src) + (count ? ' · ' + count + ' 期' : '');
+  el.style.color = src === 'demo' ? 'var(--red)' : 'var(--muted)';
+}
+
+function applyRecords(list, src){
+  rawRecords = list;
+  history = rawRecords.map(function(r){ return r.nums; });
+  updateUIWithDraw(rawRecords[0]);
+  renderHistoryList();
+  setDataSource(src, rawRecords.length);
+  if(document.getElementById('tab-vault').classList.contains('active')) renderVaults();
+}
+
+async function syncCloudData(){
   var btn = document.getElementById('syncCloudBtn');
+  var oldText = btn.textContent;
   btn.textContent = '正在同步中...'; btn.disabled = true;
+  var ok = false;
   try {
-    const response = await fetch(CLOUD_JSON_URL, { cache: 'no-store' });
-    if(!response.ok) throw new Error('404');
-    const data = await response.json();
-    let newRaw = [];
-    if (Array.isArray(data)) {
-      data.forEach(item => {
-        if (item.nums && Array.isArray(item.nums) && item.nums.length >= 6) {
-          let dateVal = item.date || item.drawDate || item.time || getTodayStr();
-          newRaw.push({ issue: item.issue || 'Unknown', nums: item.nums.slice(0,6).sort((a,b)=>a-b), extra: item.extra || 0, date: dateVal });
+    var controller = new AbortController();
+    var tid = setTimeout(function(){ controller.abort(); }, 8000);
+    var resp = await fetch(CLOUD_JSON_URL, { cache: 'no-store', signal: controller.signal });
+    clearTimeout(tid);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    var data = await resp.json();
+    var newRaw = [];
+    if(Array.isArray(data)){
+      data.forEach(function(item){
+        if(item && item.nums && Array.isArray(item.nums) && item.nums.length >= 6){
+          newRaw.push({
+            issue: String(item.issue || item.drawIssue || '未知'),
+            nums: item.nums.slice(0,6).map(Number).sort(function(a,b){ return a-b; }),
+            extra: Number(item.extra) || 0,
+            date: item.date || item.drawDate || item.time || ''
+          });
         }
       });
     }
-    if(newRaw.length > 0) {
-      rawRecords = newRaw; history = rawRecords.map(r => r.nums);
-      localStorage.setItem('hk6_real_history_v1', JSON.stringify(rawRecords));
-      updateUIWithDraw(rawRecords[0]); renderHistoryList();
-      showToast('☁️ 數據同步成功');
-      if(document.getElementById('tab-vault').classList.contains('active')) renderVaults();
-    } else { throw new Error('Format'); }
-  } catch (err) {
-    showToast('❌ 同步失敗，已加載備用數據', true);
-    rawRecords = fallbackData; history = rawRecords.map(r => r.nums);
-    updateUIWithDraw(rawRecords[0]); renderHistoryList();
-  } finally { btn.textContent = '手動同步最新數據'; btn.disabled = false; }
-}
-
-function renderHistoryList() {
-  var listEl = document.getElementById('historyList');
-  if(!listEl) return;
-  listEl.innerHTML = rawRecords.map(r => `
-    <div class="history-item">
-      <div class="history-issue">${r.issue}${r.date ? '<br><span style="font-size:11px;color:var(--muted);font-weight:normal;">' + r.date + '</span>' : ''}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
-        ${r.nums.map(n => `<span class="ball ${getWave(n)}" style="width:26px;height:26px;font-size:11px;margin-right:2px;">${pad(n)}</span>`).join('')}
-        ${r.extra ? `<span style="font-size:10px;color:var(--gold);margin-left:4px;">特別號碼</span><span class="ball ${getWave(r.extra)}" style="width:26px;height:26px;font-size:11px;border:2px dashed var(--gold);">${pad(r.extra)}</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function loadHistory() {
-  try {
-    var saved = localStorage.getItem('hk6_real_history_v1');
-    if (saved) {
-      rawRecords = JSON.parse(saved); history = rawRecords.map(r => r.nums);
-      updateUIWithDraw(rawRecords[0]); renderHistoryList(); return;
+    if(newRaw.length === 0) throw new Error('數據格式不正確');
+    localStorage.setItem(LS_HISTORY_KEY, JSON.stringify(newRaw));
+    applyRecords(newRaw, 'cloud');
+    showToast('☁️ 同步成功，共 ' + newRaw.length + ' 期');
+    ok = true;
+  } catch(err){
+    console.warn('云端同步失败：', err);
+  }
+  if(!ok){
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(LS_HISTORY_KEY) || 'null'); } catch(e){}
+    if(cached && Array.isArray(cached) && cached.length > 0){
+      applyRecords(cached, 'cache');
+      showToast('⚠️ 雲端不可用，已用本地緩存（' + cached.length + ' 期）', true);
+    } else {
+      applyRecords(fallbackData, 'demo');
+      showToast('⚠️ 雲端不可用，已用演示數據', true);
     }
-  } catch(e) {}
-  history = [];
+  }
+  btn.textContent = oldText; btn.disabled = false;
 }
 document.getElementById('syncCloudBtn').addEventListener('click', syncCloudData);
 
-/* ================= 幸運金庫 ================= */
-function getVaultData() {
+function getVaultData(){
   var seed = 12345;
-  function random() { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); }
+  function random(){ var x = Math.sin(seed++) * 10000; return x - Math.floor(x); }
   var vaults = [];
-  for(var i=1; i<=14; i++) {
+  for(var i=1; i<=14; i++){
     var nums = new Set();
-    while(nums.size < 6) { nums.add(Math.floor(random() * 49) + 1); }
-    vaults.push({ id: i, name: '金庫 ' + i, nums: Array.from(nums).sort((a,b)=>a-b), hitCount: 0, rate: '0.0' });
+    while(nums.size < 6){ nums.add(Math.floor(random() * 49) + 1); }
+    vaults.push({ id: i, name: '金庫 ' + i, nums: Array.from(nums).sort(function(a,b){ return a-b; }), hitCount: 0, rate: '0.0' });
   }
   return vaults;
 }
 var VAULTS = getVaultData();
 
-function calcVaultStats() {
-  if (history.length === 0) { VAULTS.forEach(v => { v.hitCount = 0; v.rate = '0.0'; }); return; }
-  VAULTS.forEach(function(v) {
+function calcVaultStats(){
+  if(history.length === 0){ VAULTS.forEach(function(v){ v.hitCount = 0; v.rate = '0.0'; }); return; }
+  VAULTS.forEach(function(v){
     v.hitCount = 0;
-    history.forEach(function(draw) { if (draw.some(function(num) { return v.nums.includes(num); })) v.hitCount++; });
+    history.forEach(function(draw){ if(draw.some(function(num){ return v.nums.indexOf(num) !== -1; })) v.hitCount++; });
     v.rate = ((v.hitCount / history.length) * 100).toFixed(1);
   });
 }
 
-function renderVaults() {
+function renderVaults(){
   calcVaultStats();
   var grid = document.getElementById('vaultGrid');
   if(!grid) return;
   var maxHit = -1, minHit = 999;
-  VAULTS.forEach(function(v) { if(v.hitCount > maxHit) maxHit = v.hitCount; if(v.hitCount < minHit) minHit = v.hitCount; });
-  
-  grid.innerHTML = VAULTS.map(function(v) {
+  VAULTS.forEach(function(v){ if(v.hitCount > maxHit) maxHit = v.hitCount; if(v.hitCount < minHit) minHit = v.hitCount; });
+  grid.innerHTML = VAULTS.map(function(v){
     var badgeClass = '', badgeText = '';
-    if(history.length > 0) {
-      if(v.hitCount === maxHit && maxHit > 0) { badgeClass = 'hot'; badgeText = '🔥 最熱門'; }
-      else if(v.hitCount === minHit) { badgeClass = 'cold'; badgeText = '❄️ 大冷門'; }
+    if(history.length > 0){
+      if(v.hitCount === maxHit && maxHit > 0){ badgeClass = 'hot'; badgeText = '🔥 最熱門'; }
+      else if(v.hitCount === minHit){ badgeClass = 'cold'; badgeText = '❄️ 大冷門'; }
     }
-    return `<div class="vault-card">
-      <div class="vault-header"><span class="vault-title">${v.name}</span><span class="vault-badge ${badgeClass}">${badgeText}</span></div>
-      <div class="vault-info"><b>${v.hitCount}</b> 次命中<br>開出率 ${v.rate}%</div>
-      <div class="vault-actions"><button class="btn-history" onclick="viewVaultHistory(${v.id})">往績</button><button class="btn-open" onclick="openVault(${v.id})">開庫</button></div>
-    </div>`;
+    return '<div class="vault-card">'
+      + '<div class="vault-header"><span class="vault-title">' + v.name + '</span><span class="vault-badge ' + badgeClass + '">' + badgeText + '</span></div>'
+      + '<div class="vault-info"><b>' + v.hitCount + '</b> 次命中<br>開出率 ' + v.rate + '%</div>'
+      + '<div class="vault-actions"><button class="btn-history" onclick="viewVaultHistory(' + v.id + ')">往績</button><button class="btn-open" onclick="openVault(' + v.id + ')">開庫</button></div>'
+      + '</div>';
   }).join('');
 }
 
-// 往績彈窗
-window.viewVaultHistory = function(id) {
-  var vault = VAULTS.find(v => v.id === id);
-  var hits = rawRecords.filter(r => r.nums.some(n => vault.nums.includes(n))).slice(0, 5);
-  
-  document.getElementById('historyModalTitle').innerText = `【${vault.name}】往績記錄`;
-  let contentEl = document.getElementById('historyModalContent');
-  
-  if(hits.length === 0) {
-    contentEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">近期暫無命中記錄</div>';
-  } else {
-    contentEl.innerHTML = hits.map(h => `
-      <div class="hm-item">
-        <div class="hm-item-head">
-          <span>第 ${h.issue} 期</span>
-          <span>${h.date || ''}</span>
-        </div>
-        <div class="hm-item-balls">
-          ${h.nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}
-          ${h.extra ? `<span class="vd-ball ${getWave(h.extra)}" style="border-style:dashed; border-color:var(--gold); color:var(--gold);">${pad(h.extra)}</span>` : ''}
-        </div>
-      </div>
-    `).join('');
+function seededPick(vault, issue){
+  var seed = vault.id * 7919;
+  for(var i = 0; i < issue.length; i++) seed += issue.charCodeAt(i) * (i + 3);
+  function rnd(){ seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  var vaultNums = vault.nums.slice();
+  for(var i = vaultNums.length - 1; i > 0; i--){
+    var j = Math.floor(rnd() * (i + 1));
+    var t = vaultNums[i]; vaultNums[i] = vaultNums[j]; vaultNums[j] = t;
   }
+  var takeFromVault = 2 + Math.floor(rnd() * 2);
+  var picks = vaultNums.slice(0, takeFromVault);
+  var rest = ALL.filter(function(n){ return picks.indexOf(n) === -1; });
+  for(var i = rest.length - 1; i > 0; i--){
+    var j = Math.floor(rnd() * (i + 1));
+    var t = rest[i]; rest[i] = rest[j]; rest[j] = t;
+  }
+  for(var i = 0; i < 6 - picks.length; i++) picks.push(rest[i]);
+  return picks.sort(function(a,b){ return a - b; });
+}
+
+window.viewVaultHistory = function(id){
+  var vault = VAULTS.find(function(v){ return v.id === id; });
+  if(!vault) return;
+  document.getElementById('historyModalTitle').innerText = '【' + vault.name + '】歷史期號組合回放';
+  var contentEl = document.getElementById('historyModalContent');
+  if(!rawRecords || rawRecords.length === 0){
+    contentEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">暫無歷史期號，請先同步數據</div>';
+    document.getElementById('vaultHistoryModal').style.display = 'flex';
+    return;
+  }
+  var list = rawRecords.slice(0, 30);
+  var html = '<div style="background:rgba(240,180,41,.08);border:1px solid var(--gold);color:var(--gold);font-size:12px;line-height:1.6;padding:10px 12px;border-radius:10px;">⚠️ 以下為基於真實歷史期號的<b>模擬組合回放</b>，僅供娛樂參考，<b>非實際命中記錄</b>。</div>';
+  html += list.map(function(r){
+    var nums = seededPick(vault, String(r.issue));
+    return '<div class="hm-item">'
+      + '<div class="hm-item-head"><span>第 ' + r.issue + ' 期</span><span>' + (r.date || '') + '</span></div>'
+      + '<div class="hm-item-balls">' + nums.map(function(n){ return '<span class="vd-ball ' + getWave(n) + '">' + pad(n) + '</span>'; }).join('') + '</div>'
+      + '</div>';
+  }).join('');
+  contentEl.innerHTML = html;
   document.getElementById('vaultHistoryModal').style.display = 'flex';
 };
 
-// 開庫彈窗 (每日限制 1 次)
-window.openVault = function(id) {
-  var vault = VAULTS.find(function(v) { return v.id === id; }); if(!vault) return;
-  
-  let today = new Date().toDateString();
-  let lastDate = localStorage.getItem('vault_open_date');
-  let count = parseInt(localStorage.getItem('vault_open_count') || '0');
-  if (lastDate !== today) { count = 0; localStorage.setItem('vault_open_date', today); }
-  // 如果不用VIP限制可以註釋這行
-  if (!isVip && count >= 1) { return showToast('免費用戶每天只能開庫 1 次，請升級 VIP', true); }
-  if (!isVip) { count++; localStorage.setItem('vault_open_count', count); }
+window.openVault = function(id){
+  var vault = VAULTS.find(function(v){ return v.id === id; }); if(!vault) return;
+  var today = new Date().toDateString();
+  var lastDate = localStorage.getItem('vault_open_date');
+  var count = parseInt(localStorage.getItem('vault_open_count') || '0');
+  if(lastDate !== today){ count = 0; localStorage.setItem('vault_open_date', today); }
+  if(!isVip && count >= 1) return showToast('免費用戶每天只能開庫 1 次，請升級 VIP', true);
+  if(!isVip){ count++; localStorage.setItem('vault_open_count', count); }
 
-  document.getElementById('vaultModalTitle').innerHTML = `⭐ 金庫 ${id} 尋寶成功！`;
-  document.getElementById('vaultModalSub').innerHTML = `以金庫號碼池為核心，為你鎖定 5 組心水號碼！`;
-  document.getElementById('vaultModalCardTitle').innerText = `六合彩 · 金庫 ${id} 心水`;
-  
-  let d = new Date();
-  document.getElementById('vaultModalDate').innerText = `攪珠日期: ${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
-  document.getElementById('vaultModalBadge').innerText = `金庫 ${id} 抽出`;
+  document.getElementById('vaultModalTitle').innerHTML = '⭐ 金庫 ' + id + ' 尋寶成功！';
+  document.getElementById('vaultModalSub').innerHTML = '以金庫號碼池為核心，為你鎖定 5 組心水號碼！';
+  document.getElementById('vaultModalCardTitle').innerText = '六合彩 · 金庫 ' + id + ' 心水';
+  var d = new Date();
+  document.getElementById('vaultModalDate').innerText = '攪珠日期: ' + pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear();
+  document.getElementById('vaultModalBadge').innerText = '金庫 ' + id + ' 抽出';
 
-  let rowsHtml = '';
-  let shareText = `【金運寶庫】金庫 ${id} 心水推薦 (${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()})\n\n`;
-  
-  for(let i=0; i<5; i++) {
-    let basePick = shuffle(vault.nums).slice(0, Math.floor(Math.random()*2)+1);
-    let restPool = ALL.filter(n => !basePick.includes(n));
-    let restPick = shuffle(restPool).slice(0, 6 - basePick.length);
-    let nums = [...basePick, ...restPick].sort((a,b)=>a-b);
-    rowsHtml += `<div class="vm-row">
-      <span class="vm-idx">${i+1}.</span>
-      <div class="vm-balls">
-        ${nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}
-      </div>
-    </div>`;
-    shareText += `第 ${i+1} 組：${nums.map(pad).join('  ')}\n`;
+  var rowsHtml = '';
+  var shareText = '【金運寶庫】金庫 ' + id + ' 心水推薦 (' + pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear() + ')\n\n';
+  for(var i=0; i<5; i++){
+    var basePick = shuffle(vault.nums).slice(0, Math.floor(Math.random()*2)+1);
+    var restPool = ALL.filter(function(n){ return basePick.indexOf(n) === -1; });
+    var restPick = shuffle(restPool).slice(0, 6 - basePick.length);
+    var nums = basePick.concat(restPick).sort(function(a,b){ return a-b; });
+    rowsHtml += '<div class="vm-row"><span class="vm-idx">' + (i+1) + '.</span><div class="vm-balls">'
+      + nums.map(function(n){ return '<span class="vd-ball ' + getWave(n) + '">' + pad(n) + '</span>'; }).join('') + '</div></div>';
+    shareText += '第 ' + (i+1) + ' 組：' + nums.map(pad).join('  ') + '\n';
   }
-  
   document.getElementById('vaultModalRows').innerHTML = rowsHtml;
   window._currentShareText = shareText + '\n祝君好運！🍀';
-  
   document.getElementById('vaultModal').style.display = 'flex';
 };
 
-// 分享功能
-window.shareVaultNumbers = function() {
-  if (navigator.share) {
-    navigator.share({
-      title: '金運寶庫 - 心水推薦',
-      text: window._currentShareText
-    }).catch(err => console.log('分享取消', err));
+window.shareVaultNumbers = function(){
+  if(navigator.share){
+    navigator.share({ title: '金運寶庫 - 心水推薦', text: window._currentShareText }).catch(function(){});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(window._currentShareText).then(function(){ showToast('✅ 幸運號碼已複製'); });
   } else {
-    if(navigator.clipboard) {
-      navigator.clipboard.writeText(window._currentShareText).then(() => {
-        showToast('✅ 幸運號碼已複製到剪貼板');
-      });
-    } else {
-      alert(window._currentShareText);
-    }
+    alert(window._currentShareText);
   }
 };
 
-/* ================= AI 大腦推演引擎 ================= */
-window.runEngine = function() {
+window.runEngine = function(){
   if(rawRecords.length === 0) return showToast('請先同步歷史數據', true);
-  
-  let today = new Date().toDateString();
-  let lastDate = localStorage.getItem('ai_engine_date');
-  let count = parseInt(localStorage.getItem('ai_engine_count') || '0');
-  if (lastDate !== today) { count = 0; localStorage.setItem('ai_engine_date', today); }
-  if (!isVip && count >= 1) { return showToast('免費用戶每天只能推演 1 次，請升級 VIP', true); }
+  var today = new Date().toDateString();
+  var lastDate = localStorage.getItem('ai_engine_date');
+  var count = parseInt(localStorage.getItem('ai_engine_count') || '0');
+  if(lastDate !== today){ count = 0; localStorage.setItem('ai_engine_date', today); }
+  if(!isVip && count >= 1) return showToast('免費用戶每天只能推演 1 次，請升級 VIP', true);
 
-  const logs = document.getElementById('engineLogs');
-  const btn = document.getElementById('runAiEngineBtn');
+  var logs = document.getElementById('engineLogs');
+  var btn = document.getElementById('runAiEngineBtn');
   btn.disabled = true; btn.innerHTML = '運算中...';
-  
-  let step = 0;
-  const msgs = [
-    '> 載入近 100 期開獎數據...',
-    '> 計算冷熱指數與波色方差...',
-    '> 排除 85% 低概率死角...',
-    '> 生成量子疊加態矩陣...',
-    '> 解密完成！正在輸出結果...'
-  ];
-  
-  const interval = setInterval(() => {
-    if(step < msgs.length) {
-      logs.innerHTML = msgs.slice(0, step + 1).join('<br>');
-      step++;
-    } else {
+  var step = 0;
+  var msgs = ['&gt; 載入近 100 期開獎數據...','&gt; 計算冷熱指數與波色方差...','&gt; 排除 85% 低概率死角...','&gt; 生成量子疊加態矩陣...','&gt; 解密完成！正在輸出結果...'];
+  var interval = setInterval(function(){
+    if(step < msgs.length){ logs.innerHTML = msgs.slice(0, step+1).join('<br>'); step++; }
+    else {
       clearInterval(interval);
       btn.disabled = false; btn.innerHTML = '⚡ 啟動大數據推演';
-      if (!isVip) { count++; localStorage.setItem('ai_engine_count', count); }
+      if(!isVip){ count++; localStorage.setItem('ai_engine_count', count); }
       showEngineResult();
     }
   }, 400);
 };
 
-function showEngineResult() {
-  let freqs = {}; for(let i=1;i<=49;i++) freqs[i] = 0;
-  rawRecords.slice(0, 20).forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
-  let sortedNums = ALL.slice().sort((a,b) => freqs[b] - freqs[a]);
-  let hotPool = sortedNums.slice(0, 25);
-  
-  let rowsHtml = '';
-  let shareText = `【金運寶庫 · AI 大數據推演】\n解密日期: ${nowString()}\n\n`;
-  
-  for(let i=0; i<5; i++) {
-    let base = shuffle(hotPool).slice(0, 3);
-    let restPool = ALL.filter(n => !base.includes(n));
-    let rest = shuffle(restPool).slice(0, 3);
-    let nums = [...base, ...rest].sort((a,b)=>a-b);
-    rowsHtml += `<div class="vm-row">
-      <span class="vm-idx">${pad(i+1)}></span>
-      <div class="vm-balls">${nums.map(n => `<span class="vd-ball ${getWave(n)}">${pad(n)}</span>`).join('')}</div>
-    </div>`;
-    shareText += `第 ${i+1} 組: ${nums.map(pad).join('  ')}\n`;
+function showEngineResult(){
+  var freqs = {}; for(var i=1;i<=49;i++) freqs[i] = 0;
+  rawRecords.slice(0, 20).forEach(function(r){ r.nums.forEach(function(n){ freqs[n]++; }); if(r.extra) freqs[r.extra]++; });
+  var sortedNums = ALL.slice().sort(function(a,b){ return freqs[b] - freqs[a]; });
+  var hotPool = sortedNums.slice(0, 25);
+  var rowsHtml = '';
+  var shareText = '【金運寶庫 · AI 大數據推演】\n解密日期: ' + nowString() + '\n\n';
+  for(var i=0; i<5; i++){
+    var base = shuffle(hotPool).slice(0, 3);
+    var restPool = ALL.filter(function(n){ return base.indexOf(n) === -1; });
+    var rest = shuffle(restPool).slice(0, 3);
+    var nums = base.concat(rest).sort(function(a,b){ return a-b; });
+    rowsHtml += '<div class="vm-row"><span class="vm-idx">' + pad(i+1) + '&gt;</span><div class="vm-balls">'
+      + nums.map(function(n){ return '<span class="vd-ball ' + getWave(n) + '">' + pad(n) + '</span>'; }).join('') + '</div></div>';
+    shareText += '第 ' + (i+1) + ' 組: ' + nums.map(pad).join('  ') + '\n';
   }
-  
-  document.getElementById('vaultModalTitle').innerHTML = `🧠 系統解密成功`;
-  document.getElementById('vaultModalSub').innerHTML = `已根據大數據為你鎖定 5 組最強爆發號碼`;
-  document.getElementById('vaultModalCardTitle').innerText = `AI 量子推演結果`;
-  document.getElementById('vaultModalDate').innerText = `日期: ${nowString()}`;
-  document.getElementById('vaultModalBadge').innerText = `引擎 V4.0`;
-  
+  document.getElementById('vaultModalTitle').innerHTML = '🧠 系統解密成功';
+  document.getElementById('vaultModalSub').innerHTML = '已根據大數據為你鎖定 5 組最強爆發號碼';
+  document.getElementById('vaultModalCardTitle').innerText = 'AI 量子推演結果';
+  document.getElementById('vaultModalDate').innerText = '日期: ' + nowString();
+  document.getElementById('vaultModalBadge').innerText = '引擎 V4.0';
   document.getElementById('vaultModalRows').innerHTML = rowsHtml;
-  window._currentShareText = shareText + '\n> 系統評估：命中率提升 92%';
+  window._currentShareText = shareText + '\n> 本結果由概率模型生成，僅供娛樂參考';
   document.getElementById('vaultModal').style.display = 'flex';
 }
 
-
-/* ================= UI 渲染 ================= */
 function buildLuckyGrid(){
   var grid = document.getElementById('luckyGrid'); grid.innerHTML = '';
   ALL.forEach(function(n){
@@ -1202,9 +974,7 @@ function syncHeartUI(){
   document.querySelectorAll('.heart-cell').forEach(function(c){ c.classList.toggle('active', heartPool.has(Number(c.textContent))); });
   updateHeartInfo(); renderTicketInfo();
 }
-function updateHeartInfo(){
-  document.getElementById('heartInfo').innerHTML = '已選：<b>' + heartPool.size + '</b> 個號碼';
-}
+function updateHeartInfo(){ document.getElementById('heartInfo').innerHTML = '已選：<b>' + heartPool.size + '</b> 個號碼'; }
 
 document.getElementById('heartClear').addEventListener('click', function(){ heartPool.clear(); syncHeartUI(); showToast('已清空'); });
 document.getElementById('randomLuckyBtn').addEventListener('click', function(){ lucky = ALL[Math.floor(Math.random()*49)]; refreshLuckyUI(); });
@@ -1219,7 +989,7 @@ document.getElementById('heartPasteBtn').addEventListener('click', function(){
 document.getElementById('pickModeTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
   pickMode = btn.dataset.p;
-  document.querySelectorAll('#pickModeTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('#pickModeTabs button').forEach(function(b){ b.classList.toggle('active', b === btn); });
   document.getElementById('luckyPanel').style.display = (pickMode === 'lucky') ? 'block' : 'none';
   document.getElementById('heartPanel').style.display = (pickMode === 'heart') ? 'block' : 'none';
 });
@@ -1227,348 +997,353 @@ document.getElementById('pickModeTabs').addEventListener('click', function(e){
 document.getElementById('modeTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
   genMode = btn.dataset.m;
-  document.querySelectorAll('#modeTabs button').forEach(b => b.classList.toggle('active', b === btn));
-  
+  document.querySelectorAll('#modeTabs button').forEach(function(b){ b.classList.toggle('active', b === btn); });
   if(genMode === 'smart8') ticketCount = 8;
   else if(genMode === 'smart9') ticketCount = 9;
   else if(genMode === 'smart17') ticketCount = 17;
   else if(genMode === 'dantuo') ticketCount = parseInt(document.getElementById('customTickets').value)||10;
   else if(genMode === 'heart') ticketCount = 17;
-  else if(genMode === 'custom') { ticketCount = parseInt(document.getElementById('customTickets').value)||10; }
-  
+  else if(genMode === 'custom'){
+    var v = parseInt(document.getElementById('customTickets').value, 10);
+    if(isNaN(v)) v = 10;
+    ticketCount = Math.max(1, Math.min(v, 200));
+  }
   document.getElementById('customTicketRow').style.display = (genMode === 'custom' || genMode === 'dantuo') ? 'flex' : 'none';
   renderTicketInfo();
 });
 
 document.getElementById('ballCountTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
-  if(btn.dataset.b === 'custom') {
-    ballsPerTicket = parseInt(document.getElementById('customBalls').value)||4;
-  } else {
-    ballsPerTicket = parseInt(btn.dataset.b,10);
-  }
-  document.querySelectorAll('#ballCountTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  if(btn.dataset.b === 'custom'){ ballsPerTicket = parseInt(document.getElementById('customBalls').value)||4; }
+  else { ballsPerTicket = parseInt(btn.dataset.b,10); }
+  document.querySelectorAll('#ballCountTabs button').forEach(function(b){ b.classList.toggle('active', b === btn); });
   renderTicketInfo();
 });
 
 function renderTicketInfo(){
-  document.getElementById('ticketInfo').innerHTML = `當前模式將生成 ${ticketCount} 注，每注 ${ballsPerTicket} 球。`;
+  document.getElementById('ticketInfo').innerHTML = '當前模式將生成 ' + ticketCount + ' 注，每注 ' + ballsPerTicket + ' 球。';
 }
 
+document.getElementById('customTickets').addEventListener('input', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v) || v < 1) return;
+  v = Math.min(v, 200);
+  if(genMode === 'custom' || genMode === 'dantuo'){ ticketCount = v; renderTicketInfo(); }
+});
+document.getElementById('customTickets').addEventListener('change', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v)) v = 1;
+  v = Math.max(1, Math.min(v, 200));
+  this.value = v;
+  if(genMode === 'custom' || genMode === 'dantuo'){ ticketCount = v; renderTicketInfo(); }
+});
+document.getElementById('customBalls').addEventListener('input', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v) || v < 2 || v > 6) return;
+  var active = document.querySelector('#ballCountTabs button.active');
+  if(active && active.dataset.b === 'custom'){ ballsPerTicket = v; renderTicketInfo(); }
+});
+document.getElementById('customBalls').addEventListener('change', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v)) v = 4;
+  v = Math.max(2, Math.min(v, 6));
+  this.value = v;
+  var active = document.querySelector('#ballCountTabs button.active');
+  if(active && active.dataset.b === 'custom'){ ballsPerTicket = v; renderTicketInfo(); }
+});
+
 function doGenerate(){
+  if(genMode === 'custom' || genMode === 'dantuo'){
+    var v = parseInt(document.getElementById('customTickets').value, 10);
+    if(!isNaN(v)) ticketCount = Math.max(1, Math.min(v, 200));
+  }
+  var ab = document.querySelector('#ballCountTabs button.active');
+  if(ab && ab.dataset.b === 'custom'){
+    var cb = parseInt(document.getElementById('customBalls').value, 10);
+    if(!isNaN(cb)) ballsPerTicket = Math.max(2, Math.min(cb, 6));
+  }
+  renderTicketInfo();
+
   var pool = activePool;
   if(genMode === 'heart'){
     if(heartPool.size === 0) return showToast('請先選擇心水號碼', true);
     pool = Array.from(heartPool);
   }
   if(pool.length < ballsPerTicket){
-    var extra = ALL.filter(n => !pool.includes(n));
+    var extra = ALL.filter(function(n){ return pool.indexOf(n) === -1; });
     pool = pool.concat(shuffle(extra).slice(0, ballsPerTicket - pool.length));
   }
-  
   TICKETS = [];
   for(var t=0;t<ticketCount;t++){
-    TICKETS.push(shuffle(pool).slice(0, ballsPerTicket).sort((a,b)=>a-b));
+    TICKETS.push(shuffle(pool).slice(0, ballsPerTicket).sort(function(a,b){ return a-b; }));
   }
-  
   renderTickets();
   document.querySelector('.nav-item[data-tab="tab-backtest"]').click();
   showToast('✓ 已生成 ' + TICKETS.length + ' 注，可點擊「分析」查看');
 }
 document.getElementById('genBtn').addEventListener('click', doGenerate);
 
-/* ================= 注單渲染 ================= */
 function renderTickets(){
-  var ticketsEl = document.getElementById('tickets'); 
-  if(!ticketsEl) return;
+  var ticketsEl = document.getElementById('tickets'); if(!ticketsEl) return;
   ticketsEl.innerHTML = '';
   TICKETS.forEach(function(t,i){
-    let odd = t.filter(n => n % 2 !== 0).length;
-    let even = t.length - odd;
-    let big = t.filter(n => n >= 25).length;
-    let small = t.length - big;
-    let red = t.filter(n => WAVE_RED.has(n)).length;
-    let blue = t.filter(n => WAVE_BLUE.has(n)).length;
-    let green = t.filter(n => WAVE_GREEN.has(n)).length;
-    let sum = t.length > 0 ? t.reduce((a,b)=>a+b, 0) : 0;
-    
-    let analysisStr = `和值:${sum} | 單雙:${odd}:${even} | 大小:${big}:${small} | 波色:${red}:${blue}:${green}`;
-    
-    ticketsEl.innerHTML += `<div class="ticket">
-      <div class="ticket-head">
-        <span class="ticket-no">第 ${i+1} 注</span>
-        <button class="act btn-main" style="padding:4px 12px;font-size:12px;border-radius:8px;" onclick="openTicketAnalysis(${i})">📊 分析</button>
-      </div>
-      <div class="balls" onclick="openTicketAnalysis(${i})" style="cursor:pointer;" title="點擊分析號碼">${t.map(n => `<span class="ball ${getWave(n)}">${pad(n)}</span>`).join('')}</div>
-      <div style="font-size:11px; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);">${analysisStr}</div>
-    </div>`;
+    var odd = t.filter(function(n){ return n % 2 !== 0; }).length;
+    var even = t.length - odd;
+    var big = t.filter(function(n){ return n >= 25; }).length;
+    var small = t.length - big;
+    var red = t.filter(function(n){ return WAVE_RED.has(n); }).length;
+    var blue = t.filter(function(n){ return WAVE_BLUE.has(n); }).length;
+    var green = t.filter(function(n){ return WAVE_GREEN.has(n); }).length;
+    var sum = t.length > 0 ? t.reduce(function(a,b){ return a+b; }, 0) : 0;
+    var analysisStr = '和值:' + sum + ' | 單雙:' + odd + ':' + even + ' | 大小:' + big + ':' + small + ' | 波色:' + red + ':' + blue + ':' + green;
+    ticketsEl.innerHTML += '<div class="ticket">'
+      + '<div class="ticket-head"><span class="ticket-no">第 ' + (i+1) + ' 注</span><button class="act btn-main" style="padding:4px 12px;font-size:12px;border-radius:8px;" onclick="openTicketAnalysis(' + i + ')">📊 分析</button></div>'
+      + '<div class="balls" onclick="openTicketAnalysis(' + i + ')" style="cursor:pointer;" title="點擊分析號碼">' + t.map(function(n){ return '<span class="ball ' + getWave(n) + '">' + pad(n) + '</span>'; }).join('') + '</div>'
+      + '<div style="font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);">' + analysisStr + '</div>'
+      + '</div>';
   });
 }
 
-/* ================= 注單分析彈窗 ================= */
-let currentAnalysisIdx = -1;
-let currentAnalysisNums = [];
+var currentAnalysisIdx = -1;
+var currentAnalysisNums = [];
 
-window.openTicketAnalysis = function(index) {
-  if (index < 0 || index >= TICKETS.length) return;
+window.openTicketAnalysis = function(index){
+  if(index < 0 || index >= TICKETS.length) return;
   currentAnalysisIdx = index;
-  currentAnalysisNums = [...TICKETS[index]];
+  currentAnalysisNums = TICKETS[index].slice();
   document.getElementById('ticketAnalysisModal').style.display = 'flex';
   renderAnalysisSlots();
   buildAnalysisGrid();
   updateAnalysisStats();
 };
-window.closeTicketAnalysis = function() { document.getElementById('ticketAnalysisModal').style.display = 'none'; };
+window.closeTicketAnalysis = function(){ document.getElementById('ticketAnalysisModal').style.display = 'none'; };
 
-function renderAnalysisSlots() {
-  let slotsEl = document.getElementById('caSlots');
-  let html = '';
-  let displayCount = Math.max(ballsPerTicket, currentAnalysisNums.length);
+function renderAnalysisSlots(){
+  var slotsEl = document.getElementById('caSlots');
+  var html = '';
+  var displayCount = Math.max(ballsPerTicket, currentAnalysisNums.length);
   if(displayCount < 2) displayCount = 2;
-  if(displayCount > 6) displayCount = currentAnalysisNums.length; 
-  let sortedNums = [...currentAnalysisNums].sort((a,b)=>a-b);
-  for(let i=0; i<displayCount; i++) {
-    if (i < sortedNums.length) {
-      let n = sortedNums[i]; let wave = getWave(n);
-      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      html += `<div class="slot-ball" style="border-color:${color}; color:${color};">${pad(n)}</div>`;
+  if(displayCount > 6) displayCount = currentAnalysisNums.length;
+  var sortedNums = currentAnalysisNums.slice().sort(function(a,b){ return a-b; });
+  for(var i=0; i<displayCount; i++){
+    if(i < sortedNums.length){
+      var n = sortedNums[i]; var wave = getWave(n);
+      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      html += '<div class="slot-ball" style="border-color:' + color + ';color:' + color + ';">' + pad(n) + '</div>';
     } else {
-      html += `<div class="slot-ball empty">?</div>`;
+      html += '<div class="slot-ball empty">?</div>';
     }
   }
   slotsEl.innerHTML = html;
 }
 
-function updateAnalysisStats() {
-  let statsEl = document.getElementById('caStats');
-  let t = currentAnalysisNums;
-  if (t.length === 0) { statsEl.innerHTML = '請選擇號碼以檢視分析數據'; return; }
-  let odd = t.filter(n => n % 2 !== 0).length; let even = t.length - odd;
-  let big = t.filter(n => n >= 25).length; let small = t.length - big;
-  let red = t.filter(n => WAVE_RED.has(n)).length;
-  let blue = t.filter(n => WAVE_BLUE.has(n)).length;
-  let green = t.filter(n => WAVE_GREEN.has(n)).length;
-  let sum = t.reduce((a,b)=>a+b, 0);
-  statsEl.innerHTML = `和值: <b>${sum}</b> | 單雙: <b>${odd}:${even}</b> | 大小: <b>${big}:${small}</b><br>波色: <span style="color:var(--wave-red)">紅${red}</span> <span style="color:var(--wave-blue)">藍${blue}</span> <span style="color:var(--wave-green)">綠${green}</span>`;
+function updateAnalysisStats(){
+  var statsEl = document.getElementById('caStats');
+  var t = currentAnalysisNums;
+  if(t.length === 0){ statsEl.innerHTML = '請選擇號碼以檢視分析數據'; return; }
+  var odd = t.filter(function(n){ return n % 2 !== 0; }).length; var even = t.length - odd;
+  var big = t.filter(function(n){ return n >= 25; }).length; var small = t.length - big;
+  var red = t.filter(function(n){ return WAVE_RED.has(n); }).length;
+  var blue = t.filter(function(n){ return WAVE_BLUE.has(n); }).length;
+  var green = t.filter(function(n){ return WAVE_GREEN.has(n); }).length;
+  var sum = t.reduce(function(a,b){ return a+b; }, 0);
+  statsEl.innerHTML = '和值: <b>' + sum + '</b> | 單雙: <b>' + odd + ':' + even + '</b> | 大小: <b>' + big + ':' + small + '</b><br>波色: <span style="color:var(--wave-red)">紅' + red + '</span> <span style="color:var(--wave-blue)">藍' + blue + '</span> <span style="color:var(--wave-green)">綠' + green + '</span>';
 }
 
-function buildAnalysisGrid() {
-  let gridEl = document.getElementById('caGrid');
-  let html = '';
-  for(let r=10; r>=1; r--) {
-    for(let c=0; c<=4; c++) {
-      let n = r + c * 10;
-      if(n > 49) { html += `<div></div>`; continue; }
-      let wave = getWave(n); let activeClass = currentAnalysisNums.includes(n) ? 'active' : '';
-      html += `<div class="ca-cell ${wave} ${activeClass}" onclick="toggleAnalysisNum(${n})" id="ca-cell-${n}">${n}</div>`;
+function buildAnalysisGrid(){
+  var gridEl = document.getElementById('caGrid');
+  var html = '';
+  for(var r=10; r>=1; r--){
+    for(var c=0; c<=4; c++){
+      var n = r + c * 10;
+      if(n > 49){ html += '<div></div>'; continue; }
+      var wave = getWave(n); var activeClass = currentAnalysisNums.indexOf(n) !== -1 ? 'active' : '';
+      html += '<div class="ca-cell ' + wave + ' ' + activeClass + '" onclick="toggleAnalysisNum(' + n + ')" id="ca-cell-' + n + '">' + n + '</div>';
     }
   }
   gridEl.innerHTML = html;
 }
 
-window.toggleAnalysisNum = function(n) {
-  let idx = currentAnalysisNums.indexOf(n);
-  let limit = Math.max(ballsPerTicket, currentAnalysisNums.length); 
-  if (limit > 6) limit = 6; if (limit < 2) limit = 2;
-  if(idx > -1) {
-    currentAnalysisNums.splice(idx, 1); document.getElementById('ca-cell-'+n).classList.remove('active');
+window.toggleAnalysisNum = function(n){
+  var idx = currentAnalysisNums.indexOf(n);
+  var limit = Math.max(ballsPerTicket, currentAnalysisNums.length);
+  if(limit > 6) limit = 6; if(limit < 2) limit = 2;
+  if(idx > -1){
+    currentAnalysisNums.splice(idx, 1);
+    var cell = document.getElementById('ca-cell-' + n); if(cell) cell.classList.remove('active');
   } else {
-    if (currentAnalysisNums.length >= limit) { showToast(`每注最多只能選 ${limit} 個號碼`, true); return; }
-    currentAnalysisNums.push(n); document.getElementById('ca-cell-'+n).classList.add('active');
+    if(currentAnalysisNums.length >= limit){ showToast('每注最多只能選 ' + limit + ' 個號碼', true); return; }
+    currentAnalysisNums.push(n);
+    var cell = document.getElementById('ca-cell-' + n); if(cell) cell.classList.add('active');
   }
   renderAnalysisSlots(); updateAnalysisStats();
 };
 
-window.saveTicketAnalysis = function() {
-  if (currentAnalysisNums.length < 2) { showToast('請至少選擇 2 個號碼', true); return; }
-  TICKETS[currentAnalysisIdx] = [...currentAnalysisNums].sort((a,b)=>a-b);
+window.saveTicketAnalysis = function(){
+  if(currentAnalysisNums.length < 2){ showToast('請至少選擇 2 個號碼', true); return; }
+  TICKETS[currentAnalysisIdx] = currentAnalysisNums.slice().sort(function(a,b){ return a-b; });
   renderTickets(); closeTicketAnalysis(); showToast('✓ 注單已更新');
 };
 
-/* ================= 大數據分析邏輯 (包含 K線/MACD) ================= */
-window.showAnalysis = function(type) {
-  if (rawRecords.length === 0) return showToast('請先同步歷史數據', true);
-  const modal = document.getElementById('analysisModal');
-  const title = document.getElementById('amTitle');
-  const content = document.getElementById('amContent');
+window.showAnalysis = function(type){
+  if(rawRecords.length === 0) return showToast('請先同步歷史數據', true);
+  var modal = document.getElementById('analysisModal');
+  var title = document.getElementById('amTitle');
+  var content = document.getElementById('amContent');
   modal.style.display = 'flex';
-  let html = '';
-
-  if(window._chartInstance) { window._chartInstance.dispose(); window._chartInstance = null; }
+  var html = '';
+  if(window._chartInstance){ window._chartInstance.dispose(); window._chartInstance = null; }
   content.style.padding = type === 'kline' ? '0' : '16px';
 
-  if (type === 'trend') {
+  if(type === 'trend'){
     title.innerText = '📈 近30期走勢圖';
     html = '<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;">';
-    for(let i=1;i<=49;i++) {
-      let count = 0;
-      rawRecords.slice(0, 30).forEach(r => { if(r.nums.includes(i) || r.extra === i) count++; });
-      let bg = count >= 4 ? 'var(--red)' : count >= 2 ? 'var(--gold)' : 'var(--panel-2)';
-      let color = count >= 2 ? '#fff' : 'var(--text)';
-      html += `<div style="text-align:center;padding:4px 0;background:${bg};color:${color};border-radius:4px;font-size:12px;">${i}<br><span style="font-size:10px;">${count}次</span></div>`;
+    for(var i=1;i<=49;i++){
+      var count = 0;
+      rawRecords.slice(0, 30).forEach(function(r){ if(r.nums.indexOf(i) !== -1 || r.extra === i) count++; });
+      var bg = count >= 4 ? 'var(--red)' : count >= 2 ? 'var(--gold)' : 'var(--panel-2)';
+      var color = count >= 2 ? '#fff' : 'var(--text)';
+      html += '<div style="text-align:center;padding:4px 0;background:' + bg + ';color:' + color + ';border-radius:4px;font-size:12px;">' + i + '<br><span style="font-size:10px;">' + count + '次</span></div>';
     }
     html += '</div>';
-  } 
-  else if (type === 'omission') {
+  }
+  else if(type === 'omission'){
     title.innerText = '📊 當前遺漏統計';
     html = '<div style="display:flex;flex-direction:column;gap:6px;">';
-    for(let i=1;i<=49;i++) {
-      let omission = 0;
-      for(let j=0;j<rawRecords.length;j++) {
-        if(rawRecords[j].nums.includes(i) || rawRecords[j].extra === i) break;
+    for(var i=1;i<=49;i++){
+      var omission = 0;
+      for(var j=0;j<rawRecords.length;j++){
+        if(rawRecords[j].nums.indexOf(i) !== -1 || rawRecords[j].extra === i) break;
         omission++;
       }
-      let wave = getWave(i);
-      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      let barW = Math.min(omission * 5, 100) + '%';
-      html += `<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:${color}">${pad(i)}</span></div><div class="stat-bar-wrap"><div style="height:100%;width:${barW};background:${color};opacity:0.7;"></div></div><div class="stat-val">${omission} 期</div></div>`;
+      var wave = getWave(i);
+      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      var barW = Math.min(omission * 5, 100) + '%';
+      html += '<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:' + color + '">' + pad(i) + '</span></div><div class="stat-bar-wrap"><div style="height:100%;width:' + barW + ';background:' + color + ';opacity:0.7;"></div></div><div class="stat-val">' + omission + ' 期</div></div>';
     }
     html += '</div>';
   }
-  else if (type === 'frequency') {
+  else if(type === 'frequency'){
     title.innerText = '📉 歷史出次統計';
     html = '<div style="display:flex;flex-direction:column;gap:6px;">';
-    let freqs = {};
-    for(let i=1;i<=49;i++) freqs[i] = 0;
-    rawRecords.forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
-    let sorted = Object.entries(freqs).sort((a,b)=>b[1]-a[1]);
-    sorted.forEach(([num, count]) => {
-      let n = parseInt(num); let wave = getWave(n);
-      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      let barW = Math.min((count / rawRecords.length) * 100, 100) + '%';
-      html += `<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:${color}">${pad(n)}</span></div><div class="stat-bar-wrap"><div style="height:100%;width:${barW};background:${color};opacity:0.7;"></div></div><div class="stat-val">${count} 次</div></div>`;
+    var freqs = {}; for(var i=1;i<=49;i++) freqs[i] = 0;
+    rawRecords.forEach(function(r){ r.nums.forEach(function(n){ freqs[n]++; }); if(r.extra) freqs[r.extra]++; });
+    var sorted = Object.entries(freqs).sort(function(a,b){ return b[1]-a[1]; });
+    sorted.forEach(function(pair){
+      var n = parseInt(pair[0], 10); var count = pair[1]; var wave = getWave(n);
+      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      var barW = Math.min((count / rawRecords.length) * 100, 100) + '%';
+      html += '<div class="stat-row"><div class="stat-label"><span class="stat-ball" style="background:' + color + '">' + pad(n) + '</span></div><div class="stat-bar-wrap"><div style="height:100%;width:' + barW + ';background:' + color + ';opacity:0.7;"></div></div><div class="stat-val">' + count + ' 次</div></div>';
     });
     html += '</div>';
   }
-  else if (type === 'hotcold') {
+  else if(type === 'hotcold'){
     title.innerText = '🔥 冷熱碼分析 (近10期)';
-    let freqs = {};
-    for(let i=1;i<=49;i++) freqs[i] = 0;
-    rawRecords.slice(0, 10).forEach(r => { r.nums.forEach(n => freqs[n]++); if(r.extra) freqs[r.extra]++; });
-    let sorted = Object.entries(freqs).sort((a,b)=>b[1]-a[1]);
-    html += '<div style="margin-bottom:10px;font-weight:bold;color:var(--red)">🔥 最熱門 (出現最多)</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px;">';
-    sorted.slice(0, 8).forEach(([num]) => {
-      let n = parseInt(num); let wave = getWave(n);
-      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      html += `<span class="stat-ball" style="background:${color};width:30px;height:30px;font-size:14px;">${n}</span>`;
+    var freqs = {}; for(var i=1;i<=49;i++) freqs[i] = 0;
+    rawRecords.slice(0, 10).forEach(function(r){ r.nums.forEach(function(n){ freqs[n]++; }); if(r.extra) freqs[r.extra]++; });
+    var sorted = Object.entries(freqs).sort(function(a,b){ return b[1]-a[1]; });
+    html = '<div style="margin-bottom:10px;font-weight:bold;color:var(--red)">🔥 最熱門 (出現最多)</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px;">';
+    sorted.slice(0, 8).forEach(function(pair){
+      var n = parseInt(pair[0], 10); var wave = getWave(n);
+      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      html += '<span class="stat-ball" style="background:' + color + ';width:30px;height:30px;font-size:14px;">' + n + '</span>';
     });
     html += '</div><div style="margin-bottom:10px;font-weight:bold;color:var(--wave-blue)">❄️ 最冷門 (出現最少)</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
-    sorted.slice(-8).forEach(([num]) => {
-      let n = parseInt(num); let wave = getWave(n);
-      let color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
-      html += `<span class="stat-ball" style="background:${color};width:30px;height:30px;font-size:14px;">${n}</span>`;
+    sorted.slice(-8).forEach(function(pair){
+      var n = parseInt(pair[0], 10); var wave = getWave(n);
+      var color = wave === 'w-red' ? 'var(--wave-red)' : (wave === 'w-blue' ? 'var(--wave-blue)' : 'var(--wave-green)');
+      html += '<span class="stat-ball" style="background:' + color + ';width:30px;height:30px;font-size:14px;">' + n + '</span>';
     });
     html += '</div>';
   }
-  else if (type === 'wave') {
+  else if(type === 'wave'){
     title.innerText = '🔮 波色比例統計';
-    let r=0,b=0,g=0;
-    rawRecords.forEach(rec => {
-      rec.nums.forEach(n => { if(WAVE_RED.has(n)) r++; else if(WAVE_BLUE.has(n)) b++; else g++; });
-      if(rec.extra) { if(WAVE_RED.has(rec.extra)) r++; else if(WAVE_BLUE.has(rec.extra)) b++; else g++; }
+    var r=0,b=0,g=0;
+    rawRecords.forEach(function(rec){
+      rec.nums.forEach(function(n){ if(WAVE_RED.has(n)) r++; else if(WAVE_BLUE.has(n)) b++; else g++; });
+      if(rec.extra){ if(WAVE_RED.has(rec.extra)) r++; else if(WAVE_BLUE.has(rec.extra)) b++; else g++; }
     });
-    let total = r+b+g || 1;
-    html = `
-      <div style="margin-bottom:15px;text-align:center;">總開出號碼數: <b>${total}</b></div>
-      <div class="stat-row"><div class="stat-label">紅波</div><div class="stat-bar-wrap"><div class="stat-bar-red" style="width:${(r/total*100)}%"></div></div><div class="stat-val">${(r/total*100).toFixed(1)}%</div></div>
-      <div class="stat-row"><div class="stat-label">藍波</div><div class="stat-bar-wrap"><div class="stat-bar-blue" style="width:${(b/total*100)}%"></div></div><div class="stat-val">${(b/total*100).toFixed(1)}%</div></div>
-      <div class="stat-row"><div class="stat-label">綠波</div><div class="stat-bar-wrap"><div class="stat-bar-green" style="width:${(g/total*100)}%"></div></div><div class="stat-val">${(g/total*100).toFixed(1)}%</div></div>
-    `;
+    var total = r+b+g || 1;
+    html = '<div style="margin-bottom:15px;text-align:center;">總開出號碼數: <b>' + total + '</b></div>'
+      + '<div class="stat-row"><div class="stat-label">紅波</div><div class="stat-bar-wrap"><div class="stat-bar-red" style="width:' + (r/total*100) + '%"></div></div><div class="stat-val">' + (r/total*100).toFixed(1) + '%</div></div>'
+      + '<div class="stat-row"><div class="stat-label">藍波</div><div class="stat-bar-wrap"><div class="stat-bar-blue" style="width:' + (b/total*100) + '%"></div></div><div class="stat-val">' + (b/total*100).toFixed(1) + '%</div></div>'
+      + '<div class="stat-row"><div class="stat-label">綠波</div><div class="stat-bar-wrap"><div class="stat-bar-green" style="width:' + (g/total*100) + '%"></div></div><div class="stat-val">' + (g/total*100).toFixed(1) + '%</div></div>';
   }
-  else if (type === 'zodiac') {
+  else if(type === 'zodiac'){
     title.innerText = '🐲 生肖統計 (當年)';
-    let currentYear = new Date().getFullYear();
-    let zCount = {};
-    const animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
-    animals.forEach(a => zCount[a] = 0);
-    let baseIdx = currentYear % 12; 
-    rawRecords.forEach(r => {
-      r.nums.forEach(n => {
-        let zIdx = (baseIdx - (n % 12) + 12) % 12;
+    var currentYear = new Date().getFullYear();
+    var zCount = {};
+    var animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+    animals.forEach(function(a){ zCount[a] = 0; });
+    var baseIdx = currentYear % 12;
+    rawRecords.forEach(function(r){
+      r.nums.forEach(function(n){
+        var zIdx = (baseIdx - (n % 12) + 12) % 12;
         zCount[animals[zIdx]]++;
       });
     });
     html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
-    for(let a of animals) {
-      html += `<div style="background:var(--panel-2);padding:10px;border-radius:8px;text-align:center;">
-        <div style="font-size:16px;font-weight:bold;margin-bottom:4px;color:var(--gold)">${a}</div>
-        <div style="font-size:12px;color:var(--muted)">出現 ${zCount[a]} 次</div>
-      </div>`;
-    }
+    animals.forEach(function(a){
+      html += '<div style="background:var(--panel-2);padding:10px;border-radius:8px;text-align:center;"><div style="font-size:16px;font-weight:bold;margin-bottom:4px;color:var(--gold)">' + a + '</div><div style="font-size:12px;color:var(--muted)">出現 ' + zCount[a] + ' 次</div></div>';
+    });
     html += '</div><div style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center;">* 注：生肖按當年農曆年對應，數據僅供參考</div>';
   }
-  else if (type === 'headtail') {
+  else if(type === 'headtail'){
     title.innerText = '🔢 頭尾數統計';
-    let heads = {0:0,1:0,2:0,3:0,4:0};
-    let tails = {};
-    for(let i=0;i<=9;i++) tails[i]=0;
-    rawRecords.forEach(r => {
-      r.nums.forEach(n => {
+    var heads = {0:0,1:0,2:0,3:0,4:0};
+    var tails = {}; for(var i=0;i<=9;i++) tails[i]=0;
+    rawRecords.forEach(function(r){
+      r.nums.forEach(function(n){
         heads[Math.floor(n/10)] = (heads[Math.floor(n/10)]||0)+1;
         tails[n%10] = (tails[n%10]||0)+1;
       });
     });
     html = '<div style="display:flex;gap:20px;"><div style="flex:1;"><div style="font-weight:bold;margin-bottom:8px;">頭數</div>';
-    for(let h=0; h<=4; h++) {
-      html += `<div class="stat-row"><div class="stat-label">${h}頭</div><div class="stat-bar-wrap"><div style="height:100%;width:${(heads[h]/rawRecords.length/6*100)}%;background:var(--gold);"></div></div></div>`;
+    for(var h=0; h<=4; h++){
+      html += '<div class="stat-row"><div class="stat-label">' + h + '頭</div><div class="stat-bar-wrap"><div style="height:100%;width:' + (heads[h]/rawRecords.length/6*100) + '%;background:var(--gold);"></div></div></div>';
     }
     html += '</div><div style="flex:1;"><div style="font-weight:bold;margin-bottom:8px;">尾數</div>';
-    for(let t=0; t<=9; t++) {
-      html += `<div class="stat-row"><div class="stat-label">${t}尾</div><div class="stat-bar-wrap"><div style="height:100%;width:${(tails[t]/rawRecords.length/6*100)}%;background:var(--wave-blue);"></div></div></div>`;
+    for(var t=0; t<=9; t++){
+      html += '<div class="stat-row"><div class="stat-label">' + t + '尾</div><div class="stat-bar-wrap"><div style="height:100%;width:' + (tails[t]/rawRecords.length/6*100) + '%;background:var(--wave-blue);"></div></div></div>';
     }
     html += '</div></div>';
   }
-  else if (type === 'kline') {
+  else if(type === 'kline'){
     title.innerText = '🕯️ 六合彩和值 K線圖 & MACD';
     html = '<div id="klineChart" style="width:100%;height:400px;"></div>';
     content.innerHTML = html;
-    
-    let recent = rawRecords.slice(0, 50).reverse();
-    let dates = recent.map(r => r.issue);
-    let kData = [];
-    let prevSum = null;
-    
-    recent.forEach(r => {
-      let sum = r.nums.reduce((a,b)=>a+b, 0);
+    var recent = rawRecords.slice(0, 50).reverse();
+    var dates = recent.map(function(r){ return r.issue; });
+    var kData = [];
+    var prevSum = null;
+    recent.forEach(function(r){
+      var sum = r.nums.reduce(function(a,b){ return a+b; }, 0);
       if(prevSum === null) prevSum = sum;
-      let open = prevSum;
-      let close = sum;
-      let low = Math.min(open, close) - Math.floor(Math.random() * 15);
-      let high = Math.max(open, close) + Math.floor(Math.random() * 15);
+      var open = prevSum; var close = sum;
+      var low = Math.min(open, close) - Math.floor(Math.random() * 15);
+      var high = Math.max(open, close) + Math.floor(Math.random() * 15);
       kData.push([open, close, low, high]);
       prevSum = close;
     });
-    
-    function calculateEMA(n, data) {
-      let ema = [];
-      let k = 2 / (n + 1);
-      let prevEma = data[0];
-      data.forEach((val, i) => {
-        if(i===0) ema.push(prevEma);
-        else { prevEma = val * k + prevEma * (1 - k); ema.push(prevEma); }
-      });
+    function calculateEMA(n, data){
+      var ema = []; var k = 2 / (n + 1); var prevEma = data[0];
+      data.forEach(function(val, i){ if(i===0) ema.push(prevEma); else { prevEma = val * k + prevEma * (1 - k); ema.push(prevEma); } });
       return ema;
     }
-    let closeData = kData.map(d => d[1]);
-    let ema12 = calculateEMA(12, closeData);
-    let ema26 = calculateEMA(26, closeData);
-    let dif = ema12.map((v, i) => v - ema26[i]);
-    let dea = calculateEMA(9, dif);
-    let macd = dif.map((v, i) => (v - dea[i]) * 2);
-    
-    let macdData = macd.map((v, i) => [i, v, dif[i], dea[i]]);
-
-    let chartDom = document.getElementById('klineChart');
+    var closeData = kData.map(function(d){ return d[1]; });
+    var ema12 = calculateEMA(12, closeData);
+    var ema26 = calculateEMA(26, closeData);
+    var dif = ema12.map(function(v, i){ return v - ema26[i]; });
+    var dea = calculateEMA(9, dif);
+    var macd = dif.map(function(v, i){ return (v - dea[i]) * 2; });
+    var macdData = macd.map(function(v, i){ return [i, v, dif[i], dea[i]]; });
+    var chartDom = document.getElementById('klineChart');
     window._chartInstance = echarts.init(chartDom, document.body.classList.contains('light-mode') ? null : 'dark');
-    
-    let option = {
+    window._chartInstance.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
       legend: { data: ['和值K線', 'MACD', 'DIF', 'DEA'], textStyle: { color: '#8b98a9' }, top: 10 },
-      grid: [
-        { left: '10%', right: '8%', height: '50%', top: '15%' },
-        { left: '10%', right: '8%', height: '20%', top: '70%' }
-      ],
+      grid: [{ left: '10%', right: '8%', height: '50%', top: '15%' }, { left: '10%', right: '8%', height: '20%', top: '70%' }],
       xAxis: [
         { type: 'category', data: dates, gridIndex: 0, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { color: '#8b98a9' } },
         { type: 'category', data: dates, gridIndex: 1, boundaryGap: false, axisLine: { lineStyle: { color: '#555' } }, axisLabel: { show: false } }
@@ -1577,125 +1352,121 @@ window.showAnalysis = function(type) {
         { scale: true, gridIndex: 0, splitLine: { show: false }, axisLabel: { color: '#8b98a9' } },
         { scale: true, gridIndex: 1, splitLine: { show: false }, axisLabel: { show: false } }
       ],
-      dataZoom: [
-        { type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 },
-        { show: false, xAxisIndex: [0, 1], type: 'slider', top: '90%' }
-      ],
+      dataZoom: [{ type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 }, { show: false, xAxisIndex: [0, 1], type: 'slider', top: '90%' }],
       series: [
         { name: '和值K線', type: 'candlestick', data: kData, itemStyle: { color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' } },
-        { name: 'MACD', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: macdData.map(d => ({ value: d[1], itemStyle: { color: d[1] > 0 ? '#ef4444' : '#22c55e' } })) },
+        { name: 'MACD', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: macdData.map(function(d){ return { value: d[1], itemStyle: { color: d[1] > 0 ? '#ef4444' : '#22c55e' } }; }) },
         { name: 'DIF', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dif, lineStyle: { color: '#f0b429' }, symbol: 'none' },
         { name: 'DEA', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: dea, lineStyle: { color: '#1890ff' }, symbol: 'none' }
       ]
-    };
-    window._chartInstance.setOption(option);
+    });
     return;
   }
-
   content.innerHTML = html;
 };
 
-/* ================= 殺號 ================= */
-var strategyTabs = document.getElementById('strategyTabs');
-strategyTabs.addEventListener('click', function(e){
+document.getElementById('strategyTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
   strategy = btn.dataset.s;
-  strategyTabs.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-  ['missingPanel', 'headPanel', 'tailPanel', 'wavePanel'].forEach(id => document.getElementById(id).style.display = 'none');
+  this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+  ['missingPanel','headPanel','tailPanel','wavePanel'].forEach(function(id){ document.getElementById(id).style.display = 'none'; });
   if(strategy === 'missing') document.getElementById('missingPanel').style.display = 'block';
   else if(strategy === 'head') document.getElementById('headPanel').style.display = 'block';
   else if(strategy === 'tail') document.getElementById('tailPanel').style.display = 'block';
   else if(strategy === 'wave') document.getElementById('wavePanel').style.display = 'block';
 });
 
-document.querySelectorAll('.exclude-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
+document.querySelectorAll('.exclude-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
     this.classList.toggle('active');
     var g = this.dataset.g;
-    if(this.parentNode.parentNode.id === 'missingPanel') { missingGroups.has(g) ? missingGroups.delete(g) : missingGroups.add(g); }
-    else if(this.parentNode.parentNode.id === 'headPanel') { headGroups.has(g) ? headGroups.delete(g) : headGroups.add(g); }
-    else if(this.parentNode.parentNode.id === 'tailPanel') { tailGroups.has(g) ? tailGroups.delete(g) : tailGroups.add(g); }
-    else if(this.parentNode.parentNode.id === 'wavePanel') { waveGroups.has(g) ? waveGroups.delete(g) : waveGroups.add(g); }
+    var pid = this.parentNode.parentNode.id;
+    if(pid === 'missingPanel'){ missingGroups.has(g) ? missingGroups.delete(g) : missingGroups.add(g); }
+    else if(pid === 'headPanel'){ headGroups.has(g) ? headGroups.delete(g) : headGroups.add(g); }
+    else if(pid === 'tailPanel'){ tailGroups.has(g) ? tailGroups.delete(g) : tailGroups.add(g); }
+    else if(pid === 'wavePanel'){ waveGroups.has(g) ? waveGroups.delete(g) : waveGroups.add(g); }
   });
 });
 
 document.getElementById('keepTabs').addEventListener('click', function(e){
   var btn = e.target.closest('button'); if(!btn) return;
   keepCount = parseInt(btn.dataset.k,10);
-  document.querySelectorAll('#keepTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
 });
 
 document.getElementById('applyKill').addEventListener('click', function(){
   var killArr = [];
-  if(['missing','head','tail','wave'].includes(strategy)) {
+  if(['missing','head','tail','wave'].indexOf(strategy) !== -1){
     if(strategy === 'missing' && missingGroups.size === 0) return showToast('請先選擇要排除的門數', true);
     if(strategy === 'head' && headGroups.size === 0) return showToast('請先選擇要排除的頭數', true);
     if(strategy === 'tail' && tailGroups.size === 0) return showToast('請先選擇要排除的尾數', true);
     if(strategy === 'wave' && waveGroups.size === 0) return showToast('請先選擇要排除的波色', true);
-    if(strategy === 'missing') {
-      missingGroups.forEach(g => { var gi=parseInt(g), s=gi*10+1, e=(gi===4)?49:(gi*10+9); for(let i=s;i<=e;i++) killArr.push(i); });
+    if(strategy === 'missing'){
+      missingGroups.forEach(function(g){ var gi = parseInt(g,10); var s = gi*10+1; var e = (gi===4)?49:(gi*10+9); for(var i=s;i<=e;i++) killArr.push(i); });
     }
-    else if(strategy === 'head') { for(let i=1;i<=49;i++) if(headGroups.has(String(Math.floor(i/10)))) killArr.push(i); }
-    else if(strategy === 'tail') { for(let i=1;i<=49;i++) if(tailGroups.has(String(i%10))) killArr.push(i); }
-    else if(strategy === 'wave') {
-      for(let i=1;i<=49;i++) { 
-        if(waveGroups.has('red') && WAVE_RED.has(i)) killArr.push(i); 
-        else if(waveGroups.has('blue') && WAVE_BLUE.has(i)) killArr.push(i); 
-        else if(waveGroups.has('green') && WAVE_GREEN.has(i)) killArr.push(i); 
+    else if(strategy === 'head'){ for(var i=1;i<=49;i++) if(headGroups.has(String(Math.floor(i/10)))) killArr.push(i); }
+    else if(strategy === 'tail'){ for(var i=1;i<=49;i++) if(tailGroups.has(String(i%10))) killArr.push(i); }
+    else if(strategy === 'wave'){
+      for(var i=1;i<=49;i++){
+        if(waveGroups.has('red') && WAVE_RED.has(i)) killArr.push(i);
+        else if(waveGroups.has('blue') && WAVE_BLUE.has(i)) killArr.push(i);
+        else if(waveGroups.has('green') && WAVE_GREEN.has(i)) killArr.push(i);
       }
     }
   } else {
     if(keepCount < 49){
-      var freq = new Array(50).fill(0); 
-      if(history.length > 0) history.forEach(d => d.forEach(n => freq[n]++));
-      var sorted = ALL.slice().sort((a,b) => strategy === 'hot' ? freq[b] - freq[a] : freq[a] - freq[b]);
+      var freq = new Array(50).fill(0);
+      if(history.length > 0) history.forEach(function(d){ d.forEach(function(n){ freq[n]++; }); });
+      var sorted = ALL.slice().sort(function(a,b){ return strategy === 'hot' ? freq[b] - freq[a] : freq[a] - freq[b]; });
       killArr = sorted.slice(0, 49 - keepCount);
     }
   }
-  killed = new Set(killArr); 
-  activePool = ALL.filter(n => !killed.has(n));
-  var html = `保留 <b>${activePool.length}</b> 個號碼<br><div class="kill-nums">`;
-  ALL.forEach(n => { html += `<div class="kn ${killed.has(n)?'kill':'keep'}">${pad(n)}</div>`; });
+  killed = new Set(killArr);
+  activePool = ALL.filter(function(n){ return !killed.has(n); });
+  var html = '保留 <b>' + activePool.length + '</b> 個號碼<br><div class="kill-nums">';
+  ALL.forEach(function(n){ html += '<div class="kn ' + (killed.has(n)?'kill':'keep') + '">' + pad(n) + '</div>'; });
   document.getElementById('killResult').innerHTML = html + '</div>';
-  if (killArr.length > 0) { showToast(`已執行縮水，剔除 ${killArr.length} 碼，剩餘 ${activePool.length} 碼`); } else { showToast(`未剔除任何號碼，保留 ${activePool.length} 碼`); }
+  showToast(killArr.length > 0 ? ('已執行縮水，剔除 ' + killArr.length + ' 碼，剩餘 ' + activePool.length + ' 碼') : ('未剔除任何號碼，保留 ' + activePool.length + ' 碼'));
 });
 
-/* ================= AI 多組 ================= */
-document.getElementById('toggleAiBtn').addEventListener('click', function() {
+document.getElementById('copyKill').addEventListener('click', function(){
+  if(activePool.length === 0) return showToast('沒有結果', true);
+  var text = '保留 ' + activePool.length + ' 個號碼：\n' + activePool.map(pad).join('  ');
+  if(navigator.clipboard) navigator.clipboard.writeText(text).then(function(){ showToast('✓ 已複製'); });
+});
+
+document.getElementById('toggleAiBtn').addEventListener('click', function(){
   var panel = document.getElementById('aiPanel');
   var isHidden = panel.style.display === 'none' || panel.style.display === '';
   panel.style.display = isHidden ? 'block' : 'none';
   this.textContent = isHidden ? '收起' : '展開';
 });
 
-document.getElementById('runAiBtn').addEventListener('click', function() {
+document.getElementById('runAiBtn').addEventListener('click', function(){
   if(history.length === 0) return showToast('請先同步歷史數據', true);
   var groupCount = parseInt(document.getElementById('aiGroupCount').value) || 10;
   var tCount = parseInt(document.getElementById('aiTicketCount').value) || 17;
   var simCount = parseInt(document.getElementById('aiSimCount').value) || 100000;
   var btn = this; var oldText = btn.textContent;
-  btn.textContent = `正在模擬 ${simCount} 次...`; btn.disabled = true;
+  btn.textContent = '正在模擬 ' + simCount + ' 次...'; btn.disabled = true;
   document.getElementById('aiResult').innerHTML = '<div style="text-align:center;color:var(--gold);padding:10px;">計算中，請稍候...</div>';
-  setTimeout(() => {
+  setTimeout(function(){
     var results = [];
-    for(let g=0; g<groupCount; g++) {
+    for(var g=0; g<groupCount; g++){
       var groupTickets = [];
-      for(let t=0; t<tCount; t++) groupTickets.push(shuffle(activePool).slice(0, ballsPerTicket));
+      for(var t=0; t<tCount; t++) groupTickets.push(shuffle(activePool).slice(0, ballsPerTicket));
       results.push({ id: g+1, tickets: groupTickets, win: 0 });
     }
-    for(let s=0; s<simCount; s++) {
+    for(var s=0; s<simCount; s++){
       var draw = new Set(shuffle(ALL).slice(0, 6));
-      results.forEach(res => {
-        res.tickets.forEach(t => { if(t.every(n => draw.has(n))) res.win++; });
+      results.forEach(function(res){
+        res.tickets.forEach(function(t){ if(t.every(function(n){ return draw.has(n); })) res.win++; });
       });
     }
-    results.sort((a,b) => b.win - a.win);
+    results.sort(function(a,b){ return b.win - a.win; });
     var html = '<div style="font-size:12px;color:var(--muted);margin-bottom:8px;">模擬完成！勝率最高的前三組：</div>';
-    results.slice(0, 3).forEach((r, i) => {
-      html += `<div style="background:var(--panel-2); border:1px solid var(--line); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-        <div><span style="color:var(--gold);font-weight:bold;">Top ${i+1}</span> - 模擬中獎: <b style="color:var(--red);">${r.win}</b> 次</div>
-        <button class="act btn-main sm" style="padding:4px 8px; font-size:11px;" onclick="applyAiGroup(${r.id-1})">應用</button>
-      </div>`;
+    results.slice(0, 3).forEach(function(r, i){
+      html += '<div style="background:var(--panel-2);border:1px solid var(--line);padding:8px;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><div><span style="color:var(--gold);font-weight:bold;">Top ' + (i+1) + '</span> - 模擬中獎: <b style="color:var(--red);">' + r.win + '</b> 次</div><button class="act btn-main sm" style="padding:4px 8px;font-size:11px;" onclick="applyAiGroup(' + (r.id-1) + ')">應用</button></div>';
     });
     window._aiResults = results;
     document.getElementById('aiResult').innerHTML = html;
@@ -1703,7 +1474,7 @@ document.getElementById('runAiBtn').addEventListener('click', function() {
   }, 100);
 });
 
-window.applyAiGroup = function(idx) {
+window.applyAiGroup = function(idx){
   if(!window._aiResults || !window._aiResults[idx]) return;
   TICKETS = window._aiResults[idx].tickets;
   renderTickets();
@@ -1711,29 +1482,28 @@ window.applyAiGroup = function(idx) {
   showToast('✓ 已應用 AI 推薦組合');
 };
 
-/* ================= 核對與導入 ================= */
-function buildDrawInputs(){
+(function buildDrawInputs(){
   var labels = ['1st','2nd','3rd','4th','5th','6th','特別號'];
-  document.getElementById('drawInputs').innerHTML = labels.map((lb, i) => 
-    `<div class="di-wrap"><input class="di ${i===6?'di-special':''}" maxlength="2" inputmode="numeric" placeholder="?"><span class="di-label ${i===6?'sp':''}">${lb}</span></div>`
-  ).join('');
-}
-buildDrawInputs();
+  document.getElementById('drawInputs').innerHTML = labels.map(function(lb, i){
+    return '<div class="di-wrap"><input class="di ' + (i===6?'di-special':'') + '" maxlength="2" inputmode="numeric" placeholder="?"><span class="di-label ' + (i===6?'sp':'') + '">' + lb + '</span></div>';
+  }).join('');
+})();
 
 document.getElementById('randomDraw').addEventListener('click', function(){
   var picked = shuffle(ALL).slice(0, 7);
-  document.querySelectorAll('.di').forEach((inp, i) => { inp.value = pad(picked[i]); });
+  document.querySelectorAll('.di').forEach(function(inp, i){ inp.value = pad(picked[i]); });
 });
 
 document.getElementById('confirmDraw').addEventListener('click', function(){
   if(TICKETS.length === 0) return showToast('請先生成注單', true);
   var inputs = document.querySelectorAll('.di');
-  var vals = []; var isEmpty = Array.from(inputs).every(inp => !inp.value.trim());
-  if(isEmpty) {
+  var vals = [];
+  var isEmpty = Array.prototype.every.call(inputs, function(inp){ return !inp.value.trim(); });
+  if(isEmpty){
     var picked = shuffle(ALL).slice(0, 7);
-    inputs.forEach((inp, i) => { inp.value = pad(picked[i]); vals.push(picked[i]); });
+    inputs.forEach(function(inp, i){ inp.value = pad(picked[i]); vals.push(picked[i]); });
   } else {
-    for(let i=0; i<7; i++) {
+    for(var i=0; i<7; i++){
       var v = parseInt(inputs[i].value.trim(), 10);
       if(isNaN(v) || v < 1 || v > 49) return showToast('號碼必須是 1-49', true);
       vals.push(v);
@@ -1741,46 +1511,42 @@ document.getElementById('confirmDraw').addEventListener('click', function(){
   }
   var mainSet = new Set(vals.slice(0,6)); var special = vals[6];
   var winCount = 0, hitDist = {};
-  document.querySelectorAll('.ball.win').forEach(b => b.classList.remove('win'));
-  TICKETS.forEach((t, idx) => {
-    var hit = t.filter(n => mainSet.has(n) || n === special).length;
+  document.querySelectorAll('.ball.win').forEach(function(b){ b.classList.remove('win'); });
+  TICKETS.forEach(function(t, idx){
+    var hit = t.filter(function(n){ return mainSet.has(n) || n === special; }).length;
     hitDist[hit] = (hitDist[hit]||0) + 1;
     if(hit === t.length) winCount++;
-    document.querySelectorAll('#tickets .ticket')[idx].querySelectorAll('.ball').forEach((bEl, j) => {
-      if(mainSet.has(t[j]) || t[j] === special) bEl.classList.add('win');
-    });
+    var ticketEl = document.querySelectorAll('#tickets .ticket')[idx];
+    if(ticketEl){
+      ticketEl.querySelectorAll('.ball').forEach(function(bEl, j){
+        if(mainSet.has(t[j]) || t[j] === special) bEl.classList.add('win');
+      });
+    }
   });
-  var drawBallsHtml = vals.map((n, i) => `<span class="ball ${getWave(n)}" style="${i===6?'border:2px dashed var(--gold);':''}">${pad(n)}</span>`).join('');
-  document.getElementById('verdict').innerHTML = `<div style="font-size:14px; font-weight:bold; color:var(--gold); margin-bottom:8px;">本期開獎</div>
-    <div style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin-bottom:12px;">${drawBallsHtml}</div>
-    <div style="background:var(--panel-2); padding:12px; border-radius:8px; color:var(--text);">
-      您的注單共中獎：<b style="color:var(--red); font-size:18px;">${winCount}</b> 注！
-    </div>`;
+  var drawBallsHtml = vals.map(function(n, i){ return '<span class="ball ' + getWave(n) + '" style="' + (i===6?'border:2px dashed var(--gold);':'') + '">' + pad(n) + '</span>'; }).join('');
+  document.getElementById('verdict').innerHTML = '<div style="font-size:14px;font-weight:bold;color:var(--gold);margin-bottom:8px;">本期開獎</div><div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;">' + drawBallsHtml + '</div><div style="background:var(--panel-2);padding:12px;border-radius:8px;color:var(--text);">您的注單共中獎：<b style="color:var(--red);font-size:18px;">' + winCount + '</b> 注！</div>';
   var chartHtml = '<div style="font-size:13px;color:var(--muted);margin-bottom:12px;font-weight:600;">📊 命中分佈</div><div style="display:flex;align-items:flex-end;justify-content:space-around;height:120px;gap:6px;padding:0 4px;">';
-  var maxHit = ballsPerTicket, maxCount = Math.max(...Object.values(hitDist), 1);
-  for(let h=0; h<=maxHit; h++) {
-    let cnt = hitDist[h] || 0, pct = (cnt/maxCount)*100, isWin = (h===maxHit);
-    let barColor = isWin ? 'var(--gold)' : 'var(--panel-2)';
-    chartHtml += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <div style="font-size:12px;color:var(--gold);font-weight:bold;">${cnt}</div>
-      <div style="width:100%;height:${Math.max(pct,3)}%;background:${barColor};border-radius:4px 4px 0 0;min-height:4px;"></div>
-      <div style="font-size:11px;color:var(--muted);">${h}/${maxHit}</div>
-    </div>`;
+  var maxHit = ballsPerTicket;
+  var maxCount = Math.max.apply(null, Object.values(hitDist).concat([1]));
+  for(var h=0; h<=maxHit; h++){
+    var cnt = hitDist[h] || 0; var pct = (cnt/maxCount)*100; var isWin = (h===maxHit);
+    var barColor = isWin ? 'var(--gold)' : 'var(--panel-2)';
+    chartHtml += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="font-size:12px;color:var(--gold);font-weight:bold;">' + cnt + '</div><div style="width:100%;height:' + Math.max(pct,3) + '%;background:' + barColor + ';border-radius:4px 4px 0 0;min-height:4px;"></div><div style="font-size:11px;color:var(--muted);">' + h + '/' + maxHit + '</div></div>';
   }
   chartHtml += '</div>';
   document.getElementById('hitChart').innerHTML = chartHtml;
   document.getElementById('hitChart').style.display = 'block';
 });
 
-document.getElementById('importTicketsBtn').addEventListener('click', async function() {
-  var text = await prompt('請粘貼自定義注單，每行一注：', '');
+document.getElementById('importTicketsBtn').addEventListener('click', async function(){
+  var text = await window.prompt('請粘貼自定義注單，每行一注：', '');
   if(!text) return;
   var lines = text.split(/\r?\n/); var newTickets = [];
-  lines.forEach(line => {
+  lines.forEach(function(line){
     var nums = line.match(/\d+/g);
     if(nums){
-      var arr = nums.map(Number).filter(n => n>=1 && n<=49);
-      var unique = Array.from(new Set(arr)).sort((a,b)=>a-b);
+      var arr = nums.map(Number).filter(function(n){ return n>=1 && n<=49; });
+      var unique = Array.from(new Set(arr)).sort(function(a,b){ return a-b; });
       if(unique.length >= 2 && unique.length <= 6) newTickets.push(unique);
     }
   });
@@ -1789,50 +1555,468 @@ document.getElementById('importTicketsBtn').addEventListener('click', async func
   showToast('成功導入 ' + TICKETS.length + ' 注');
 });
 
-document.getElementById('verifyHistoryBtn').addEventListener('click', function() {
+document.getElementById('verifyHistoryBtn').addEventListener('click', function(){
   if(TICKETS.length === 0) return showToast('沒有注單可核對', true);
   if(rawRecords.length === 0) return showToast('無歷史記錄', true);
   var totalWin = 0; var details = [];
-  rawRecords.forEach(rec => {
+  rawRecords.forEach(function(rec){
     var mainSet = new Set(rec.nums); var hitCount = 0;
-    TICKETS.forEach(t => {
-      var hit = t.filter(n => mainSet.has(n) || n === rec.extra).length;
+    TICKETS.forEach(function(t){
+      var hit = t.filter(function(n){ return mainSet.has(n) || n === rec.extra; }).length;
       if(hit === t.length) hitCount++;
     });
-    if(hitCount > 0) { totalWin += hitCount; details.push({ issue: rec.issue, win: hitCount }); }
+    if(hitCount > 0){ totalWin += hitCount; details.push({ issue: rec.issue, win: hitCount }); }
   });
-  var resultArea = document.getElementById('verifyResultArea'); var summaryEl = document.getElementById('verifySummary');
-  if(totalWin > 0) {
-    var html = `在總共 <b>${rawRecords.length}</b> 期歷史中，您的注單共中獎 <b style="color:var(--red);font-size:16px;">${totalWin}</b> 注！<br><br>最近中獎期號：<br>`;
-    details.slice(0, 5).forEach(d => { html += `<span style="color:var(--gold);">${d.issue}</span> 期：中 ${d.win} 注<br>`; });
-    if(details.length > 5) html += `...等共 ${details.length} 期中獎。`;
+  var resultArea = document.getElementById('verifyResultArea');
+  var summaryEl = document.getElementById('verifySummary');
+  if(totalWin > 0){
+    var html = '在總共 <b>' + rawRecords.length + '</b> 期歷史中，您的注單共中獎 <b style="color:var(--red);font-size:16px;">' + totalWin + '</b> 注！<br><br>最近中獎期號：<br>';
+    details.slice(0, 5).forEach(function(d){ html += '<span style="color:var(--gold);">' + d.issue + '</span> 期：中 ' + d.win + ' 注<br>'; });
+    if(details.length > 5) html += '...等共 ' + details.length + ' 期中獎。';
     summaryEl.innerHTML = html;
   } else {
-    summaryEl.innerHTML = `在總共 <b>${rawRecords.length}</b> 期歷史中，您的注單遺憾未能中獎。`;
+    summaryEl.innerHTML = '在總共 <b>' + rawRecords.length + '</b> 期歷史中，您的注單遺憾未能中獎。';
   }
   resultArea.style.display = 'block';
 });
 
+/* ================= 策略模型 + 回測排行 ================= */
+var STRATEGIES = [
+  { id:'random', name:'🎲 純隨機（基準）', desc:'完全隨機選號，作為對照組' },
+  { id:'hot', name:'🔥 熱號追熱', desc:'近 20 期出現頻率最高的號碼池' },
+  { id:'cold', name:'❄️ 冷號回補', desc:'近 20 期出現頻率最低的號碼池' },
+  { id:'omission', name:'📊 遺漏回歸', desc:'當前遺漏接近歷史平均的號碼' },
+  { id:'wave', name:'🔮 波色均衡', desc:'每注紅藍綠波比例接近均分' },
+  { id:'sumRange', name:'➕ 和值區間', desc:'每注和值落在歷史常見區間' },
+  { id:'parity', name:'⚖️ 奇偶大小均衡', desc:'單雙、大小比例接近對半' },
+  { id:'tailSpread', name:'🔢 尾數分散', desc:'每注尾數盡量不重複' },
+  { id:'noConsecutive', name:'🚫 連號規避', desc:'避開連續號碼組合' },
+  { id:'aiComposite', name:'🧠 AI 綜合加權', desc:'頻率+遺漏+區間多因子加權' }
+];
+
+function makeRng(seed){
+  var s = seed >>> 0;
+  return function(){
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function pickK(pool, k, rng){
+  var a = pool.slice();
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(rng() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a.slice(0, k);
+}
+
+function freqMap(hist, win){
+  var f = {}; for(var i = 1; i <= 49; i++) f[i] = 0;
+  hist.slice(0, win).forEach(function(r){
+    r.nums.forEach(function(n){ f[n]++; });
+    if(r.extra) f[r.extra]++;
+  });
+  return f;
+}
+
+function omissionMap(hist){
+  var o = {};
+  for(var i = 1; i <= 49; i++) o[i] = hist.length;
+  for(var j = 0; j < hist.length; j++){
+    var seen = {};
+    hist[j].nums.forEach(function(n){ seen[n] = 1; });
+    if(hist[j].extra) seen[hist[j].extra] = 1;
+    for(var n = 1; n <= 49; n++){
+      if(seen[n] && o[n] === hist.length) o[n] = j;
+    }
+  }
+  return o;
+}
+
+function sRandom(ctx){
+  var out = [];
+  for(var i = 0; i < ctx.k; i++) out.push(pickK(ALL, ctx.n, ctx.rng).sort(function(a,b){ return a-b; }));
+  return out;
+}
+
+function sPool(ctx, pool){
+  if(pool.length < ctx.n) pool = ALL.slice();
+  var out = [];
+  for(var i = 0; i < ctx.k; i++) out.push(pickK(pool, ctx.n, ctx.rng).sort(function(a,b){ return a-b; }));
+  return out;
+}
+
+function sHot(ctx){
+  var f = freqMap(ctx.hist, 20);
+  var sorted = ALL.slice().sort(function(a,b){ return f[b] - f[a]; });
+  return sPool(ctx, sorted.slice(0, 25));
+}
+
+function sCold(ctx){
+  var f = freqMap(ctx.hist, 20);
+  var sorted = ALL.slice().sort(function(a,b){ return f[a] - f[b]; });
+  return sPool(ctx, sorted.slice(0, 25));
+}
+
+function sOmission(ctx){
+  var o = omissionMap(ctx.hist);
+  var avg = 0; for(var n = 1; n <= 49; n++) avg += o[n]; avg /= 49;
+  var sorted = ALL.slice().sort(function(a,b){ return Math.abs(o[a] - avg) - Math.abs(o[b] - avg); });
+  return sPool(ctx, sorted.slice(0, 25));
+}
+
+function sWave(ctx){
+  var red = [], blue = [], green = [];
+  ALL.forEach(function(n){ if(WAVE_RED.has(n)) red.push(n); else if(WAVE_BLUE.has(n)) blue.push(n); else green.push(n); });
+  var out = [];
+  for(var i = 0; i < ctx.k; i++){
+    var base = Math.floor(ctx.n / 3); var rem = ctx.n - base * 3;
+    var arr = [base, base, base];
+    for(var r = 0; r < rem; r++) arr[Math.floor(ctx.rng() * 3)]++;
+    var tk = pickK(red, arr[0], ctx.rng).concat(pickK(blue, arr[1], ctx.rng)).concat(pickK(green, arr[2], ctx.rng));
+    if(tk.length < ctx.n){
+      var extra = pickK(ALL.filter(function(n){ return tk.indexOf(n) === -1; }), ctx.n - tk.length, ctx.rng);
+      tk = tk.concat(extra);
+    }
+    out.push(tk.slice(0, ctx.n).sort(function(a,b){ return a-b; }));
+  }
+  return out;
+}
+
+function sSum(ctx){
+  var out = [];
+  var minSum = ctx.n * 17, maxSum = ctx.n * 33;
+  for(var i = 0; i < ctx.k; i++){
+    var tk = null;
+    for(var tr = 0; tr < 50; tr++){
+      var c = pickK(ALL, ctx.n, ctx.rng);
+      var s = c.reduce(function(a,b){ return a+b; }, 0);
+      if(s >= minSum && s <= maxSum){ tk = c; break; }
+    }
+    if(!tk) tk = pickK(ALL, ctx.n, ctx.rng);
+    out.push(tk.sort(function(a,b){ return a-b; }));
+  }
+  return out;
+}
+
+function sParity(ctx){
+  var out = [];
+  for(var i = 0; i < ctx.k; i++){
+    var tk = null;
+    for(var tr = 0; tr < 50; tr++){
+      var c = pickK(ALL, ctx.n, ctx.rng);
+      var odd = c.filter(function(n){ return n % 2 === 1; }).length;
+      var big = c.filter(function(n){ return n >= 25; }).length;
+      if(Math.abs(odd - ctx.n / 2) <= 1 && Math.abs(big - ctx.n / 2) <= 1){ tk = c; break; }
+    }
+    if(!tk) tk = pickK(ALL, ctx.n, ctx.rng);
+    out.push(tk.sort(function(a,b){ return a-b; }));
+  }
+  return out;
+}
+
+function sTail(ctx){
+  var out = [];
+  for(var i = 0; i < ctx.k; i++){
+    var usedTails = {};
+    var tk = [];
+    var pool = ALL.slice();
+    for(var j = 0; j < ctx.n; j++){
+      var cand = pool.filter(function(n){ return !usedTails[n % 10]; });
+      if(cand.length === 0) cand = pool;
+      var pick = cand[Math.floor(ctx.rng() * cand.length)];
+      tk.push(pick);
+      usedTails[pick % 10] = 1;
+      pool = pool.filter(function(n){ return n !== pick; });
+    }
+    out.push(tk.sort(function(a,b){ return a-b; }));
+  }
+  return out;
+}
+
+function sNoCons(ctx){
+  var out = [];
+  for(var i = 0; i < ctx.k; i++){
+    var tk = null;
+    for(var tr = 0; tr < 50; tr++){
+      var c = pickK(ALL, ctx.n, ctx.rng).sort(function(a,b){ return a-b; });
+      var hasCons = false;
+      for(var j = 1; j < c.length; j++){ if(c[j] - c[j-1] === 1){ hasCons = true; break; } }
+      if(!hasCons){ tk = c; break; }
+    }
+    if(!tk) tk = pickK(ALL, ctx.n, ctx.rng).sort(function(a,b){ return a-b; });
+    out.push(tk);
+  }
+  return out;
+}
+
+function sAi(ctx){
+  var f = freqMap(ctx.hist, 30);
+  var o = omissionMap(ctx.hist);
+  var maxF = 1, maxO = 1;
+  for(var n = 1; n <= 49; n++){ if(f[n] > maxF) maxF = f[n]; if(o[n] > maxO) maxO = o[n]; }
+  var score = {};
+  for(var n = 1; n <= 49; n++){
+    score[n] = (f[n] / maxF) * 0.4 + (o[n] / maxO) * 0.3 + (1 - Math.abs(n - 25) / 24) * 0.3;
+  }
+  var sorted = ALL.slice().sort(function(a,b){ return score[b] - score[a]; });
+  return sPool(ctx, sorted.slice(0, 30));
+}
+
+function genByStrategy(id, hist, n, k, rng){
+  var ctx = { hist: hist, n: n, k: k, rng: rng };
+  switch(id){
+    case 'random': return sRandom(ctx);
+    case 'hot': return sHot(ctx);
+    case 'cold': return sCold(ctx);
+    case 'omission': return sOmission(ctx);
+    case 'wave': return sWave(ctx);
+    case 'sumRange': return sSum(ctx);
+    case 'parity': return sParity(ctx);
+    case 'tailSpread': return sTail(ctx);
+    case 'noConsecutive': return sNoCons(ctx);
+    case 'aiComposite': return sAi(ctx);
+    default: return sRandom(ctx);
+  }
+}
+
+function runBacktestCalc(periods, k, n){
+  var stats = {};
+  STRATEGIES.forEach(function(s){
+    stats[s.id] = { total: 0, sumHits: 0, hit1: 0, hit2: 0, hit3: 0, full: 0, maxHit: 0, periods: 0 };
+  });
+  var actualPeriods = 0;
+  for(var t = 0; t < periods && t < rawRecords.length; t++){
+    var rec = rawRecords[t];
+    var drawSet = new Set(rec.nums);
+    if(rec.extra) drawSet.add(rec.extra);
+    var trainHist = rawRecords.slice(t + 1);
+    if(trainHist.length < 5) break;
+    actualPeriods++;
+    for(var si = 0; si < STRATEGIES.length; si++){
+      var s = STRATEGIES[si];
+      var rng = makeRng((t + 1) * 10007 + si * 131 + 17);
+      var tickets = [];
+      try { tickets = genByStrategy(s.id, trainHist, n, k, rng); } catch(e){ tickets = []; }
+      var st = stats[s.id];
+      st.periods++;
+      for(var ti = 0; ti < tickets.length; ti++){
+        var tk = tickets[ti];
+        st.total++;
+        var hit = 0;
+        for(var z = 0; z < tk.length; z++){ if(drawSet.has(tk[z])) hit++; }
+        st.sumHits += hit;
+        if(hit >= 1) st.hit1++;
+        if(hit >= 2) st.hit2++;
+        if(hit >= 3) st.hit3++;
+        if(hit === tk.length) st.full++;
+        if(hit > st.maxHit) st.maxHit = hit;
+      }
+    }
+  }
+  var rows = STRATEGIES.map(function(s){
+    var st = stats[s.id];
+    var total = st.total || 1;
+    var avgHits = st.sumHits / total;
+    var h1 = st.hit1 / total * 100;
+    var h2 = st.hit2 / total * 100;
+    var h3 = st.hit3 / total * 100;
+    var score = avgHits * 100 + h1 * 0.3 + h2 * 1.0 + h3 * 3.0;
+    return {
+      id: s.id, name: s.name, desc: s.desc,
+      total: st.total, avgHits: avgHits, hit1Rate: h1, hit2Rate: h2, hit3Rate: h3,
+      full: st.full, maxHit: st.maxHit, periods: st.periods, score: score
+    };
+  });
+  rows.sort(function(a,b){ return b.score - a.score; });
+  return { rows: rows, actualPeriods: actualPeriods };
+}
+
+function renderBacktestResult(result, meta){
+  var el = document.getElementById('btLeaderboard');
+  var rows = result.rows;
+  var html = '<div class="bt-wrap"><table class="bt-table"><thead><tr>'
+    + '<th>#</th><th>策略</th><th>總注數</th><th>平均命中球</th><th>中1球率</th><th>中2球率</th><th>中3球率</th><th>最高單注</th><th>全中</th><th>操作</th>'
+    + '</tr></thead><tbody>';
+  rows.forEach(function(r, i){
+    var cls = i === 0 ? 'top1' : (i === 1 ? 'top2' : (i === 2 ? 'top3' : ''));
+    var crown = i === 0 ? '<span class="bt-badge">🏆 冠軍</span>' : '';
+    var applied = (window._appliedStrategy === r.id) ? ' applied' : '';
+    html += '<tr class="' + cls + applied + '">'
+      + '<td>' + (i + 1) + '</td>'
+      + '<td><b>' + r.name + '</b>' + crown + '<div style="font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px;">' + r.desc + '</div></td>'
+      + '<td>' + r.total + '</td>'
+      + '<td><b>' + r.avgHits.toFixed(3) + '</b></td>'
+      + '<td>' + r.hit1Rate.toFixed(1) + '%</td>'
+      + '<td>' + r.hit2Rate.toFixed(1) + '%</td>'
+      + '<td>' + r.hit3Rate.toFixed(1) + '%</td>'
+      + '<td>' + r.maxHit + ' 球</td>'
+      + '<td>' + r.full + '</td>'
+      + '<td><button class="act btn-main sm" style="padding:5px 10px;font-size:11px;white-space:nowrap;" data-strategy="' + r.id + '" onclick="applyStrategy(\'' + r.id + '\')">🎯 用此策略</button></td>'
+      + '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<div class="bt-note">'
+    + '📌 <b>回測說明</b><br>'
+    + '· 有效回測 <b>' + result.actualPeriods + '</b> 期 ｜ 每策略 <b>' + meta.k + '</b> 注 ｜ 每注 <b>' + meta.n + '</b> 球 ｜ 共 ' + STRATEGIES.length + ' 種策略<br>'
+    + '· <b>平均命中球</b> = 所有注單命中球數總和 ÷ 總注數（含正碼與特別號）<br>'
+    + '· <b>中 X 球率</b> = 至少命中 X 球的注數 ÷ 總注數<br>'
+    + '· 每期回測僅使用該期<b>之前</b>的歷史數據生成號碼，避免未來函數<br>'
+    + '· <b>全中</b> = 一注所有球都命中開獎號碼（六合彩 6 中 6 概率極低，0 屬正常）<br>'
+    + '· 點「🎯 用此策略」會用<b>最新一期之後</b>的視角，按該策略生成新注單，可直接去核對<br>'
+    + '· ⚠️ 彩票開獎為獨立隨機事件，任何策略都無法保證命中。排行榜僅反映該段歷史的統計表現，不代表未來。'
+    + '</div>';
+  el.innerHTML = html;
+}
+window.applyStrategy = function(strategyId){
+  if(!rawRecords || rawRecords.length < 6) return showToast('歷史數據不足，請先同步', true);
+  var meta = null;
+  for(var i = 0; i < STRATEGIES.length; i++){ if(STRATEGIES[i].id === strategyId){ meta = STRATEGIES[i]; break; } }
+  if(!meta) return showToast('未知策略', true);
+
+  var k = parseInt(document.getElementById('btTicketCount').value, 10) || 10;
+  var n = parseInt(document.getElementById('btBalls').value, 10) || 6;
+  k = Math.max(1, Math.min(k, 50));
+  n = Math.max(2, Math.min(n, 6));
+
+  var seed = ((Date.now() % 100000000) ^ (k * 131) ^ (n * 17) ^ strategyId.length) >>> 0;
+  var rng = makeRng(seed);
+  var tickets;
+  try {
+    tickets = genByStrategy(strategyId, rawRecords, n, k, rng);
+  } catch(e){
+    return showToast('策略生成失敗：' + (e && e.message ? e.message : e), true);
+  }
+  if(!tickets || tickets.length === 0) return showToast('策略未生成注單', true);
+
+  TICKETS = tickets;
+  ballsPerTicket = n;
+  window._appliedStrategy = strategyId;
+
+  document.querySelectorAll('#ballCountTabs button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.b === String(n));
+  });
+  document.getElementById('ticketInfo').innerHTML = '已套用「' + meta.name.replace(/^[^\s]+\s*/, '') + '」策略，生成 ' + tickets.length + ' 注，每注 ' + n + ' 球。';
+
+  renderTickets();
+
+  var btEl = document.getElementById('btLeaderboard');
+  if(btEl){
+    btEl.querySelectorAll('tr').forEach(function(tr){ tr.classList.remove('applied'); });
+    var btn = btEl.querySelector('[data-strategy="' + strategyId + '"]');
+    if(btn){ var tr = btn.closest('tr'); if(tr) tr.classList.add('applied'); }
+  }
+
+  showToast('✓ 已用「' + meta.name + '」生成 ' + tickets.length + ' 注，可去「核對」比對');
+
+  var ticketsEl = document.getElementById('tickets');
+  if(ticketsEl) ticketsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};document.getElementById('btPeriodTabs').addEventListener('click', function(e){
+  var btn = e.target.closest('button'); if(!btn) return;
+  var customInput = document.getElementById('customBtPeriod');
+  if(btn.dataset.p === 'custom'){
+    customInput.style.display = '';
+    var v = parseInt(customInput.value, 10) || 100;
+    v = Math.max(5, Math.min(v, 500));
+    customInput.value = v;
+    backtestPeriods = v;
+  } else {
+    customInput.style.display = 'none';
+    backtestPeriods = parseInt(btn.dataset.p, 10) || 50;
+  }
+  this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+});
+
+document.getElementById('customBtPeriod').addEventListener('input', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v) || v < 5) return;
+  backtestPeriods = Math.min(v, 500);
+});
+
+document.getElementById('customBtPeriod').addEventListener('change', function(){
+  var v = parseInt(this.value, 10);
+  if(isNaN(v)) v = 100;
+  v = Math.max(5, Math.min(v, 500));
+  this.value = v;
+  backtestPeriods = v;
+});
+
+document.getElementById('runBacktestBtn').addEventListener('click', function(){
+  if(rawRecords.length < 10) return showToast('歷史數據不足，請先同步', true);
+  var k = parseInt(document.getElementById('btTicketCount').value, 10) || 10;
+  var n = parseInt(document.getElementById('btBalls').value, 10) || 6;
+  k = Math.max(1, Math.min(k, 50));
+  n = Math.max(2, Math.min(n, 6));
+
+  var customInput = document.getElementById('customBtPeriod');
+  if(customInput && customInput.style.display !== 'none'){
+    var cv = parseInt(customInput.value, 10);
+    if(!isNaN(cv)) backtestPeriods = Math.max(5, Math.min(cv, 500));
+  }
+
+  // 期數不足：提示並中斷，不自動截斷
+  if(backtestPeriods > rawRecords.length){
+    var warnMsg = '⚠️ 回測已中斷：請求 ' + backtestPeriods + ' 期，但可用歷史只有 ' + rawRecords.length + ' 期。請減少期數或先同步更多數據。';
+    document.getElementById('btStatus').textContent = warnMsg;
+    document.getElementById('btLeaderboard').innerHTML = '';
+    showToast('⚠️ 期數不足，回測已中斷（可用 ' + rawRecords.length + ' 期）', true);
+    console.warn('[回測中斷] 請求期數：' + backtestPeriods + '，可用期數：' + rawRecords.length);
+    return;
+  }
+
+  var periods = backtestPeriods;
+
+  var btn = this;
+  btn.disabled = true;
+  var oldText = btn.textContent;
+  btn.textContent = '回測中...';
+  var msg = '正在計算 ' + periods + ' 期 × ' + STRATEGIES.length + ' 策略 × ' + k + ' 注...';
+  if(backtestPeriods > rawRecords.length){
+    msg += '（請求 ' + backtestPeriods + ' 期，歷史只有 ' + rawRecords.length + ' 期，已自動截斷）';
+  }
+  document.getElementById('btStatus').textContent = msg;
+  document.getElementById('btLeaderboard').innerHTML = '';
+
+  setTimeout(function(){
+    try {
+      var t0 = Date.now();
+      var result = runBacktestCalc(periods, k, n);
+      var elapsed = ((Date.now() - t0) / 1000).toFixed(2);
+      renderBacktestResult(result, { k: k, n: n });
+      document.getElementById('btStatus').textContent = '✅ 回測完成，耗時 ' + elapsed + ' 秒，排行榜按綜合評分（平均命中球優先）排序';
+      showToast('✅ 回測完成');
+    } catch(err){
+      console.error(err);
+      document.getElementById('btStatus').textContent = '❌ 回測失敗：' + (err && err.message ? err.message : err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
+  }, 60);
+});
+
 document.getElementById('saveToVaultBtn').addEventListener('click', function(){
   if(TICKETS.length === 0) return showToast('沒有注單可存入', true);
-  var vault = []; try{ vault = JSON.parse(localStorage.getItem(LS_VAULT_KEY) || '[]'); }catch(e){}
+  var vault = [];
+  try { vault = JSON.parse(localStorage.getItem(LS_VAULT_KEY) || '[]'); } catch(e){}
   vault.push({ time: nowString(), tickets: TICKETS, ballsPerTicket: ballsPerTicket });
   if(vault.length > 10) vault = vault.slice(-10);
   localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vault));
   showToast('✅ 已存入存根'); renderVault();
 });
 
-function renderVault() {
+function renderVault(){
   var panel = document.getElementById('vaultPanel'), vault = [];
-  try{ vault = JSON.parse(localStorage.getItem(LS_VAULT_KEY) || '[]'); }catch(e){}
-  if(vault.length === 0) return panel.innerHTML = '<div style="font-size:13px; color:var(--muted); text-align:center;">暫無存根。</div>';
+  try { vault = JSON.parse(localStorage.getItem(LS_VAULT_KEY) || '[]'); } catch(e){}
+  if(vault.length === 0){ panel.innerHTML = '<div style="font-size:13px;color:var(--muted);text-align:center;">暫無存根。</div>'; return; }
   var html = '';
-  for(var i = vault.length - 1; i >= 0; i--) {
+  for(var i = vault.length - 1; i >= 0; i--){
     var v = vault[i];
-    html += '<div class="vault-item"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px;"><span>' + v.time + '</span></div><div style="display:flex; flex-direction:column; gap:6px;">';
+    html += '<div class="vault-item"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px;"><span>' + v.time + '</span></div><div style="display:flex;flex-direction:column;gap:6px;">';
     v.tickets.forEach(function(t, idx){
       var balls = t.map(function(n){ return '<span class="ball ' + getWave(n) + '" style="width:22px;height:22px;font-size:11px;">' + pad(n) + '</span>'; }).join('');
-      html += '<div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted);"><span style="min-width:40px;">第' + (idx+1) + '注</span><div style="display:flex;gap:4px;flex-wrap:wrap;">' + balls + '</div></div>';
+      html += '<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);"><span style="min-width:40px;">第' + (idx+1) + '注</span><div style="display:flex;gap:4px;flex-wrap:wrap;">' + balls + '</div></div>';
     });
     html += '</div></div>';
   }
@@ -1843,51 +2027,63 @@ document.getElementById('copyTickets').addEventListener('click', function(){
   if(TICKETS.length === 0) return showToast('沒有注單', true);
   var lines = ['【金運寶庫 · 注單】'];
   TICKETS.forEach(function(t,i){ lines.push('第 ' + String(i+1).padStart(2,'0') + ' 注：' + t.map(pad).join('  ')); });
-  if(navigator.clipboard) navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast('✓ 已複製'));
+  if(navigator.clipboard) navigator.clipboard.writeText(lines.join('\n')).then(function(){ showToast('✓ 已複製'); });
 });
 
 document.getElementById('exportImageBtn').addEventListener('click', function(){
   if(TICKETS.length === 0) return showToast('沒有注單', true);
-  var canvas = document.createElement('canvas'); var ctx = canvas.getContext('2d');
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
   var width = 600, ticketHeight = 60, headerHeight = 120, padding = 20, footerHeight = 60;
   canvas.width = width; canvas.height = headerHeight + TICKETS.length * ticketHeight + footerHeight;
-  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#F5F7FA' : '#0b0f16'; ctx.fillRect(0, 0, width, canvas.height);
+  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#F5F7FA' : '#0b0f16';
+  ctx.fillRect(0, 0, width, canvas.height);
   ctx.fillStyle = document.body.classList.contains('light-mode') ? '#002366' : '#f0b429';
-  ctx.font = 'bold 24px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('金運寶庫 · 注單', width/2, 40);
-  ctx.fillStyle = '#8b98a9'; ctx.font = '13px sans-serif'; ctx.fillText('時間：' + nowString(), width/2, 70);
+  ctx.font = 'bold 24px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('金運寶庫 · 注單', width/2, 40);
+  ctx.fillStyle = '#8b98a9'; ctx.font = '13px sans-serif';
+  ctx.fillText('時間：' + nowString(), width/2, 70);
   TICKETS.forEach(function(t, i){
     var y = headerHeight + i * ticketHeight;
-    ctx.fillStyle = '#8b98a9'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left'; ctx.fillText('第 ' + (i+1) + ' 注', padding, y + 20);
+    ctx.fillStyle = '#8b98a9'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('第 ' + (i+1) + ' 注', padding, y + 20);
     t.forEach(function(n, j){
       var cx = padding + 80 + j * 42 + 18, cy = y + 20, wave = getWave(n);
       var textColor = wave === 'w-red' ? '#ef4444' : (wave === 'w-blue' ? '#3b82f6' : '#22c55e');
-      ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2); ctx.fillStyle = 'rgba(128,128,128,0.1)'; ctx.fill(); ctx.strokeStyle = textColor; ctx.lineWidth = 1; ctx.stroke();
-      ctx.fillStyle = textColor; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(pad(n), cx, cy);
+      ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(128,128,128,0.1)'; ctx.fill();
+      ctx.strokeStyle = textColor; ctx.lineWidth = 1; ctx.stroke();
+      ctx.fillStyle = textColor; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(pad(n), cx, cy);
     });
   });
   var dataUrl = canvas.toDataURL('image/png');
   var modal = document.createElement('div');
   modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  var box = document.createElement('div'); box.style.cssText = 'background:var(--panel); width:100%; max-width:400px; padding:20px; border-radius:16px; text-align:center;';
-  box.innerHTML = '<img src="' + dataUrl + '" style="width:100%; border-radius:10px; margin-bottom:12px;" /><div style="font-size:13px; color:var(--muted); margin-bottom:16px;">請長按上方圖片保存</div><button onclick="this.closest(\'div[style]\').parentNode.remove()" style="width:100%; padding:12px; border-radius:10px; border:none; background:var(--gold); color:#fff; font-weight:bold;">完成</button>';
-  modal.appendChild(box); modal.onclick = function(e) { if(e.target === modal) modal.remove(); }; document.body.appendChild(modal);
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--panel);width:100%;max-width:400px;padding:20px;border-radius:16px;text-align:center;';
+  box.innerHTML = '<img src="' + dataUrl + '" style="width:100%;border-radius:10px;margin-bottom:12px;" /><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">請長按上方圖片保存</div><button class="act btn-main" style="width:100%;">完成</button>';
+  box.querySelector('button').addEventListener('click', function(){ modal.remove(); });
+  modal.appendChild(box);
+  modal.addEventListener('click', function(e){ if(e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
 });
 
 document.querySelectorAll('.nav-item').forEach(function(item){
   item.addEventListener('click', function(){
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    item.classList.add('active'); document.getElementById(item.dataset.tab).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+    document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+    item.classList.add('active');
+    document.getElementById(item.dataset.tab).classList.add('active');
     window.scrollTo(0,0);
-    if(item.dataset.tab === 'tab-vault') renderVaults(); 
-    if(item.dataset.tab === 'tab-backtest') renderVault(); 
+    if(item.dataset.tab === 'tab-vault') renderVaults();
+    if(item.dataset.tab === 'tab-backtest') renderVault();
   });
 });
 
-/* ================= 會員與啟動 ================= */
-const API_URL = 'https://winter-night-ffc5.vivibeauty01.workers.dev';
-let isVip = false;
-window.showVipModal = function(){ if(isVip) return showToast('已是會員'); document.getElementById('vipMask').style.display = 'flex'; }
+var API_URL = 'https://winter-night-ffc5.vivibeauty01.workers.dev';
+var isVip = false;
+window.showVipModal = function(){ if(isVip) return showToast('已是會員'); document.getElementById('vipMask').style.display = 'flex'; };
 function checkVipStatus(){
   var token = localStorage.getItem('hk6_vip_token'), expire = localStorage.getItem('hk6_vip_expire');
   if(!token || !expire) return false;
@@ -1897,40 +2093,66 @@ function checkVipStatus(){
 function updateVipUI(){
   var badge = document.getElementById('vipHeaderBadge');
   if(isVip){ badge.innerHTML = '👑 尊爵VIP'; badge.classList.add('member'); document.getElementById('vipMask').style.display = 'none'; }
-  else{ badge.innerHTML = '👑 尊爵VIP'; badge.classList.remove('member'); }
+  else { badge.innerHTML = '👑 尊爵VIP'; badge.classList.remove('member'); }
 }
 isVip = checkVipStatus(); updateVipUI();
 
 document.getElementById('vipActivateBtn').addEventListener('click', async function(){
   var code = document.getElementById('vipCodeInput').value.trim();
   if(!code) return showToast('請輸入激活碼', true);
-  var btn = this, oldText = btn.textContent; btn.textContent = '...'; btn.disabled = true;
+  var btn = this; var oldText = btn.textContent;
+  btn.textContent = '...'; btn.disabled = true;
   try {
-    const response = await fetch(API_URL + '/?key=' + encodeURIComponent(code));
-    const result = await response.json();
-    if (result.success) {
-      localStorage.setItem('hk6_vip_token', code); localStorage.setItem('hk6_vip_expire', new Date(result.expire).getTime());
-      isVip = true; updateVipUI(); setTimeout(() => { showToast('🎉 激活成功！'); }, 100);
-    } else { setTimeout(() => { showToast('❌ ' + (result.msg || '卡密無效'), true); }, 100); }
-  } catch (error) { setTimeout(() => { showToast('❌ 網絡錯誤', true); }, 100); }
-  finally { btn.textContent = oldText; btn.disabled = false; }
+    var resp = await fetch(API_URL + '/?key=' + encodeURIComponent(code));
+    var result = await resp.json();
+    if(result.success){
+      localStorage.setItem('hk6_vip_token', code);
+      localStorage.setItem('hk6_vip_expire', new Date(result.expire).getTime());
+      isVip = true; updateVipUI();
+      showToast('🎉 激活成功！');
+    } else {
+      showToast('❌ ' + (result.msg || '卡密無效'), true);
+    }
+  } catch(err){
+    showToast('❌ 網絡錯誤', true);
+  } finally {
+    btn.textContent = oldText; btn.disabled = false;
+  }
 });
 
-window.prompt = function(message, defaultValue) {
-  return new Promise((resolve) => {
+window.prompt = function(message, defaultValue){
+  return new Promise(function(resolve){
     window._promptResolve = resolve;
     document.getElementById('customPromptMsg').textContent = message;
     document.getElementById('customPromptInput').value = defaultValue || '';
     document.getElementById('customPromptMask').style.display = 'flex';
   });
 };
-window.closeCustomPrompt = function() { document.getElementById('customPromptMask').style.display = 'none'; if (window._promptResolve) { window._promptResolve(null); window._promptResolve = null; } };
-window.submitCustomPrompt = function() { document.getElementById('customPromptMask').style.display = 'none'; if (window._promptResolve) { window._promptResolve(document.getElementById('customPromptInput').value); window._promptResolve = null; } };
+window.closeCustomPrompt = function(){
+  document.getElementById('customPromptMask').style.display = 'none';
+  if(window._promptResolve){ window._promptResolve(null); window._promptResolve = null; }
+};
+window.submitCustomPrompt = function(){
+  document.getElementById('customPromptMask').style.display = 'none';
+  if(window._promptResolve){ window._promptResolve(document.getElementById('customPromptInput').value); window._promptResolve = null; }
+};
 
-/* ================= 啟動 ================= */
-loadHistory();
-syncCloudData(); 
-buildLuckyGrid(); buildHeartGrid(); renderVault(); renderTickets();
+(function initApp(){
+  var cached = null;
+  try { cached = JSON.parse(localStorage.getItem(LS_HISTORY_KEY) || 'null'); } catch(e){}
+  if(cached && Array.isArray(cached) && cached.length > 0){
+    applyRecords(cached, 'cache');
+  } else {
+    applyRecords(fallbackData, 'demo');
+  }
+  buildLuckyGrid();
+  buildHeartGrid();
+  renderVault();
+  renderTickets();
+  renderTicketInfo();
+  syncCloudData();
+})();
+
 })();
 </script>
 </body>
