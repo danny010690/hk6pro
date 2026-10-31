@@ -319,6 +319,11 @@ body.light-mode .vm-btn-close{background:var(--input-bg);color:var(--text);borde
   color: #1a1a1a !important; 
   text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important;
 }
+/* ================= 恢复默认字体参数 ================= / / 1. 恢复大标题和副标题的原始质感 */ h1 { font-weight: 800; letter-spacing: -0.5px; } .sub { font-weight: normal; letter-spacing: normal; }
+/* 2. 恢复区块标题的默认字重 / .section-title { font-size: 14px; font-weight: normal; / 取消粗暴的加粗 / letter-spacing: 0.12em; / 恢复原来的字距 */ color: var(--muted); }
+/* 3. 恢复各网格图标文字（大数据分析/实用工具） / .ag-text { font-size: 12px; font-weight: 600; / 恢复中等粗细 / letter-spacing: normal; / 取消字距 */ }
+/* 4. 恢复最新开奖卡片的文字 */ .ld-label { font-weight: 800; letter-spacing: 2px; } .ld-issue { font-weight: 900; }
+/* 5. 恢复按钮上的文字默认参数，取消之前的强行加粗 */ button.act, .btn-sync, .btn-shake { font-weight: 700; letter-spacing: normal; }
 </style>
 </head>
 <body>
